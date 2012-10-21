@@ -1,0 +1,449 @@
+<?php
+
+/**
+ * Implementation of hook_menu().
+ */
+
+function dmm_misc_menu() {
+  
+  $items = array();
+  
+  $items['test'] = array(
+    'page callback' => 'dmm_misc_testPage',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+    
+  return $items;
+  
+}
+
+
+/**
+ * Convert path from Drupal stream uri.
+ */
+function dmm_misc_testPage() {
+  return 'test page';
+}
+
+
+
+
+/**
+ * Convert a relative or absolute path to Drupal stream uri.
+ */
+function dmm_misc_getStreamUriFromRelativePath($path) {
+  $file_default_scheme = file_default_scheme();
+  $default_file_path = variable_get('file_' . $file_default_scheme . '_path', ($file_default_scheme == 'public' ? 'f' : 'pf'));
+
+  $stream_path = str_replace('http://' . $_SERVER['SERVER_NAME'], '', $path);
+  $stream_path = ltrim($stream_path, '/');
+  return $file_default_scheme . ':/' . str_replace($default_file_path, '', $stream_path);
+}
+
+
+/**
+ * Push field tags to metatags in the Head.
+ */
+function dmm_misc_pushTagsToMetatags($name, $value, $weight = 'NA') {
+  switch ($name) {
+    case 'keywords':
+    case 'news_keywords':
+      $t = '';
+      $tags = element_children($value);
+      foreach ($tags as $tag) {
+        $t .= $t ? ', ' . $value[$tag]['#title'] : $value[$tag]['#title'];
+      }
+      if ($t) {
+        dmm_misc_addMetatag($name, $t, NULL, $weight);
+      }
+      break;
+  }
+}
+
+
+/**
+ * Helper function to add metatag to a current page.
+ */
+function dmm_misc_addMetatag($name, $content, $href = NULL) {
+  if ($content) {
+    if ($name == 'title') {
+      drupal_set_title($content);
+    }
+    else {
+      $meta = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+            'name' => $name,
+            'content' => $content,
+        )
+      );
+      drupal_add_html_head($meta, $name);
+    }
+  } // End of if ($content) {
+  elseif($href) {
+    $meta = array(
+      '#tag' => 'link',
+      '#attributes' => array(
+          'rel' => $name,
+          'href' => $href,
+      )
+    );
+    drupal_add_html_head($meta, $name);
+  } // End of elseif($href) {
+}
+
+
+/**
+ * Form with a fieldset of Add content section for Admin Content GoCloudBackup page (by Views).
+ */
+function dmm_misc_AddContentSection_form() {
+  
+  global $user;
+  
+  $types = node_type_get_types();
+  
+  // Hide some content tupes if not a root.
+  if ($user->uid != 1) {
+    unset($types['admin_page'], $types['preface'], $types['webform']);
+  }
+  
+  $options = array('' => '- Select a content type -');
+  foreach ($types as $type => $value) {
+    $options[str_replace('_', '-', $type)] = $value->name;
+  }
+  
+  $form['add_content'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Add a new content'),
+    '#collapsible' => TRUE,
+  );
+  $form['add_content']['select_type'] = array(
+    '#type' => 'select',
+    //'#title' => 'Select content type',
+    '#options' => $options,
+    '#attributes' => array('id' => 'select_type',  'onChange' => "top.location.href='http://" . $_SERVER['SERVER_NAME'] . "/node/add/" . "' + document.getElementById('select_type').options[document.getElementById('select_type').selectedIndex].value"),
+  );
+  
+  return $form;
+}
+
+
+/**
+ * Convert json to array;
+ */
+function dmm_misc_jsonToArray($string) {
+
+  $json = preg_replace('/.*\[(.*)\].*/i', '$1', $string);
+
+  // Correct wrong quotes from HyperComments.
+  $json = urldecode(str_replace('%26quot%3B', '%22', urlencode(ltrim(rtrim($json, '}'), '{'))));
+  
+  $json = explode(',"', $json);
+  
+  foreach ($json as $pair) {
+    $pair = explode('":', $pair);
+    $key = trim($pair[0], '"');
+    $value = trim($pair[1], '"');
+    $json_data[$key] = $value;
+  }
+  
+  return $json_data;
+}
+
+
+/**
+ * Convert path from Drupal stream uri.
+ */
+function dmm_misc_getPathFromStreamUri($uri) {
+  $file_default_scheme = file_default_scheme();
+  $default_file_path = variable_get('file_' . $file_default_scheme . '_path', '/f');
+  
+  return $default_file_path . str_replace($file_default_scheme . ':/', '', $uri);
+}
+
+
+/**
+ * Returns a current url.
+ */
+function dmm_misc_getCurrentUrl() {
+    if (isset($_SERVER['REDIRECT_URL']) && $_SERVER['REDIRECT_URL']) {
+      $url = $_SERVER['REDIRECT_URL'];
+    }
+    else {
+      $url = explode('?', $_SERVER['REQUEST_URI']);
+      $url = $url[0];
+    }
+    
+    $url = "http://" . $_SERVER['SERVER_NAME'] . $url;
+    return $url;
+}
+
+
+/**
+ * Implements hook_theme().
+ */
+function dmm_misc_theme($existing, $type, $theme, $path) {
+  return array(
+    'dmm_misc_submenuSimple' => array(
+      'variables' => array('vars' => null),
+    ),
+    'dmm_misc_headerLinks' => array(
+      'variables' => array('vars' => null),
+    ),
+     
+    // Altered Tagadelic weighted tag cloud.
+    'dmm_misc_tagadelicWeighted_acceptPredefinedTagsPaths' => array(
+      'variables' => array('tags' => array())
+    ),
+
+  );
+}
+
+
+/**
+ * Theme function that renders the HTML for the tags.
+ *
+ * @ingroup themable
+ */
+function theme_dmm_misc_tagadelicWeighted_acceptPredefinedTagsPaths(array $vars) {
+  $tags = $vars['tags'];
+  $output = '';
+
+  foreach ($tags as $tag) {
+    $output .= l($tag->name, isset($tag->link['href']) ? $tag->link['href'] : 'taxonomy/term/' . $tag->tid, array(
+      'attributes' => array(
+        'class' => array("tagadelic", "level" . $tag->weight),
+        'rel' => 'tag',
+        'title'  => $tag->description,
+        )
+      )
+    ) . " \n";
+  }
+  
+  
+  if(isset($vars['voc'])){
+    if (count($tags) >= variable_get('tagadelic_block_tags_' . $vars['voc']->vid, 12)) {
+      $output .= theme('more_link', array('title' => t('more tags'), 'url' => "tagadelic/chunk/{$vars['voc']->vid}"));
+    }
+  }
+
+  return $output;
+}
+  
+
+/**
+ * Simple theming of nested submenu.
+ */
+function theme_dmm_misc_headerLinks($vars) {
+  if(empty($vars['submenu']['below'])) {
+    return NULL;
+  }
+
+  $class = isset($vars['class']) ? $vars['class'] : 'header-links';
+  $delimiter = isset($vars['delimiter']) ? $vars['delimiter'] : '';
+  $out = '<ul class="' . $class . '">';
+  $count = 0;
+  foreach ($vars['submenu']['below'] as $submenu) {
+    if (isset($submenu['link']['hidden']) && $submenu['link']['hidden']) {
+      continue;
+    }
+    $out .= ($count ? $delimiter : '') . '<li>' . l(t($submenu['link']['link_title']), $submenu['link']['href'], array('attributes' => array('class' => array($submenu['link']['link_title']), 'title' => $submenu['link']['options']['attributes']['title'], 'target' => '_blank' ))) . '</li>';
+    $count++;
+  }
+  $out .= '</ul>';
+  return $out;
+}
+
+
+/**
+ * Simple theming of nested submenu.
+ */
+function theme_dmm_misc_submenuSimple($vars) {
+  if(empty($vars['submenu']['below'])) {
+    return NULL;
+  }
+  $level = isset($vars['level']) ? $vars['level'] : 0;
+  $class = isset($vars['class']) ? $vars['class'] : 'om-links';
+  $delimiter = isset($vars['delimiter']) ? $vars['delimiter'] : '';
+  $out = '<ul class="dmm ' . $class . ' lvl-' . $level . '">';
+  $count = 0;
+  foreach ($vars['submenu']['below'] as $submenu) {
+    if (is_object($submenu)) {
+      $submenu = (array) $submenu;
+    }
+    if (isset($submenu['link']['hidden']) && $submenu['link']['hidden']) {
+      continue;
+    }
+    $out .= ($count ? $delimiter : '') . '<li>';
+    if($level) {
+      for ($i = 0; $i < $level; $i++ ) {
+        $out .= '--';
+      }
+    }
+    $title = t($submenu['link']['link_title']);
+    if(isset($submenu['count']) && $submenu['count']) {
+      $title .= ' (' . $submenu['count'] . ')';
+    }
+    // If the field Description has '<nolink>' don't show link for this item
+    if(isset($submenu['link']['localized_options']['attributes']['title']) && strtolower($submenu['link']['localized_options']['attributes']['title']) == '<nolink>') {
+      $out .= $title;
+    }
+    else {
+      $out .= l($title, $submenu['link']['href']);
+    }
+    $out .= '</li>';
+    if (!empty($submenu['below'])) {
+      // Recursion call.
+      $out .= '<li>' . theme('dmm_misc_submenuSimple', array('submenu' => $submenu, 'level' => ($level + 1), 'class' => $class, 'delimiter' => $delimiter )) . '</li>';
+    }
+    $count++;
+  }
+  $out .= '</ul>';
+  return $out;
+}
+
+
+/**
+ * Returns tags list. 
+ */
+function dmm_misc_getTags($limit = NULL) {
+  
+  $tags = NULL;
+  $voc = taxonomy_vocabulary_machine_name_load('tags');
+    
+  $types = array();
+
+  $query = db_select('taxonomy_term_data', 'td')
+        ->fields('td', array('name', 'tid', 'description'));
+  $query->leftJoin('taxonomy_index', 'ti', 'ti.tid = td.tid');
+  $query->leftJoin('node', 'n', 'n.nid = ti.nid');
+  //$query->where('n.nid = ti.nid AND n.type = :type', array(':type' => $content_type))
+  $query->where('n.nid = ti.nid')
+        ->addExpression('COUNT(n.nid)', 'count');
+  $query->groupBy('td.name');
+  //$query->condition('td.vid', $voc->vid);
+  if ($limit) {
+    $query->range(0, $limit);
+    // a4s Random only if the limit is set.
+    $query->orderRandom();
+  }
+  $query->orderRandom();
+  $results = $query->execute();
+
+  // Necessary for pathauto_cleanstring().
+  module_load_include('inc', 'pathauto');
+
+  foreach($results as $result) {
+
+    // Translate terms to the current language.
+    // $result->name = i18n_string_translate(array('taxonomy', 'term', $result->tid, 'name'), $result->name);
+
+    //$result->link = array('link_title' => $result->name, 'href' => $base_url . '/tags/' . pathauto_cleanstring($result->name));
+    $result->link = array('link_title' => $result->name, 'href' => 'taxonomy/term/' . $result->tid);
+    $tags[$result->tid] = $result;
+  }
+  return $tags;
+}
+
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function dmm_misc_views_pre_render(&$view) {
+  
+  // Add a prefaces for the some views pages.
+  // Also adds metatags for Tags pages.
+  
+  //dpm($view->name); dpm($view->current_display);
+  
+  $key = 'view-' . $view->name . '-' . $view->current_display;
+  $do_attach_preface = FALSE;
+  
+  switch($key) {
+    
+    default:
+      $do_attach_preface = FALSE;
+      break;
+      
+    case 'view-content_feeds-sections_page':
+    case 'view-taxonomy_term-page_by_tag':
+      $do_attach_preface = TRUE;
+      break;
+  }
+  
+  // Redefine the $key if on the specific content type.
+  if ($key == 'view-taxonomy_term-page_by_tag') {
+    $args = arg();
+    $term = taxonomy_term_load($args[2]);
+  }
+  
+  if ($do_attach_preface && $preface_node = dmm_misc_getPrefaceByKey($key)) {
+   
+    if ($view->current_display == 'page_by_tag') {
+
+      // add metatags for the specific term.
+      if (isset($term->metatags['keywords']['value']) && $term->metatags['keywords']['value']) {
+        dmm_misc_addMetatag('keywords', $term->metatags['keywords']['value']);
+      }
+      if (isset($term->description) && $term->description) {
+        dmm_misc_addMetatag('description', $term->description);
+      }
+      
+      // add metatag title for the specific term, if it's set in the Metatags block and not equal to defaults.
+      if (isset($term->metatags['title']['value']) && $term->metatags['title']['value']) {
+        $metatag_title = token_replace($term->metatags['title']['value']);
+        dmm_misc_addMetatag('title', $metatag_title);
+        // Set the title (not only a metatag title) as well.
+        $preface_node->title = htmlspecialchars_decode($metatag_title);
+        $view->build_info['title'] = $preface_node->title;
+      }
+      else {
+        //$preface_node->title = $view->get_title();//$view->build_info['title'];
+        $preface_node->title .= ' "' . htmlspecialchars_decode($view->build_info['substitutions']['%1']) . '"';
+        $view->build_info['title'] = $preface_node->title;
+      }
+    }
+    else {
+      // Change the title of the view (main page title actually)
+      if (isset($preface_node->metatags['title']['value'])) {
+        $view->build_info['title'] = $preface_node->metatags['title']['value'];
+      }
+      else{
+        $view->build_info['title'] = $preface_node->title;
+      }
+    }
+    
+    
+    // Show plain caption, not a link for a full node as a full node itself will be unpublished and unreachable.
+    $preface_node->title_no_link = TRUE;
+    // Hide the title of the preface.
+    // $preface_node->title = '';
+    // Works, but it's shown after exposed filters.
+    $view->attachment_before = render(node_view($preface_node, 'full'));
+    
+  } // End of if ($do_attach_preface && $preface_node = dmm_misc_getPrefaceByKey($key)) {
+   
+} 
+
+
+/**
+ * Returns preface node by key.
+ */
+function dmm_misc_getPrefaceByKey($key) {
+    
+    $preface_node = NULL;
+    
+    $query = db_select('node', 'n');
+    $query->join('field_data_field_preface_key', 'pk', "pk.entity_id = n.nid"); 
+    $query->fields('n', array('nid'))  
+          //->fields('pn', array('field_preface_key_value')) 
+          ->condition('n.type', 'preface')
+          ->condition('pk.field_preface_key_value', $key); 
+    $preface_nid = $query->execute()->fetchField(); 
+    if ($preface_nid) {
+      $preface_node = node_load($preface_nid);
+    }
+    return $preface_node;
+}

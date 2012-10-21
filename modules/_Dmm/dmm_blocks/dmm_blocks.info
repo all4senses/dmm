@@ -1,0 +1,6 @@
+name = Dmm Blocks
+package = "Dom Moej Mechty"
+description = "Defines different blocks for the site including ones for side bars and OM-Menu"
+core = 7.x
+tags[] = Dmm
+files[] = dmm_blocks.module

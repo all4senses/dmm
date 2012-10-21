@@ -1,0 +1,313 @@
+<?php
+
+/**
+ * @file
+ * Module for building and managing site's blocks.
+ */
+
+
+//module_load_include('inc', 'dmm_blocks', 'inc/constants');
+
+
+/**
+ * Implements hook_block_info().
+ */
+function dmm_blocks_block_info() {
+  
+  $blocks['main_menu_om_sections'] = array(
+    'info' => t('OM Sections'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
+  $blocks['main_menu_om_content'] = array(
+    'info' => t('OM Content'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
+  $blocks['main_menu_om_aboutus'] = array(
+    'info' => t('OM About Us'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
+//  $blocks['b_provider_p_bottom'] = array(
+//    'info' => t('Bottom section of Business providers page preface'),
+//    'cache' => DRUPAL_CACHE_GLOBAL,
+//  );
+    
+  
+  $blocks['footer_menu'] = array(
+    'info' => t('Footer menu (dmm)'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  $blocks['header_links'] = array(
+    'info' => t('Header links'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
+    
+  $blocks['tags'] = array(
+    'info' => t('Shows a tag cloud page'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  $blocks['tags_block'] = array(
+    'info' => t('Shows a tag cloud block'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
+  $blocks['slideshow_one'] = array(
+    'info' => t('Slideshow one (Sequense)'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  $blocks['slideshow_two'] = array(
+    'info' => t('Slideshow two (AdvancedSlider)'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
+   
+  return $blocks;
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function dmm_blocks_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {      
+    case 'main_menu_om_sections':
+      $block['subject'] = t('OM Sections');
+      $block['content'] = dmm_blocks_get_omMenuBlock_byTitle('Разделы', 'dmm_blocks_get_omMenuBlock_Sections');
+      break;
+    case 'main_menu_om_content':
+      $block['subject'] = t('OM Content');
+      $block['content'] = dmm_blocks_get_omMenuBlock_byTitle('Материалы', 'dmm_blocks_get_omMenuBlock_Content');
+      break;
+    case 'main_menu_om_aboutus':
+      $block['subject'] = t('OM About Us');
+      $block['content'] = dmm_blocks_get_omMenuBlock_byTitle('О нас', 'dmm_blocks_get_omMenuBlock_AboutUs');
+      break;
+    
+    case 'footer_menu':
+      $block['subject'] = t('Footer menu');
+      $block['content'] = dmm_blocks_get_footerMenu();
+      break; 
+    case 'header_links':
+      $block['subject'] = t('Header links');
+      $block['content'] = dmm_blocks_get_headerLinks();
+      break; 
+    
+     
+//    case 'b_provider_p_bottom':
+//      $block['subject'] = t('Bottom section of Business providers page preface');
+//      $block['content'] = dmm_misc_getPrefaceBottomSection('page-compare-business-gcb-providers');
+//      break;
+    
+    
+    case 'tags':
+      $block['subject'] = t('Shows a tag cloud page');
+      $block['content'] = dmm_blocks_buildTagsCloudBlock();
+      break;
+    case 'tags_block':
+      $block['subject'] = t('Случайные теги');
+      $block['content'] = dmm_blocks_buildTagsCloudBlock(TRUE);
+      break;
+    
+    
+    case 'slideshow_one':
+      $block['subject'] = t('Slideshow one (Sequense)');
+      $block['content'] = dmm_image_getSlideshow('Sequense');
+      break;
+    case 'slideshow_two':
+      $block['subject'] = t('Slideshow two (AdvancedSlider)');
+      $block['content'] = dmm_image_getSlideshow('AdvancedSlider');
+      break;
+    
+  }
+
+  return $block;
+}
+
+
+/**
+ * Returns a themed Header links block.
+ */
+function dmm_blocks_get_headerLinks() {
+  $menu = menu_build_tree('menu-header-links');
+  return theme('dmm_misc_headerLinks', array('submenu' => array('below' => $menu)));
+}
+
+
+/**
+ * Returns a themed Footer menu.
+ */
+function dmm_blocks_get_footerMenu() {
+  $menu = menu_build_tree('menu-footer-menu');
+  return theme('dmm_misc_submenuSimple', array('submenu' => array('below' => $menu), 'class' => 'menu', 'delimiter' => '<li> | </li>'));
+}
+
+
+/**
+ * Dispatcher for getting themed block for MegaMenu by a block title.
+ */
+function dmm_blocks_get_omMenuBlock_byTitle($title, $function) {
+
+  /*
+  global $language;
+  $types = cache_get('types_' . $language->language);
+  Expire = current time + 2 hours.
+  cache_set('types_' . $language->language, $types, 'cache', time() + 7200);
+  */
+  
+  // Get main menu wireframe menu.
+  $submenu = dmm_blocks_getSubmenuByTitle('main-menu', $title);
+  return $function($submenu);
+}
+
+
+/**
+ * Returns a themed block OM-Menu.
+ */
+function dmm_blocks_get_omMenuBlock_Sections($submenu) {
+  return theme('dmm_misc_submenuSimple', array('submenu' => $submenu, 'class' => 'block'));
+}
+
+
+/**
+ * Returns a themed block OM-Menu.
+ */
+function dmm_blocks_get_omMenuBlock_Content($submenu) {
+  return theme('dmm_misc_submenuSimple', array('submenu' => $submenu, 'class' => 'block'));
+}
+
+
+/**
+ * Returns a themed block OM-Menu.
+ */
+function dmm_blocks_get_omMenuBlock_AboutUs($submenu) {
+  return theme('dmm_misc_submenuSimple', array('submenu' => $submenu, 'class' => 'block'));
+}
+
+
+/**
+ * Returns a submenu from a menu.
+ */
+function dmm_blocks_getSubmenuByTitle($menu_name, $submenu_title) {
+  $menu = menu_build_tree($menu_name);
+  if(!$menu) {
+    return NULL;
+  }
+  foreach ($menu as $submenu) {
+    if ($submenu['link']['link_title'] == $submenu_title) {
+      return $submenu;
+    }
+  }
+  return NULL;
+}
+
+
+/**
+ * Wrap a block content in proper block's divs.
+ */
+function dmm_blocks_wrapInBlockThemed($block_data, $block)
+{
+  if(!isset($block['content']) || !$block['content']) {
+      return null;
+  }
+  if (is_array($block['content'])) {
+    $block['content'] = render($block);
+  }
+  
+  if (isset($block_data['shadow']) && $block_data['shadow']) {
+    return 
+      '<section id="block-' . $block_data['module'] . '-' . $block_data['delta'] . '" class="block gcb block-' . $block_data['module'] . '">' 
+        . '<div class="inside">'
+            . ( ($block['subject'] && (!isset($block_data['subject_visible']) || $block_data['subject_visible']) )
+                ? 
+                '<div class="block-icon pngfix"></div><h2 class="block-title">' . $block['subject'] . '</h2>'
+                :
+                '') 
+            . '<div class="content">' . $block['content'] . '</div>
+          </div> <!-- /.inside -->
+          <div class="shadow"></div>
+      </section>';
+  }
+  else {
+    return 
+      '<section id="block-' . $block_data['module'] . '-' . $block_data['delta'] . '" class="block gcb block-' . $block_data['module'] . '">' 
+         . ( ($block['subject'] && (!isset($block_data['subject_visible']) || $block_data['subject_visible']) )
+            ? 
+            '<div class="block-icon pngfix"></div><h2 class="block-title">' . $block['subject'] . '</h2>'
+            :
+            '') 
+         . '<div class="content">' . $block['content'] . '</div>
+      </section>';
+  }
+}
+
+
+/**
+ * Returns a content of a block wrapped in proper divs.
+ */
+function dmm_blocks_getBlockThemed($block_data)
+{
+  $block = module_invoke($block_data['module'], 'block_view', $block_data['delta']);
+  if ($block) {
+    if (@$block_data['no_subject']) {
+      $block['subject'] = '';
+    }
+    elseif (isset($block_data['subject'])) {
+      $block['subject'] = $block_data['subject'];
+    }
+    return dmm_blocks_wrapInBlockThemed($block_data, $block);
+  }
+  return NULL;
+}
+
+
+/**
+ * Returns a tag cloud block.
+ */
+function dmm_blocks_buildTagsCloudBlock($side_block = NULL) {
+  
+  // Uncomment to use a cache.
+  // global $language;
+  // $tags = cache_get('tags_page_block' . $language->language);
+  
+  // Comment to use a cache.
+  if (1) { 
+    
+  // Uncomment to use a cache.
+  //if (!$tags || empty($tags->data) || $tags->expire < time()) {
+    
+    if ($side_block) {
+      $tags_array = dmm_misc_getTags(4);
+    }
+    else {
+      $tags_array = dmm_misc_getTags();
+    }
+
+    if (!$tags_array) {
+      return NULL;
+    }
+    
+    // Simple List.
+    // $tags = theme('gcb_misc_submenuSimple', array('submenu' => array('below' => $tags_array), 'class' => 'tags'));
+    // Tag cloud.
+    
+    $tags_array = tagadelic_sort_tags(tagadelic_build_weighted_tags($tags_array, 12));
+    
+    $tags = theme('dmm_misc_tagadelicWeighted_acceptPredefinedTagsPaths', array('tags' => $tags_array));
+  
+    // Expire = current time + 4 hours.
+   
+    // Uncomment to use a cache.
+    // cache_set('tags_page_block' . $language->language, $tags, 'cache', time() + 14400);
+    
+  }
+  else {
+    $tags = $tags->data;
+  }
+  
+  $out = $side_block ? '<div class="tags">' . $tags . '</div><div class="more">' . l('Все теги', 'tags') . '</div>' : '<div class="tags cloud">' . $tags . '</div>';
+  return $out;
+}

@@ -1,0 +1,262 @@
+<?php
+
+/**
+ * Implementation of hook_menu().
+ */
+function dmm_user_menu() {
+  
+  $items = array();
+  
+  $items['hc-notify'] = array(
+    'page callback' => 'dmm_user_hcNotifyGet_ajax',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+    
+  
+ /* 
+  $items['user/%user/blog'] = array( 
+      'title' => t('User blog'),
+      //'title callback' => '_guestbook_info',
+      //'title arguments' => array(1, 'title'),
+      'page callback' => 'dmm_user_getUserContent', //'wdg_user_blog_page',
+      'page arguments' => array(1, 'blog_post', 'blog post', 'blog posts'),
+      //'access callback' => 'guestbook_menu_access_user_guestbook',
+      //'access arguments' => array(1, 'access user guestbooks'),
+      'access arguments' => array('access content'),
+      'type' => MENU_LOCAL_TASK,
+    );
+*/
+
+  $user_pages = array('blog' => 'blog_post', 'articles' => 'article', 'master-classes' => 'master_class', 'albums' => 'album');
+  foreach ($user_pages as $url_part => $content_type) {
+    $items['user/%user/' . $url_part] = array( 
+      'title' => t("User's $url_part"),
+      'title callback' => 'dmm_user_getUserTabTitle',
+      'title arguments' => array(1, $url_part),
+      'page callback' => 'dmm_user_getUserContent',
+      'page arguments' => array(1, $url_part, $content_type),
+      //'access callback' => 'guestbook_menu_access_user_guestbook',
+      //'access arguments' => array(1, 'access user guestbooks'),
+      'access arguments' => array('access content'),
+      'type' => MENU_LOCAL_TASK,
+    );
+  }
+    
+  return $items;
+  
+}
+
+
+/**
+ * Returns user's content.
+ */
+function dmm_user_hcNotifyGet_ajax() {
+   $status = TRUE;
+  //$output = 'gv_misc_testPage_requestTest()----';
+  
+  $post = array();
+  foreach ($_POST as $key => $value) {
+    $post[$key] = check_plain(strip_tags($value));
+  }
+  
+  global $language;
+  $params['hcNotify_data'] = $post;
+
+  drupal_mail('dmm_user', 'hcNotify_data', 'all4senses@gmail.com', $language->language, $params);
+
+  drupal_json_output(array('status' => $status, /*'data' => $output, 'post' => $_POST, 'token' => $post['token'], 'test_token' => $test_token, 'valid_token' => $valid_token, 'letter' => $letter*/));
+}
+
+
+/**
+ * Implements hook_mail().
+ */
+function dmm_user_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'hcNotify_data':
+
+        foreach ($params['hcNotify_data'] as $k => $value) {
+          if ($k == 'data') {
+            $notify[$k] = json_decode(urldecode(str_replace('%26quot%3B', '%22', urlencode($value))));
+          }
+          else {
+            $notify[$k] = $value;
+          }
+        }
+ 
+      $message['subject'] = t('HC comments notify');
+      $message['body'][] = serialize($notify); //$string;
+      break;
+  }
+  
+}  
+
+
+/**
+ * Returns user's content.
+ */
+function dmm_user_getUserTabTitle($account, $content_title){
+  return t("@name's " . $content_title, array('@name' => format_username($account)));
+}
+
+
+/**
+ * Returns user's content.
+ */
+function dmm_user_getUserContent($account, $content_title, $content_type){
+  
+  $preface = NULL;
+  
+  // Get specific user page preface by a preface key.
+  $field_prefaces_ids = field_get_items('user', $account, 'field_prefaces_collection');
+  foreach ($field_prefaces_ids as $field_prefaces_id) {
+    $field_collection = field_collection_field_get_entity($field_prefaces_id);
+    // Almost the same.
+    //$field_collection = field_collection_item_load($field_prefaces_id['value']);
+    //$prefaces[] = $field_collection->view();
+    if ($field_collection->field_preface_key_user['und'][0]['value'] == $content_type) {
+      $preface = render($field_collection->view());
+      break;
+    }
+  }
+  
+  // An other method, does the same.
+  /*
+  $wrapper = entity_metadata_wrapper('user', $account);
+  foreach ($wrapper->field_prefaces_collection as $field_collection){
+    //$prefaces[] = array('field_collection' => $field_collection->view(), 'field_collection_rendered' => render($field_collection), 'key' => $field_collection->field_preface_key_user->value());
+    if ($i->field_preface_key_user->value() == $content_type) {
+      $preface = render($field_collection->view());
+      break;
+    }
+  }
+  */
+  
+  
+  
+  drupal_set_title($title = t("@name's " . $content_title, array('@name' => format_username($account))), PASS_THROUGH);
+  $user_content = dmm_pages_getContentFeedWithControls($content_type, $account->uid);
+  
+  // It a preface is defined, don't show the title (using preface's one).
+  return ($preface ? $preface : '<h1>' . $title . '</h1>') . $user_content;
+}
+
+
+/**
+ * Implements hook_user_view().
+ */
+/*
+function dmm_user_user_view($account, $view_mode, $langcode) {
+    
+//  $dmm_user_mode = variable_get('dmm_user_mode', dmm_user_SITE_dmm_user | dmm_user_USER_dmm_userS);
+//  if ($dmm_user_mode & dmm_user_USER_dmm_userS) {
+//    if (user_access('access user dmm_users') && empty($account->data['dmm_user_status'])) {
+//      $title = t("Read @username's dmm_user.", array('@username' => $account->name));
+//      $link  = l(t('View recent dmm_user entries'), "user/$account->uid/dmm_user", array('attributes' => array('title' => $title)));
+   
+
+    
+    
+// Append guestbook on user profile page    
+    
+    
+// TODO: makeown guestbook for each user (on demand?) on user create or by link
+$gbook = node_load(4);
+$gbook_comments = comment_node_page_additions($gbook); 
+////dpm($gbook_comments); //dpm($gbook);
+
+$gbook = node_view($gbook);
+unset($gbook['links']['comment']); // remove link "add new comment as we have a form below"
+      $account->content['dmm_guestbook'] = array(
+        '#type' => 'user_profile_item',
+        '#title' => t('The Wall'),
+        '#markup' => render($gbook) . render($gbook_comments['comment_form']) . render($gbook_comments['comments']),
+        //'#attributes' => array('class' => 'dmm_user'),
+        '#weight' => 10,
+      );
+
+}
+*/
+
+
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+/*
+function dmm_user_form_user_register_form_alter(&$form, &$form_state) {
+    
+  // Set up the right nickname (username) for user registered via loginza
+  // !!!!!!!!!!!!!!!!!!!!!  MUST have weight bigger then loginza in a system table
+    
+  if (isset($_SESSION['loginza']['data'])) 
+  {
+    $data = $_SESSION['loginza']['data'];
+
+    //if($data['email'])
+    //   $form['account']['name']['#default_value'] = $data['email'];
+    //else
+        $form['account']['name']['#default_value'] = strtolower(str_replace(' ', '.', $data['name']['full_name'])); //_loginza_username($data);
+        //
+    //if (!empty($data['email'])) $form['account']['mail']['#default_value'] = $data['email'];
+ }
+
+}
+*/
+
+
+/**
+ * Implements hook_user_presave().
+ */
+/*
+function dmm_user_user_presave(&$edit, $account, $category) {
+  foreach (array('dmm_user_status', 'dmm_user_send_email', 'dmm_user_intro') as $key) {
+    if (isset($edit[$key])) {
+      $edit['data'][$key] = $edit[$key];
+    }
+  }
+}
+*/
+
+/**
+ * Implements hook_user_delete().
+ */
+/*
+function dmm_user_user_delete($account) {
+  db_delete('dmm_user')
+    ->condition('recipient', $account->uid)
+    ->execute();
+}
+*/
+
+
+/**
+ * Implementation of hook_permission().
+ */
+/*
+function dmm_user_permission() {
+  return array(
+    'moderate all dmm_users' => array(
+      'title' => t('Moderate all dmm_users'),
+    ),
+    'moderate own dmm_user' => array(
+      'title' => t('Moderate own dmm_user'),
+    ),
+    'access site dmm_user' => array(
+      'title' => t('View site dmm_user'),
+    ),
+    'access user dmm_users' => array(
+      'title' => t('View user dmm_users'),
+    ),
+    'post in site dmm_user' => array(
+      'title' => t('Post in site dmm_user'),
+    ),
+    'post in user dmm_users' => array(
+      'title' => t('Post in user dmm_users'),
+    ),
+  );
+}
+*/

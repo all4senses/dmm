@@ -1,0 +1,9 @@
+name = Dmm Misc
+description = Miscelaneous functions
+core = 7.x
+version = "7.x"
+core = "7.x"
+project = "Dmm Misc"
+package = "Dom Moej Mechty"
+
+

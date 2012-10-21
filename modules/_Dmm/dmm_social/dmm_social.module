@@ -1,0 +1,235 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function dmm_social_menu() {
+    
+  $items = array();
+  
+  /*
+  // Look at the inc file.      
+  $items['user/%user/social'] = array( 
+      'title' => t('Social connect'),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('dmm_social_socialPageForm', 1),
+      ////'page callback' => 'dmm_social_socialPageShow', 
+      //'page arguments' => array(1, 'album', 'album', 'albums', array('t','mini'), 'dmm_pages_buildMiniTeasersSet'),
+      ////'page arguments' => array(1),
+      
+      'access arguments' => array('access content'),
+      'type' => MENU_LOCAL_TASK,
+    );  
+*/
+  $items['authsub'] = array (
+    'page callback' => 'dmm_social_authsub_redirect',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  return $items;
+}
+
+
+/**
+ * Socialite social buttons.
+ */
+function dmm_social_getSocialiteButtons($url = NULL, $title = NULL) {
+
+  if (!$url) {
+    $url = 'http://' . $_SERVER['SERVER_NAME'] . ($_GET['q'] == 'home' ? '' : $_SERVER['REQUEST_URI']);
+  }
+  
+  //drupal_add_js('sites/all/libraries/jquery.plugins/socialite/socialite.min.js');
+  drupal_add_js('sites/all/libraries/jquery.plugins/socialite/socialite.js');
+  
+  $path_to_custom_js = drupal_get_path('module', 'dmm_social') . '/js/';
+  drupal_add_js($path_to_custom_js . 'addSocialite.js');
+  
+  $out = '
+  <ul class="social-buttons cf">
+			<li><a href="http://twitter.com/share" class="socialite twitter-share" data-text="' . $title . '" data-url="' . $url . '" data-count="horizontal" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a></li>
+			<li><a href="https://plus.google.com/share?url=' . $url . '" class="socialite googleplus-one" data-size="medium" data-href="' . $url . '" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a></li>
+			<li><a href="http://www.facebook.com/sharer.php?u=' . $url . '&amp;t=' . $title . '" class="socialite facebook-like" data-href="' . $url . '" data-send="false" data-layout="button_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a></li>
+			<li><a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=' . $url . '&amp;title=' . $title . '" class="socialite linkedin-share" data-url="' . $url . '" data-counter="right" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a></li>
+      <li><a href="http://pinterest.com/pin/create/button/?url=' . $url . '" class="socialite pinterest-pinit" data-count-layout="horizontal" data-href="' . $url . '" rel="nofollow" target="_blank"><span class="vhidden">Share on PIN</span></a></li>
+      <li><a href="http://vkontakte.ru/share.php?url=' . $url . '" class="socialite vkontakte-like" data-type="mini" data-text="Vkon" data-href="' . $url . '" rel="nofollow" target="_blank"><span class="vhidden">Share on VK</span></a></li>
+      <li><a href="http://connect.mail.ru/share?url=' . $url . '" class="socialite mailru-like mrc__plugin_uber_like_button" data-mrc-config=' . '"' . "{'nt' : '1', 'cm' : '3', 'ck' : '3', 'sz' : '20', 'st' : '2', 'tp' : 'combo'}" . '"' .  ' data-href="' . $url . '" rel="nofollow" target="_blank"><span class="vhidden">Share on Mail.ru</span></a></li>  
+		</ul>
+  ';
+  
+  return $out;
+}
+
+
+/**
+ * Redirect different app types auths to appropriate calling paths.
+ */
+function dmm_social_authsub_redirect()
+{
+    if(!isset($_GET['redirect']))
+        drupal_goto();
+    
+    $redirect_query = "http://".$_SERVER['SERVER_NAME'] . '/' . ltrim($_GET['redirect'], '/') . '?';
+    unset($_GET['q'], $_GET['redirect']);
+    $count = 0;
+    foreach($_GET as $key=>$param)
+        if($count++ > 0)
+            $redirect_query .= '&' . $key . '=' . $param;
+        else
+            $redirect_query .= $key . '=' . $param;
+        
+    drupal_goto($redirect_query);
+}
+
+
+/**
+ * Implements hook_theme().
+ */
+function dmm_social_theme($existing, $type, $theme, $path) {
+  return array(
+    'dmm_social_socialPageForm' => array(
+      'path' => path_to_theme() . '/templates',
+      'template' => 'dmm_socialPage',
+      'render element' => 'form',
+    ),  
+            
+  );
+}
+
+
+/**
+ * Implements hook_block_info().
+ */
+function dmm_social_block_info() {
+  
+  $blocks['hc_main_comments'] = array(
+    'info' => t('HC Main comments'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  $blocks['hc_recent_comments'] = array(
+    'info' => t('HC Recent comments'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  $blocks['hc_popular_articles'] = array(
+    'info' => t('HC Popular articles'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  return $blocks;
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function dmm_social_block_view($delta = '') {
+  
+  $block = array();
+  switch ($delta) {      
+    
+    case 'hc_main_comments':
+      $block['subject'] = t('HC Main comments');
+      $block['content'] = dmm_social_hcBlocks('main_comments');
+      break;
+    case 'hc_recent_comments':
+      $block['subject'] = t('HC Recent comments');
+      $block['content'] = dmm_social_hcBlocks('recent_comments');
+      break;
+    case 'hc_popular_articles':
+      $block['subject'] = t('HC Popular articles');
+      $block['content'] = dmm_social_hcBlocks('popular_articles');
+      break;
+
+  }
+
+  return $block;
+}
+
+
+/**
+ * Builds HyperComments blocks.
+ */
+function dmm_social_hcBlocks($block_type) {
+  
+  switch ($block_type) {
+
+    case 'main_comments':
+      
+      
+      global $user;
+      if ($user->uid) {
+        $user = user_load($user->uid);
+
+        $user_auth = array(
+          'nick' => $user->field_first_name['und'][0]['value']  . ' ' . $user->field_last_name['und'][0]['value'],
+          'avatar' => isset($user->picture->uri) ? 'http://' . $_SERVER['SERVER_NAME'] . '/' . dmm_misc_getPathFromStreamUri($user->picture->uri) : '',
+          'id' => $user->uid,
+          'email' => $user->mail,
+        );
+
+        $time = time();
+        $secret = "123321";
+        $user_base64 = base64_encode( json_encode($user_auth) );
+        $sign = md5($secret . $user_base64 . $time);
+        $auth = $user_base64 . "_" . $time . "_" . $sign;
+      }
+      else {
+        $auth = NULL;
+      }
+
+      //$path_to_module = drupal_get_path('module', 'dmm_social');
+      //drupal_add_js(array('dmm_social' => array('auth' => $auth, 'uid' => $user->uid)), 'setting');
+      //drupal_add_js($path_to_module . '/js/dmm_hcMainComments.js');
+      
+      
+      //return '<div id="hypercomments_main"></div>';
+      
+      
+      return '<script type="text/javascript">
+              var _hcp = _hcp || {}; _hcp.widget_id = 3235; _hcp.widget = "Stream"; _hcp.append = "#hypercomments_main"; ' . ($user->uid ? '_hcp.auth = "' . $auth . '";' : '') . '
+              (function() { 
+              var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
+              hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://widget.hypercomments.com/apps/js/hc.js";
+              var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hcc, s.nextSibling); 
+              })();
+              </script>
+              <div id="hypercomments_main"></div>';
+      
+
+
+    
+    case 'recent_comments':
+      $path_to_module = drupal_get_path('module', 'dmm_social');
+      drupal_add_js($path_to_module . '/js/dmm_hcRecentComments.js');
+      return '<div id="hypercomments_recent"></div>';
+    /* 
+    return '<div id="hypercomments_recent"></div>
+            <script type="text/javascript">
+            var _hcwp = _hcwp || [];
+            _hcwp.push({widget_id : 3235, widget : "Mixstream", filter:"last", limit:5, append:"#hypercomments_recent" });
+            (function() {
+            var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
+            hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://widget.hypercomments.com/apps/js/hc.dev.js";
+            var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hcc, s.nextSibling);
+            })();
+            </script>';
+    */
+    case 'popular_articles':
+      $path_to_module = drupal_get_path('module', 'dmm_social');
+      drupal_add_js($path_to_module . '/js/dmm_hcPopularArticles.js');
+      return '<div id="hypercomments_popular"></div>';
+      /*
+      return '<div id="hypercomments_popular"></div>
+              <script type="text/javascript">
+              var _hcwp = _hcwp || [];
+              _hcwp.push({widget_id : 3235, widget : "Mixstream",filter:"popular",limit:5, append:"#hypercomments_popular" });
+              (function() {
+              var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
+              hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://widget.hypercomments.com/apps/js/hc.dev.js";
+              var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hcc, s.nextSibling);
+              })();
+              </script>';
+      */
+          
+  }
+}
