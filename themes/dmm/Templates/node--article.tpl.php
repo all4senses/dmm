@@ -56,8 +56,8 @@
 
                   if ($page) {
 
-                    if (isset($author->field_u_social_profiles['und'])) {
-                      foreach ($author->field_u_social_profiles['und'] as $value) {
+                    if (isset($author->field_social_profiles['und'])) {
+                      foreach ($author->field_social_profiles['und'] as $value) {
                         $value = explode(':', $value['value']);
                         if (@$value[0] && @$value[1]) {
                           $user_social_profiles[$value[0]] = $value[1];
