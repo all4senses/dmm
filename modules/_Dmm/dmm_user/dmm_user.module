@@ -116,7 +116,7 @@ function dmm_user_getUserContent($account, $content_title, $content_type){
     // Almost the same.
     //$field_collection = field_collection_item_load($field_prefaces_id['value']);
     //$prefaces[] = $field_collection->view();
-    if ($field_collection->field_key['und'][0]['value'] == $content_type) {
+    if ($field_collection->field_key_list['und'][0]['value'] == $content_type) {
       $preface = render($field_collection->view());
       break;
     }
@@ -126,8 +126,8 @@ function dmm_user_getUserContent($account, $content_title, $content_type){
   /*
   $wrapper = entity_metadata_wrapper('user', $account);
   foreach ($wrapper->field_user_prefaces as $field_collection){
-    //$prefaces[] = array('field_collection' => $field_collection->view(), 'field_collection_rendered' => render($field_collection), 'key' => $field_collection->field_key->value());
-    if ($i->field_key->value() == $content_type) {
+    //$prefaces[] = array('field_collection' => $field_collection->view(), 'field_collection_rendered' => render($field_collection), 'key' => $field_collection->field_key_list->value());
+    if ($i->field_key_list->value() == $content_type) {
       $preface = render($field_collection->view());
       break;
     }
