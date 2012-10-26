@@ -700,7 +700,7 @@ window.Socialite = (function(window, document, undefined)
 
     Socialite.setup({
         vkontakte: {
-            apiId: 3186958, // park.all4senses.com
+            apiId: 3198660, // dommoejmechty.com.ua
             group: {
               id: 0,
               mode: 0,
