@@ -344,6 +344,7 @@ function dmm_misc_getTags($limit = NULL) {
     $result->link = array('link_title' => $result->name, 'href' => 'taxonomy/term/' . $result->tid);
     $tags[$result->tid] = $result;
   }
+  dpm($tags);
   return $tags;
 }
 
