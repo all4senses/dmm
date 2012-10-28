@@ -314,9 +314,10 @@ function dmm_misc_getOmBlockTagsByName($tag) {
   $voc = taxonomy_vocabulary_machine_name_load('dmmmenu');
   dpm($voc);
   
-  $tid = taxonomy_get_term_by_name($tag, $voc->vid);
+  $term = taxonomy_get_term_by_name($tag, $voc->vid);
+  dpm($term);
           
-  $tags = taxonomy_get_children($tid);
+  $tags = taxonomy_get_children($term->tid);
   return $tags;
 }
 
