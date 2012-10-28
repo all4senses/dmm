@@ -172,6 +172,15 @@ function dmm_blocks_get_omMenuBlock_Library($submenu = NULL) {
     $out = theme('dmm_misc_submenuSimple', array('submenu' => $submenu, 'class' => 'block'));
   }
   else {
+    drupal_add_library('system', 'ui.core');
+    drupal_add_library('system', 'ui.widget');
+    drupal_add_library('system', 'ui.position');  
+
+    //drupal_add_library('system', 'effects.bounce');
+
+    $path_to_custom_js = drupal_get_path('module', 'dmm_blocks') . '/js/';
+    drupal_add_js($path_to_custom_js . 'dmm_mainMenuBlocks.js');
+  
     $out = 'Test';
   }
   return $out;
