@@ -312,7 +312,7 @@ function theme_dmm_misc_submenuSimple($vars) {
 function dmm_misc_getOmBlockTagsByName($tag) {
 
   $voc = taxonomy_vocabulary_machine_name_load('dmmmenu');
-  $types = array();
+  dpm($voc);
   
   $tid = taxonomy_get_term_by_name($tag, $voc->vid);
           
