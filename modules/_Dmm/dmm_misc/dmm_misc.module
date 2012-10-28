@@ -305,6 +305,22 @@ function theme_dmm_misc_submenuSimple($vars) {
 }
 
 
+
+/**
+ * Returns tags list. 
+ */
+function dmm_misc_getOmBlockTagsByName($tag) {
+
+  $voc = taxonomy_vocabulary_machine_name_load('dmmmenu');
+  $types = array();
+  
+  $tid = taxonomy_get_term_by_name($tag, $voc->vid);
+          
+  $tags = taxonomy_get_children($tid);
+  return $tags;
+}
+
+
 /**
  * Returns tags list. 
  */

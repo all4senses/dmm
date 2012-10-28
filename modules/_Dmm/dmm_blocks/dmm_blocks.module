@@ -173,8 +173,8 @@ function dmm_blocks_get_omMenuBlock_Library($submenu = NULL) {
   }
   else {
     drupal_add_library('system', 'ui.core');
-    drupal_add_library('system', 'ui.widget');
-    drupal_add_library('system', 'ui.position');
+    //drupal_add_library('system', 'ui.widget');
+    //drupal_add_library('system', 'ui.position');
     drupal_add_library('system', 'ui.tabs');
 
     //drupal_add_library('system', 'effects.bounce');
@@ -182,6 +182,8 @@ function dmm_blocks_get_omMenuBlock_Library($submenu = NULL) {
     $path_to_custom_js = drupal_get_path('module', 'dmm_blocks') . '/js/';
     drupal_add_js($path_to_custom_js . 'dmm_mainMenuBlocks.js');
   
+    $tags = dmm_misc_getOmBlockTagsByName('Энциклопедия Уюта');
+    dpm($tags);
     $out = '
       
   <div id="tabs">
