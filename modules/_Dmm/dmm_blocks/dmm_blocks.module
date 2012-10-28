@@ -174,7 +174,8 @@ function dmm_blocks_get_omMenuBlock_Library($submenu = NULL) {
   else {
     drupal_add_library('system', 'ui.core');
     drupal_add_library('system', 'ui.widget');
-    drupal_add_library('system', 'ui.position');  
+    drupal_add_library('system', 'ui.position');
+    drupal_add_library('system', 'ui.tabs');
 
     //drupal_add_library('system', 'effects.bounce');
 
