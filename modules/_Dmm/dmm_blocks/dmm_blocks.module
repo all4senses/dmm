@@ -14,8 +14,8 @@
  */
 function dmm_blocks_block_info() {
   
-  $blocks['main_menu_om_sections'] = array(
-    'info' => t('OM Sections'),
+  $blocks['main_menu_om_library'] = array(
+    'info' => t('OM Library'),
     'cache' => DRUPAL_CACHE_GLOBAL,
   );
   
@@ -74,9 +74,9 @@ function dmm_blocks_block_info() {
 function dmm_blocks_block_view($delta = '') {
   $block = array();
   switch ($delta) {      
-    case 'main_menu_om_sections':
-      $block['subject'] = t('OM Sections');
-      $block['content'] = dmm_blocks_get_omMenuBlock_byTitle('Разделы', 'dmm_blocks_get_omMenuBlock_Sections');
+    case 'main_menu_om_library':
+      $block['subject'] = t('OM Library');
+      $block['content'] = dmm_blocks_get_omMenuBlock_Library(); //dmm_blocks_get_omMenuBlock_byTitle('Энциклопедия Уюта', 'dmm_blocks_get_omMenuBlock_Library');
       break;
     case 'main_menu_om_content':
       $block['subject'] = t('OM Content');
@@ -167,8 +167,14 @@ function dmm_blocks_get_omMenuBlock_byTitle($title, $function) {
 /**
  * Returns a themed block OM-Menu.
  */
-function dmm_blocks_get_omMenuBlock_Sections($submenu) {
-  return theme('dmm_misc_submenuSimple', array('submenu' => $submenu, 'class' => 'block'));
+function dmm_blocks_get_omMenuBlock_Library($submenu = NULL) {
+  if ($submenu) {
+    $out = theme('dmm_misc_submenuSimple', array('submenu' => $submenu, 'class' => 'block'));
+  }
+  else {
+    $out = 'Test';
+  }
+  return $out;
 }
 
 
