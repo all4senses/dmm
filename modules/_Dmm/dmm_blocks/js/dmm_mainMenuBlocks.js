@@ -4,7 +4,7 @@
     attach: function (context, settings) {
        
        
-       //console.log('blocks test!');
+       console.log('blocks test!');
        
     }
   };
