@@ -12,16 +12,16 @@
        $( ".tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
        
        $( ".tabs li a" ).click(function(event){
-//         var e = event || window.event;
-//         e.preventDefault();
-//         e.stopPropagation();
+         var e = event || window.event;
+         e.preventDefault();
+         e.stopPropagation();
 ////         if(e.preventDefault){
 ////            e.preventDefault();
 ////         }else{
 ////            e.returnValue = false; 
 ////         };
 //         
-            event.preventDefault(); // stop browser from following href
+            //event.preventDefault(); // stop browser from following href
 //            var url = $(this).attr('href'); // get href
 //            var hash = url.split('#'); // get the hash-part
 //            if(hash.length > 1) location.hash = hash[1]; // rewrite the url
