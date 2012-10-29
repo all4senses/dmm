@@ -307,9 +307,9 @@ function theme_dmm_misc_submenuSimple($vars) {
 
 
 /**
- * Returns tags list. 
+ * Returns SupersectionsTerms_ByTopTermName. 
  */
-function dmm_misc_getOmBlockTagsByName($tag) {
+function dmm_misc_OmBlock_getSupersectionsTerms_ByTopTermName($tag) {
 
   $voc = taxonomy_vocabulary_machine_name_load('dmmmenu');
   
@@ -321,6 +321,22 @@ function dmm_misc_getOmBlockTagsByName($tag) {
 
   $tags = taxonomy_get_children($term['tid'], $voc->vid);
   return $tags;
+}
+
+
+/**
+ * Returns getSectionsLists_bySupersectionsTerms. 
+ */
+function dmm_misc_OmBlock_getSectionsLists_bySupersectionsTerms($supersectionsTerms) {
+  foreach ($supersectionsTerms as $supersectionTerm) {
+    $query = db_select('taxonomy_index', 'ti');
+    $query->leftJoin('node', 'n', 'n.nid = ti.nid');  
+    $query->fields('n', array('nid', 'title'))
+          ->condition('ti.tid', $supersectionTerm->tid);
+    $sectionsLists[$supersectionTerm->tid] = $query->execute()->fetchAssoc();
+  }
+  
+  dpm($sectionsLists);
 }
 
 
