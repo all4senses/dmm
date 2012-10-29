@@ -312,9 +312,13 @@ function theme_dmm_misc_submenuSimple($vars) {
 function dmm_misc_getOmBlockTagsByName($tag) {
 
   $voc = taxonomy_vocabulary_machine_name_load('dmmmenu');
+  
   $query = db_select('taxonomy_term_data', 'td')
-        ->fields('td', array('tid', 'description'));
+        ->fields('td', array('tid', 'description'))
+        ->condition('td.vid', $voc->vid)
+        ->condition('td.name', $tag);
   $term = $query->execute()->fetchAssoc();
+  
   dpm($term);
   $tags = taxonomy_get_children($term['tid'], $voc->vid);
   return $tags;
