@@ -5,7 +5,7 @@
        
        $( ".tabs" )
        .tabs({
-          event: "click" //"mouseover"
+          event: "mouseover"
         })
        .addClass( "ui-tabs-vertical ui-helper-clearfix" );
        
@@ -28,7 +28,7 @@
             return false; 
         });
        
-       console.log('blocks test!');
+       //console.log('blocks test!');
        
     }
   };

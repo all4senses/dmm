@@ -18,9 +18,12 @@ function dmm_blocks_block_info() {
     'info' => t('OM Library'),
     'cache' => DRUPAL_CACHE_GLOBAL,
   );
-  
   $blocks['main_menu_om_aumeniavottak'] = array(
     'info' => t('OM A u menia vot tak'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  $blocks['main_menu_om_hochusebetakoe'] = array(
+    'info' => t('OM Hochu sebe takoe'),
     'cache' => DRUPAL_CACHE_GLOBAL,
   );
   
@@ -83,6 +86,12 @@ function dmm_blocks_block_view($delta = '') {
       $block['subject'] = t('OM A u menia vot tak');
       $block['content'] = dmm_blocks_get_omMenu_getTabbedBlock_byTopTermName('А у меня вот так!');//dmm_blocks_get_omMenuBlock_byTitle('Материалы', 'dmm_blocks_get_omMenuBlock_Content');
       break;
+    
+    case 'main_menu_om_hochusebetakoe':
+      $block['subject'] = t('OM Hochu sebe takoe');
+      $block['content'] = dmm_blocks_get_omMenu_getTabbedBlock_byTopTermName('Хочу себе такое');//dmm_blocks_get_omMenuBlock_byTitle('Материалы', 'dmm_blocks_get_omMenuBlock_Content');
+      break;
+    
     
     case 'main_menu_om_aboutus':
       $block['subject'] = t('OM About Us');
