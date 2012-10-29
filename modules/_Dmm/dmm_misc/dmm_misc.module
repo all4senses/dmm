@@ -345,6 +345,7 @@ function dmm_misc_OmBlock_getSectionsLists_bySupersectionsTerms($supersectionsTe
       $results = $query->execute();
       
       foreach ($results as $tag) {
+        dpm($tag);
         $tags .= $tags ? ', ' . $tag->name : $tag->name;
       }
       $sectionsLists[$supersectionTerm->tid]['tags'] = $tags;
