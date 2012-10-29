@@ -197,7 +197,7 @@ function dmm_blocks_get_omMenu_getTabbedBlock_byTopTermName($topTermName) {
       $out_tabs_contents .= 
         '<div id="tabs-' . $tabs_captions_term->tid . '">
            <div>Content of ' . $tabs_captions_term->name . '</div>
-           <div>' . $tabs_contents['tid'] . '</div>
+           <div>' . $tabs_contents[$tabs_captions_term->tid] . '</div>
         </div>';
     }
     $out = '<div class="tabs"><ul>' . $out_tabs_captions . '</ul>' . $out_tabs_contents . '</div>';
