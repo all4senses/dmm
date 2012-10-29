@@ -19,8 +19,8 @@ function dmm_blocks_block_info() {
     'cache' => DRUPAL_CACHE_GLOBAL,
   );
   
-  $blocks['main_menu_om_content'] = array(
-    'info' => t('OM Content'),
+  $blocks['main_menu_om_aumeniavottak'] = array(
+    'info' => t('OM A u menia vot tak'),
     'cache' => DRUPAL_CACHE_GLOBAL,
   );
   
@@ -78,10 +78,12 @@ function dmm_blocks_block_view($delta = '') {
       $block['subject'] = t('OM Library');
       $block['content'] = dmm_blocks_get_omMenu_getTabbedBlock_byTopTermName('Энциклопедия Уюта'); //dmm_blocks_get_omMenuBlock_byTitle('Энциклопедия Уюта', 'dmm_blocks_get_omMenuBlock_Library');
       break;
-    case 'main_menu_om_content':
-      $block['subject'] = t('OM Content');
-      $block['content'] = dmm_blocks_get_omMenuBlock_byTitle('Материалы', 'dmm_blocks_get_omMenuBlock_Content');
+    
+    case 'main_menu_om_aumeniavottak':
+      $block['subject'] = t('OM A u menia vot tak');
+      $block['content'] = dmm_blocks_get_omMenu_getTabbedBlock_byTopTermName('А у меня вот так!');//dmm_blocks_get_omMenuBlock_byTitle('Материалы', 'dmm_blocks_get_omMenuBlock_Content');
       break;
+    
     case 'main_menu_om_aboutus':
       $block['subject'] = t('OM About Us');
       $block['content'] = dmm_blocks_get_omMenuBlock_byTitle('О нас', 'dmm_blocks_get_omMenuBlock_AboutUs');
