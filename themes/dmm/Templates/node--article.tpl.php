@@ -169,7 +169,7 @@
 
 
                     <?php 
-                      if (isset($node->field_tags['und'])) {
+                      if ($node->type != 'section' && isset($node->field_tags['und'])) {
                         $tags = NULL;
                         foreach ($node->field_tags['und'] as $key => $value) {
                           $tags .= ($tags ? '<div class="delim">|</div>' : '') . l(t($content['field_tags'][$key]['#title']), 'taxonomy/term/' . $value['tid']);
