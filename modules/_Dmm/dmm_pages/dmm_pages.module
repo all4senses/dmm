@@ -161,9 +161,19 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
   $display_name = ($currentViewStyle == 'teasers') ? 'section_teasers_block' : 'section_titles_block';
   
   $viewsFilterOptions_tid = array('id' => 'tid', 'value' => $tids, 'type' => 'select', 'vid' =>  'tags', 'hierarchy' => 1, 'reduce_duplicates' => 1, 'group' => 0);
-  $nodeTypesToShow = array('article' => 'Статьи', 'album' => 'Альбомы', 'master_class' => 'Мастер-классы', 'blog_post' => 'Посты в Блогах');
-  dpm($node);
+  
+  $nodeTypesToShow_all = array('article' => 'Статьи', 'album' => 'Альбомы', 'master_class' => 'Мастер-классы', 'blog_post' => 'Посты в Блогах');
+  if (isset($node->field_content_types['und'])) {
+    foreach ($node->field_content_types['und'] as $content_type) {
+      $nodeTypesToShow[$content_type['value']] = $nodeTypesToShow_all[$content_type['value']];
+    }
+  }
+  else {
+    $nodeTypesToShow = array();
+  }
+  
   foreach ($nodeTypesToShow as $type => $title) {
+    
     $view = views_get_view($view_name);
     $view->add_item($display_name, 'filter', 'taxonomy_index', 'tid', $viewsFilterOptions_tid);
     $viewsFilterOptions_nodeType = array('id' => 'type', 'value' => array($type => $type));
