@@ -370,7 +370,7 @@ function dmm_misc_OmBlock_getSectionsLists_bySupersectionsTerms($supersectionsTe
     }
   } // End of foreach ($supersectionsTerms as $supersectionTerm) {
   
-  dpm($sectionsLists);
+  return $sectionsLists;
 }
 
 
