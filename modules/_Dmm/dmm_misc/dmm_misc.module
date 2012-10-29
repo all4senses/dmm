@@ -318,8 +318,7 @@ function dmm_misc_getOmBlockTagsByName($tag) {
         ->condition('td.vid', $voc->vid)
         ->condition('td.name', $tag);
   $term = $query->execute()->fetchAssoc();
-  
-  dpm($term);
+
   $tags = taxonomy_get_children($term['tid'], $voc->vid);
   return $tags;
 }

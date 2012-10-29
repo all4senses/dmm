@@ -11,7 +11,8 @@
        
        $( ".tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
        $( ".tabs li a" ).click(function(event){
-         return false; //event.preventDefault();
+         event.preventDefault();
+         return false; 
         });
        
        console.log('blocks test!');
