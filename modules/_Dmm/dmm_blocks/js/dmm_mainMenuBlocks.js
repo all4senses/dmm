@@ -5,9 +5,9 @@
        
        $( ".tabs" )
        .tabs({
-          event: "mouseover"
+          event: "click" //"mouseover"
         })
-       .addClass( "ui-tabs-vertical ui-helper-clearfix" ).history();
+       .addClass( "ui-tabs-vertical ui-helper-clearfix" );
        
        $( ".tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
        
