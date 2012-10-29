@@ -182,7 +182,7 @@ function dmm_blocks_get_omMenu_getTabbedBlock_byTopTermName($topTermName) {
     $out_tabs_captions = NULL;
     $out_tabs_contents = NULL;
     foreach($tabs_captions_terms as $tabs_captions_term) {
-      $out_tabs_captions .= '<li><a onclick="return false;" href="#tabs-' . $tabs_captions_term->tid . '">' . $tabs_captions_term->name . '</a></li>';
+      $out_tabs_captions .= '<li><a href="#tabs-' . $tabs_captions_term->tid . '">' . $tabs_captions_term->name . '</a></li>';
       $out_tabs_contents .= '<div id="tabs-' . $tabs_captions_term->tid . '">
         <p>Content of ' . $tabs_captions_term->name . '</p>
     </div>';
