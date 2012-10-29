@@ -189,7 +189,7 @@ function dmm_blocks_get_omMenu_getTabbedBlock_byTopTermName($topTermName) {
   
     $tabs_captions_terms = dmm_misc_OmBlock_getSupersectionsTerms_ByTopTermName($topTermName);
     $tabs_contents = dmm_misc_OmBlock_getSectionsLists_bySupersectionsTerms($tabs_captions_terms);
-    dpm($tabs_contents);
+
     $out_tabs_captions = NULL;
     $out_tabs_contents = NULL;
     foreach($tabs_captions_terms as $tabs_captions_term) {
