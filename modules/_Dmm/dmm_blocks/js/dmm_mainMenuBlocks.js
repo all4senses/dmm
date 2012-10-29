@@ -11,7 +11,11 @@
        
        $( ".tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
        $( ".tabs li a" ).click(function(event){
-         event.preventDefault();
+         if(event.preventDefault){
+            event.preventDefault();
+         }else{
+            event.returnValue = false; 
+         };
          return false; 
         });
        
