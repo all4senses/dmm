@@ -10,7 +10,9 @@
        .addClass( "ui-tabs-vertical ui-helper-clearfix" );
        
        $( ".tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-       $( ".tabs li a" ).click(function(e){
+       
+       $( ".tabs li a" ).click(function(event){
+         var e = event || window.event;
          e.preventDefault();
          e.stopPropagation();
 //         if(e.preventDefault){
