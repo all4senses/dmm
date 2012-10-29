@@ -3,15 +3,15 @@
   Drupal.behaviors.dmm_mainMenuBlocks = {
     attach: function (context, settings) {
        
-       $( ".tabs" )
+       $( ".block-om-maximenu .tabs" )
        .tabs({
           event: "mouseover"
         })
        .addClass( "ui-tabs-vertical ui-helper-clearfix" );
        
-       $( ".tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+       $( ".block-om-maximenu .tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
        
-       $( ".tabs li a" ).click(function(event){
+       $( ".block-om-maximenu .tabs li a" ).click(function(event){
          var e = event || window.event;
          e.preventDefault();
          e.stopPropagation();
