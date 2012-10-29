@@ -153,7 +153,9 @@ ul.secondary a.active {border-bottom: none;}
 
 .field-name-field-tags {margin: 0 0 1.5em;}
 .field-name-field-tags .field-item {margin: 0 1em 0 0;}
-.field-name-field-tags div {display: inline;}
+
+/*.field-name-field-tags div {display: inline;}*/
+.field-name-field-tags div {display: inline-block;}
 
 /* profile */
 
