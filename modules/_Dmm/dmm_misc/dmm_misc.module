@@ -334,6 +334,7 @@ function dmm_misc_OmBlock_getSectionsLists_bySupersectionsTerms($supersectionsTe
 //  $vid = $voc->vid;
   $vid = 1;
   
+  $sectionsLists = array();
   foreach ($supersectionsTerms as $supersectionTerm) {
     // Get sections nids and titles.
     $query = db_select('taxonomy_index', 'ti');
@@ -342,6 +343,9 @@ function dmm_misc_OmBlock_getSectionsLists_bySupersectionsTerms($supersectionsTe
           ->condition('ti.tid', $supersectionTerm->tid);
     $results = $query->execute();
     
+    if (!$results) {
+      $sectionsLists[$supersectionTerm->tid] = FALSE;
+    }
     foreach ($results as $node) {
         $sectionsLists[$supersectionTerm->tid] = '<div class="section title"> ' . l($node->title, 'node/' . $node->nid) . '</div>';
         
