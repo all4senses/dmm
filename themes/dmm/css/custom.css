@@ -583,9 +583,11 @@ a.yt-direct:active{outline: none;}
 
 /* Main menu blocks */
 /*.ui-tabs-vertical { width: 55em; }*/
-.ui-widget-content{border: none;}
+.ui-widget-content, .ui-widget-header{border: none;}
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a{cursor: pointer;}
-/*.ui-tabs .ui-tabs-nav li.ui-tabs-selected a:hover, .ui-tabs .ui-tabs-nav li.ui-state-disabled a:hover, .ui-tabs .ui-tabs-nav li.ui-state-processing a:hover{cursor: hand;}*/
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{background: white;}
+.ui-tabs .ui-tabs-nav li{white-space: normal;}
+
 .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
 .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
 .ui-tabs-vertical .ui-tabs-nav li a { display:block; color: gray; width: 100%;}
