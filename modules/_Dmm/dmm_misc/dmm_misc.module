@@ -328,6 +328,12 @@ function dmm_misc_OmBlock_getSupersectionsTerms_ByTopTermName($tag) {
  * Returns getSectionsLists_bySupersectionsTerms. 
  */
 function dmm_misc_OmBlock_getSectionsLists_bySupersectionsTerms($supersectionsTerms) {
+  
+  // vid for tags vocabulary.
+//  $voc = taxonomy_vocabulary_machine_name_load('tags');
+//  $vid = $voc->vid;
+  $vid = 1;
+  
   foreach ($supersectionsTerms as $supersectionTerm) {
     // Get sections nids and titles.
     $query = db_select('taxonomy_index', 'ti');
@@ -341,7 +347,8 @@ function dmm_misc_OmBlock_getSectionsLists_bySupersectionsTerms($supersectionsTe
       $query = db_select('taxonomy_index', 'ti');
       $query->leftJoin('taxonomy_term_data', 'td', 'td.tid = ti.tid');  
       $query->fields('td', array('tid', 'name'))
-            ->condition('ti.nid', $sectionsLists[$supersectionTerm->tid]['nid']);
+            ->condition('ti.nid', $sectionsLists[$supersectionTerm->tid]['nid'])
+            ->condition('td.vid', $vid);
       $results = $query->execute();
       
       foreach ($results as $tag) {
