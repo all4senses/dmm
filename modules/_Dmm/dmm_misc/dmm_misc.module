@@ -336,13 +336,14 @@ function dmm_misc_OmBlock_getSectionsLists_bySupersectionsTerms($supersectionsTe
           ->condition('ti.tid', $supersectionTerm->tid);
     $sectionsLists[$supersectionTerm->tid] = $query->execute()->fetchAssoc();
     // Get sections tids
+    $tags = NULL;
     if ($sectionsLists[$supersectionTerm->tid]) {
       $query = db_select('taxonomy_index', 'ti');
       $query->leftJoin('taxonomy_term_data', 'td', 'td.tid = ti.tid');  
       $query->fields('td', array('tid', 'name'))
             ->condition('ti.nid', $sectionsLists[$supersectionTerm->tid]['nid']);
       $results = $query->execute();
-      $tags = NULL;
+      
       foreach ($results as $tag) {
         $tags .= $tags ? ', ' . $tag->name : $tag->name;
       }
