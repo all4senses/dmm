@@ -329,12 +329,25 @@ function dmm_misc_OmBlock_getSupersectionsTerms_ByTopTermName($tag) {
  */
 function dmm_misc_OmBlock_getSectionsLists_bySupersectionsTerms($supersectionsTerms) {
   foreach ($supersectionsTerms as $supersectionTerm) {
+    // Get sections nids and titles.
     $query = db_select('taxonomy_index', 'ti');
     $query->leftJoin('node', 'n', 'n.nid = ti.nid');  
     $query->fields('n', array('nid', 'title'))
           ->condition('ti.tid', $supersectionTerm->tid);
-    if ($sectionsList = $query->execute()->fetchAssoc()) {
-      $sectionsLists[$supersectionTerm->tid] = $sectionsList;
+    $sectionsLists[$supersectionTerm->tid] = $query->execute()->fetchAssoc();
+    // Get sections tids
+    if ($sectionsLists[$supersectionTerm->tid]) {
+      $query = db_select('taxonomy_index', 'ti');
+      $query->leftJoin('taxonomy_term_data', 'td', 'td.tid = ti.tid');  
+      $query->fields('td', array('tid', 'name'))
+            ->condition('ti.nid', $sectionsLists[$supersectionTerm->tid]['nid']);
+      $results = $query->execute();
+      $tags = NULL;
+      foreach ($results as $tag) {
+        $tags .= $tags ? ', ' . $tag->name : $tag->name;
+      }
+      $sectionsLists[$supersectionTerm->tid]['tags'] = $tags;
+    
     }
   }
   
