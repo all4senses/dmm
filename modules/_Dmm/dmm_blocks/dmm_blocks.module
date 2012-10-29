@@ -76,7 +76,7 @@ function dmm_blocks_block_view($delta = '') {
   switch ($delta) {      
     case 'main_menu_om_library':
       $block['subject'] = t('OM Library');
-      $block['content'] = dmm_blocks_get_omMenuBlock_Library(); //dmm_blocks_get_omMenuBlock_byTitle('Энциклопедия Уюта', 'dmm_blocks_get_omMenuBlock_Library');
+      $block['content'] = dmm_blocks_get_omMenu_getTabbedBlock_byTopTermName('Энциклопедия Уюта'); //dmm_blocks_get_omMenuBlock_byTitle('Энциклопедия Уюта', 'dmm_blocks_get_omMenuBlock_Library');
       break;
     case 'main_menu_om_content':
       $block['subject'] = t('OM Content');
@@ -163,6 +163,33 @@ function dmm_blocks_get_omMenuBlock_byTitle($title, $function) {
   return $function($submenu);
 }
 
+
+
+/**
+ * Returns a themed block OM-Menu by a menu name.
+ */
+function dmm_blocks_get_omMenu_getTabbedBlock_byTopTermName($topTermName) {
+
+    drupal_add_library('system', 'ui.core');
+    drupal_add_library('system', 'ui.tabs');
+
+    $path_to_custom_js = drupal_get_path('module', 'dmm_blocks') . '/js/';
+    drupal_add_js($path_to_custom_js . 'dmm_mainMenuBlocks.js');
+  
+    $tabs_captions_terms = dmm_misc_getOmBlockTagsByName($topTermName);
+    $out_tabs_captions = NULL;
+    $out_tabs_contents = NULL;
+    foreach($tabs_captions_terms as $tabs_captions_term) {
+      $out_tabs_captions .= '<li><a href="#tabs-' . $tabs_captions_term->tid . '">' . $tabs_captions_term->name . '</a></li>';
+      $out_tabs_contents .= '<div id="tabs-' . $tabs_captions_term->tid . '">
+        <p>Content of ' . $tabs_captions_term->name . '</p>
+    </div>';
+    }
+    $out = '<div class="tabs"><ul>' . $out_tabs_captions . '</ul>' . $out_tabs_contents . '</div>';
+  
+  return $out;
+  
+}
 
 /**
  * Returns a themed block OM-Menu.
