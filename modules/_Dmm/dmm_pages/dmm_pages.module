@@ -129,8 +129,8 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
   
   
   
+  // Set a view type.
   
-
   // Teasers by default
   if ($default_list_view_style == 'teaser') {
     $currentViewStyle = (isset($_GET['view']) && $_GET['view'] == 'titles') ? 'titles' : 'teasers';
@@ -138,7 +138,6 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
   else {
     $currentViewStyle = (isset($_GET['view']) && $_GET['view'] == 'teasers') ? 'teasers': 'titles';
   }
-  
   
   $get = $_GET;
   unset($get['q']);
@@ -160,18 +159,47 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
   //$display_name = 'section_titles_block';
   $display_name = ($currentViewStyle == 'teasers') ? 'section_teasers_block' : 'section_titles_block';
   
+  
+  
+  
+  
+  // Set tags.
   $viewsFilterOptions_tid = array('id' => 'tid', 'value' => $tids, 'type' => 'select', 'vid' =>  'tags', 'hierarchy' => 1, 'reduce_duplicates' => 1, 'group' => 0);
+  
+  
+  
+  
+  
+  
+  // Set content types to collect for this section.
   
   // Confine shown articles by those set in the section Content types select field.
   $nodeTypesToShow_all = array('article' => 'Статьи', 'album' => 'Альбомы', 'master_class' => 'Мастер-классы', 'blog_post' => 'Посты в Блогах');
+  
+  // If some type name contain '___' it means that it contain an access marker ('___public'or '___user')
+  // We need to handle it, strip markers and set an access marker separately from the content type name.
+  $content_access_types = array('user' => '0', 'private' => '1', 'library' => '2');
+  $nodeTypesToShow_access = array();
+  
   if (isset($node->field_content_types['und'])) {
     foreach ($node->field_content_types['und'] as $content_type) {
-      $nodeTypesToShow[$content_type['value']] = $nodeTypesToShow_all[$content_type['value']];
+      $content_type = $content_type['value'];
+      if (strpos($content_type, '___')) {
+        // 'album___library'
+        $content_type = explode('___', $content_type);
+        $nodeTypesToShow_access[$content_type[0]][] = $content_access_types[$content_type[1]];
+        $content_type = $content_type[0];
+      }
+      $nodeTypesToShow[$content_type] = $nodeTypesToShow_all[$content_type];
     }
   }
   else {
     $nodeTypesToShow = array();
   }
+  
+  dpm($nodeTypesToShow);
+  dpm($nodeTypesToShow_access);
+  
   
   foreach ($nodeTypesToShow as $type => $title) {
     
