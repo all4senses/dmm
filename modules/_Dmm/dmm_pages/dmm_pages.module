@@ -176,7 +176,7 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
   // Confine shown articles by those set in the section Content types select field.
   $nodeTypesToShow_all = array('article' => 'Статьи', 'album' => 'Альбомы', 'master_class' => 'Мастер-классы', 'blog_post' => 'Посты в Блогах');
   
-  // If some type name contain '___' it means that it contain an access marker ('___public'or '___user')
+  // If some type name contains '___' it means that it contain an access marker ('___public'or '___user')
   // We need to handle it, strip markers and set an access marker separately from the content type name.
   $content_access_types = array('user' => '0', 'private' => '1', 'library' => '2');
   $nodeTypesToShow_access = array();
@@ -187,7 +187,7 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
       if (strpos($content_type, '___')) {
         // 'album___library'
         $content_type = explode('___', $content_type);
-        $nodeTypesToShow_access[$content_type[0]][] = $content_access_types[$content_type[1]];
+        $nodeTypesToShow_access[$content_type[0]][$content_access_types[$content_type[1]]] = $content_access_types[$content_type[1]];
         $content_type = $content_type[0];
       }
       $nodeTypesToShow[$content_type] = $nodeTypesToShow_all[$content_type];
@@ -197,10 +197,8 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
     $nodeTypesToShow = array();
   }
   
-  dpm($nodeTypesToShow);
-  dpm($nodeTypesToShow_access);
   
-  
+  // Now we are ready to get all content grouped by a content types.
   foreach ($nodeTypesToShow as $type => $title) {
     
     $view = views_get_view($view_name);
@@ -208,6 +206,27 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
     $viewsFilterOptions_nodeType = array('id' => 'type', 'value' => array($type => $type));
     $view->add_item($display_name, 'filter', 'node', 'type', $viewsFilterOptions_nodeType);
 
+    // Add a filter by access type (user, library, etc), if set (defined a bit above)
+    if (isset($nodeTypesToShow_access[$type])) {
+      $viewsFilterOptions_accessTypes = array('id' => 'field_access_type_dmm_value', 'reduce_duplicates' => TRUE, 'value' => $nodeTypesToShow_access[$type]);
+      $view->add_item($display_name, 'filter', 'field_data_field_access_type_dmm', 'field_access_type_dmm_value', $viewsFilterOptions_nodeType);
+    }
+    
+    
+    /* Filter criterion: Content: Access type (field_access_type_dmm) */
+//    $handler->display->display_options['filters']['field_access_type_dmm_value']['id'] = 'field_access_type_dmm_value';
+//    $handler->display->display_options['filters']['field_access_type_dmm_value']['table'] = 'field_data_field_access_type_dmm';
+//    $handler->display->display_options['filters']['field_access_type_dmm_value']['field'] = 'field_access_type_dmm_value';
+//    $handler->display->display_options['filters']['field_access_type_dmm_value']['value'] = array(
+//      0 => '0',
+//      2 => '2',
+//    );
+//    $handler->display->display_options['filters']['field_access_type_dmm_value']['reduce_duplicates'] = TRUE;
+    
+    
+    
+    
+    
     $results = $view->preview($display_name);
     //if ($view->total_rows) {
     if ($view->result) {
