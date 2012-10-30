@@ -209,7 +209,7 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
     // Add a filter by access type (user, library, etc), if set (defined a bit above)
     if (isset($nodeTypesToShow_access[$type])) {
       $viewsFilterOptions_accessTypes = array('id' => 'field_access_type_dmm_value', 'reduce_duplicates' => TRUE, 'value' => $nodeTypesToShow_access[$type]);
-      $view->add_item($display_name, 'filter', 'field_data_field_access_type_dmm', 'field_access_type_dmm_value', $viewsFilterOptions_nodeType);
+      $view->add_item($display_name, 'filter', 'field_data_field_access_type_dmm', 'field_access_type_dmm_value', $viewsFilterOptions_accessTypes);
     }
     
     
