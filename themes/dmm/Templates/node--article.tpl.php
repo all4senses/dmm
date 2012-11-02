@@ -100,7 +100,7 @@
 
       <div class="content <?php echo ($page ? 'page' : 'teaser'); ?>"<?php print $content_attributes; ?>>
         <?php
-        dpm($content);
+          //dpm($content);
           hide($content['comments']);
           //hide($content['links']);
           hide($content['field_tags']);
@@ -198,7 +198,14 @@
         }
       ?>
 
-      
+      <?php 
+        if (!$user->uid) {
+          echo '<div class="login-to-comment"><a href="/user/login?destination=node/3%23comment-form">Log in</a> to post comments</div>';
+          echo '<div class="login-to-comment-loginza">' . theme('loginza_string') . '</div>';
+          echo '<div class="login-to-comment-loginza">' . theme('loginza_button') . '</div>';
+        }
+        
+      ?>
       <?php print render($content['comments']); ?>
 
 <?php if (!$page): ?>
