@@ -27,8 +27,8 @@
    * EscapeRegex function from jquery autocomplete, is not included in drupal.
    */
   Drupal.autocomplete_deluxe.escapeRegex = function(value) {
-    //return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/gi, "\\$&");
-    return value;
+    return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/gi, "\\$&");
+    //return value;
   };
 
   /**
