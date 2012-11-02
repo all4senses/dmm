@@ -203,6 +203,8 @@
           echo '<div class="login-to-comment"><a href="/user/login?destination=node/3%23comment-form">Log in</a> to post comments</div>';
           echo '<div class="login-to-comment-loginza">' . theme('loginza_string') . '</div>';
           echo '<div class="login-to-comment-loginza">' . theme('loginza_button') . '</div>';
+          echo '<div class="login-to-comment-loginza">' . theme('loginza_icons') . '</div>';
+          
         }
         
       ?>
