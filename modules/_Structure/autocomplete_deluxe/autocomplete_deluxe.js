@@ -27,9 +27,7 @@
    * EscapeRegex function from jquery autocomplete, is not included in drupal.
    */
   Drupal.autocomplete_deluxe.escapeRegex = function(value) {
-    //return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/gi, "\\$&");
-    return value.replace(/[-[\]{}()*+?\.\,\\^$|#\s]/gi, "\\$&");
-    //return value;
+    return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/gi, "\\$&");
   };
 
   /**
@@ -301,17 +299,17 @@
       var value = jqObject.val();
       // If a comma was entered and there is none or more then one comma,
       // then enter the new term.
-      if (event.which == 188 && (value.split('"').length - 1) != 1) {
-        value = value.substr(0, value.length);
-        if (self.items[value] === undefined && value != '') {
-          var ui_item = {
-            label: value,
-            value: value
-          };
-          self.addValue(ui_item);
-        }
-        clear = true;
-      }
+//      if (event.which == 188 && (value.split('"').length - 1) != 1) {
+//        value = value.substr(0, value.length);
+//        if (self.items[value] === undefined && value != '') {
+//          var ui_item = {
+//            label: value,
+//            value: value
+//          };
+//          self.addValue(ui_item);
+//        }
+//        clear = true;
+//      }
 
       // If the Backspace key was hit and the input is empty
       if (event.which == 8 && value == '') {
