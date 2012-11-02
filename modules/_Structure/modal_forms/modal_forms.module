@@ -226,8 +226,8 @@ function _modal_forms_doheader() {
    'modal-popup-medium-dmm' => array(
       'modalSize' => array(
         'type' => 'fixed',
-        'width' => 460,
-        'height' => 470,
+        'width' => 480,
+        'height' => 480,
       ),
       'modalOptions' => array(
         'opacity' => 0.85,
