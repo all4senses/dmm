@@ -200,7 +200,7 @@
 
       <?php 
         if (!$user->uid) {
-          echo '<div class="login-to-comment">To post comments log in <a href="/user/login?destination=node/3%23comment-form">with the site account</a></div> or <div class="login-to-comment-loginza">' . theme('loginza_button') . '</div>';
+          echo '<div class="login-to-comment">To post comments log in <a href="/user/login?destination=node/3%23comment-form">with the site account</a></div> or <div class="login-to-comment-loginza">' . theme('loginza_string') . theme('loginza_button') . '</div>';
           //echo '<div class="login-to-comment-loginza">' . theme('loginza_string') . '</div>';
           //echo '';
           //echo '<div class="login-to-comment-loginza">' . theme('loginza_icons') . '</div>';
