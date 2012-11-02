@@ -100,9 +100,8 @@
 
       <div class="content <?php echo ($page ? 'page' : 'teaser'); ?>"<?php print $content_attributes; ?>>
         <?php
-          //dpm($content);
           hide($content['comments']);
-          //hide($content['links']);
+          hide($content['links']);
           hide($content['field_tags']);
           hide($content['body']);
           
