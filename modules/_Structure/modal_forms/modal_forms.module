@@ -212,6 +212,12 @@ function _modal_forms_doheader() {
         'width' => 550,
         'height' => 450,
       ),
+     'modal-popup-medium-dmm' => array(
+      'modalSize' => array(
+        'type' => 'fixed',
+        'width' => 500,
+        'height' => 500,
+      ),
       'modalOptions' => array(
         'opacity' => 0.85,
         'background' => '#000',
