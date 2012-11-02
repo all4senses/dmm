@@ -227,7 +227,7 @@ function _modal_forms_doheader() {
       'modalSize' => array(
         'type' => 'fixed',
         'width' => 460,
-        'height' => 460,
+        'height' => 470,
       ),
       'modalOptions' => array(
         'opacity' => 0.85,
