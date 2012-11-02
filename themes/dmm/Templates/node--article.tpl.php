@@ -188,18 +188,19 @@
  
 
     
-  <?php //print render($content['comments']); ?>
+  
+      <?php 
+        // Used only for sections.
+        if (isset($node->sectionBlocks)) {
+          foreach ($node->sectionBlocks as $sectionBlock) {
+            echo $sectionBlock;
+          }
+        }
+      ?>
+
+      
+      <?php print render($content['comments']); ?>
 
 <?php if (!$page): ?>
   </article> <!-- /.node -->
 <?php endif; ?>
-
-  
-<?php 
-  // Used only for sections.
-  if (isset($node->sectionBlocks)) {
-    foreach ($node->sectionBlocks as $sectionBlock) {
-      echo $sectionBlock;
-    }
-  }
-?>
