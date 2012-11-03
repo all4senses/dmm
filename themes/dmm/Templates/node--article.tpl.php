@@ -227,7 +227,8 @@
           //echo l($text, $dest, array('html' => TRUE, 'attributes' => array('class' => array($type, $class), 'title' => $alt)));
           echo '<div class="login-to-comment">' . l(t('Login'), 'ajax_register/login/nojs', array('destination' => ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form', 'html' => TRUE, 'attributes' => array('class' => array('ctools-use-modal', 'ctools-modal-ctools-ajax-register-style'), 'title' => t('Login'))))  . '</div>';
           echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-ctools-ajax-register-style" href="ajax_register/login/nojs?destination=' . urlencode(ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form') . '">Log</a></div>';
-    
+          
+          $GLOBALS['destination'] = 'node/3';
     
         }
         
