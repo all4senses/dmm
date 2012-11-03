@@ -20,6 +20,8 @@ function loginza_callback() {
   }
 
   $data = drupal_json_decode($result->data);
+  dpm($data);
+  return;
   if (!empty($data['error_type'])) {
     watchdog('loginza', "Error while Loginza authentication:\r\n<pre>@data</pre>",
       array('@data' => var_export($data, TRUE)), WATCHDOG_WARNING);
