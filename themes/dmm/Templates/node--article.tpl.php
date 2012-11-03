@@ -221,8 +221,11 @@
           
           // Include css and js for modal dialog.
           _ajax_register_include_modal();
-          echo '<div class="login-to-comment">' . ctools_modal_text_button(t('Login'), 'ajax_register/login/nojs', t('Login'), 'ctools-modal-ctools-ajax-register-style')  . '</div>';
-    
+          //echo '<div class="login-to-comment">' . ctools_modal_text_button(t('Login'), 'ajax_register/login/nojs', t('Login'), 'ctools-modal-ctools-ajax-register-style')  . '</div>';
+          
+          drupal_add_library('system', 'drupal.ajax');
+          //echo l($text, $dest, array('html' => TRUE, 'attributes' => array('class' => array($type, $class), 'title' => $alt)));
+          echo '<div class="login-to-comment">' . l(t('Login'), 'ajax_register/login/nojs', array('html' => TRUE, 'attributes' => array('class' => array('ctools-use-modal', 'ctools-modal-ctools-ajax-register-style'), 'title' => t('Login'))))  . '</div>';
     
     
         }
