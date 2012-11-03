@@ -86,10 +86,129 @@ function modal_forms_admin_settings() {
     '#description' => t('Automatically activate Modal forms for links to contact.'),
   );
 
-  // Advanced settings.
+  // Styles and options settings.
+  $form['modal_forms_custom_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Styles and options'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+  );
+  $form['modal_forms_custom_settings']['modal_forms_background_color'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Background color'),
+      '#default_value' => variable_get('modal_forms_background_color', '#000'),
+      '#size' => 7,
+      '#maxlength' => 7,
+      '#required' => TRUE,
+      '#description' => t('The color of the background behind the modal. Should be entered in html hex notation (eg #000).'),
+  );
+  $form['modal_forms_custom_settings']['modal_forms_opacity'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Background opacity'),
+      '#default_value' => variable_get('modal_forms_opacity', 0.85),
+      '#size' => 3,
+      '#maxlength' => 5,
+      '#required' => TRUE,
+      '#description' => t('The opacity of the background behind the modal. Should be entered as a decimal value (eg 0.85 = 85% opacity).'),
+  );
+
+  // Modal popup size settings
+  $modal_types = array('fixed' => t('Fixed'), 'scale' => t('Scale'));
+  // Popup Small
+  $form['modal_forms_custom_settings']['modal_forms_popup_small'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Modal popup small'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['modal_forms_custom_settings']['modal_forms_popup_small']['modal_forms_popup_small_type'] = array(
+      '#type' => 'radios',
+      '#title' => t('Type'),
+      '#default_value' => variable_get('modal_forms_popup_small_type', 'fixed'),
+      '#options' => $modal_types,
+      '#description' => t('Fixed sizes should be entered in pixels. Scaled sizes should be entered as a decimal percentage of the screen region (eg 0.8 = 80% of screen width/height).'),
+  );
+  $form['modal_forms_custom_settings']['modal_forms_popup_small']['modal_forms_popup_small_width'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Width'),
+    '#default_value' => variable_get('modal_forms_popup_small_width', 300),
+    '#size' => 3,
+    '#maxlength' => 5,
+    '#required' => TRUE,
+  );
+  $form['modal_forms_custom_settings']['modal_forms_popup_small']['modal_forms_popup_small_height'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Height'),
+    '#default_value' => variable_get('modal_forms_popup_small_height', 300),
+    '#size' => 3,
+    '#maxlength' => 5,
+    '#required' => TRUE,
+  );
+  // Popup Medium
+  $form['modal_forms_custom_settings']['modal_forms_popup_medium'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Modal popup medium'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['modal_forms_custom_settings']['modal_forms_popup_medium']['modal_forms_popup_medium_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Type'),
+    '#default_value' => variable_get('modal_forms_popup_medium_type', 'fixed'),
+    '#options' => $modal_types,
+    '#description' => t('Fixed sizes should be entered in pixels. Scaled sizes should be entered as a decimal percentage of the screen region (eg 0.8 = 80% of screen width/height).'),
+  );
+  $form['modal_forms_custom_settings']['modal_forms_popup_medium']['modal_forms_popup_medium_width'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Width'),
+    '#default_value' => variable_get('modal_forms_popup_medium_width', 550),
+    '#size' => 3,
+    '#maxlength' => 5,
+    '#required' => TRUE,
+  );
+  $form['modal_forms_custom_settings']['modal_forms_popup_medium']['modal_forms_popup_medium_height'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Height'),
+    '#default_value' => variable_get('modal_forms_popup_medium_height', 450),
+    '#size' => 3,
+    '#maxlength' => 5,
+    '#required' => TRUE,
+  );
+  // Popup Large
+  $form['modal_forms_custom_settings']['modal_forms_popup_large'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Modal popup large'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['modal_forms_custom_settings']['modal_forms_popup_large']['modal_forms_popup_large_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Type'),
+    '#default_value' => variable_get('modal_forms_popup_large_type', 'scale'),
+    '#options' => $modal_types,
+    '#description' => t('Fixed sizes should be entered in pixels. Scaled sizes should be entered as a decimal percentage of the screen region (eg 0.8 = 80% of screen width/height).'),
+  );
+  $form['modal_forms_custom_settings']['modal_forms_popup_large']['modal_forms_popup_large_width'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Width'),
+    '#default_value' => variable_get('modal_forms_popup_large_width', 0.8),
+    '#size' => 3,
+    '#maxlength' => 5,
+    '#required' => TRUE,
+  );
+  $form['modal_forms_custom_settings']['modal_forms_popup_large']['modal_forms_popup_large_height'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Height'),
+    '#default_value' => variable_get('modal_forms_popup_large_height', 0.8),
+    '#size' => 3,
+    '#maxlength' => 5,
+    '#required' => TRUE,
+  );
+
+  // Page activation/deactivation settings.
   $form['modal_forms_advanced_settings'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Advanced settings'),
+    '#title' => t('Page activation settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );

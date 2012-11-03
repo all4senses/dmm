@@ -16,7 +16,7 @@ function modal_forms_login($js = NULL) {
   ctools_include('modal');
   ctools_include('ajax');
   $form_state = array(
-    'title' => t('Log in'),
+    // 'title' => t('Log in'),
     'ajax' => TRUE,
   );
 
@@ -29,12 +29,15 @@ function modal_forms_login($js = NULL) {
     if (isset($_GET['destination'])) {
       $output[] = ctools_ajax_command_redirect($_GET['destination']);
     }
+    elseif(module_exists('login_destination')) {
+      $destination = login_destination_get_destination('login');
+      $output[] = ctools_ajax_command_redirect($destination['path']);
+    }
     else {
       $output[] = ctools_ajax_command_reload();
     }
   }
   print ajax_render($output);
-  exit;
 }
 
 /**
@@ -49,7 +52,7 @@ function modal_forms_register($js = NULL) {
   ctools_include('modal');
   ctools_include('ajax');
   $form_state = array(
-    'title' => t('Create new account'),
+    // 'title' => t('Create new account'),
     'ajax' => TRUE,
   );
   $output = ctools_modal_form_wrapper('user_register_form', $form_state);
@@ -60,12 +63,15 @@ function modal_forms_register($js = NULL) {
     if (isset($_GET['destination'])) {
       $output[] = ctools_ajax_command_redirect($_GET['destination']);
     }
+    elseif(module_exists('login_destination')) {
+      $destination = login_destination_get_destination('login');
+      $output[] = ctools_ajax_command_redirect($destination['path']);
+    }
     else {
       $output[] = ctools_ajax_command_reload();
     }
   }
   print ajax_render($output);
-  exit;
 }
 
 /**
@@ -82,7 +88,7 @@ function modal_forms_password($js = NULL) {
   ctools_include('modal');
   ctools_include('ajax');
   $form_state = array(
-    'title' => t('Request new password'),
+    // 'title' => t('Request new password'),
     'ajax' => TRUE,
   );
   $output = ctools_modal_form_wrapper('user_pass', $form_state);
@@ -98,7 +104,6 @@ function modal_forms_password($js = NULL) {
     }
   }
   print ajax_render($output);
-  exit;
 }
 
 /**
@@ -115,7 +120,7 @@ function modal_forms_contact($js = NULL) {
   ctools_include('modal');
   ctools_include('ajax');
   $form_state = array(
-    'title' => t('Contact'),
+    // 'title' => t('Contact'),
     'ajax' => TRUE,
   );
   $output = ctools_modal_form_wrapper('contact_site_form', $form_state);
@@ -131,7 +136,6 @@ function modal_forms_contact($js = NULL) {
     }
   }
   print ajax_render($output);
-  exit;
 }
 
 /**
@@ -157,7 +161,7 @@ function modal_forms_comment_reply($js = NULL, $node, $pid = NULL) {
         (object) $comment,
       ),
     ),
-    'title' => t('Comment'),
+    // 'title' => t('Comment'),
     'ajax' => TRUE,
     're_render' => FALSE,
     'no_redirect' => TRUE,
@@ -194,7 +198,6 @@ function modal_forms_comment_reply($js = NULL, $node, $pid = NULL) {
   }
 
   print ajax_render($output);
-  exit;
 }
 
 /**
@@ -255,7 +258,6 @@ function modal_forms_view_webform($js = NULL, $node) {
   }
 
   print ajax_render($output);
-  exit;
 }
 
 /**
@@ -263,7 +265,8 @@ function modal_forms_view_webform($js = NULL, $node) {
  */
 function modal_forms_dismiss($js = NULL) {
   if (!$js) {
-    return;
+    // we should never be here out of ajax context
+    return MENU_NOT_FOUND;
   }
 
   ctools_include('modal');

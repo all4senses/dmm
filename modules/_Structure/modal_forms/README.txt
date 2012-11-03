@@ -16,11 +16,11 @@ Supported forms:
 ---------------
 Modal forms can automatically rewrite links to the following forms and place them in a modal.
 
-* Log in (modal_forms/nojs/user/login)
-* Request new password (modal_forms/nojs/user/password)
-* Create new account (modal_forms/nojs/user/register)
+* Log in (modal_forms/nojs/login)
+* Request new password (modal_forms/nojs/password)
+* Create new account (modal_forms/nojs/register)
 * Comment (modal_forms/nojs/modal_forms/nojs/comment/reply/[nid])
-* Contact (modal_forms/nojs/user/contact)
+* Contact (modal_forms/nojs/contact)
 
 
 Webforms:
