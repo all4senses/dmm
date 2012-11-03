@@ -199,7 +199,7 @@
 
       <?php 
         if (!$user->uid) {
-          
+          dpm($_SERVER);
           echo '<div class="login-to-comment">To post comments log in <a href="/user/login?destination=node/3%23comment-form">with the site account</a></div><div class="login-to-comment-loginza"> or ' . theme('loginza_string') . theme('loginza_button') . '</div>';
           //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium-dmm" href="/modal_forms/nojs/login?destination=' . url('node/' . $node->nid, array('absolute' => TRUE, 'fragment' => 'comment-form')) . '">Modal Login</a></div>';
           //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium-dmm" href="/modal_forms/nojs/login?destination=' . url('node/' . $node->nid, array('absolute' => TRUE)) . '%23comment-form">Modal Login</a></div>';
