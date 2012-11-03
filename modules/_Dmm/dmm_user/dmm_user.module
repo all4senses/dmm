@@ -50,35 +50,6 @@ function dmm_user_menu() {
 
 
 /**
- * Implements hook_drupal_goto_alter
- */
-/*
-function dmm_user_drupal_goto_alter(&$path, &$options, &$http_response_code) {
-  // Note that this functionality cannot be backported do 6.x as Drupal 6 does
-  // not call drupal_alter for drupal_goto.
-
-  // This actually may be used also by templates.
-//  if (isset($GLOBALS['destination'])) {
-//    $destination = $GLOBALS['destination'];
-//
-//    // alter drupal_goto
-//    if (is_array($destination)) {
-//      $path = $destination[0];
-//      $options = $destination[1];
-//    }
-//    else {
-//      $path = $destination;
-//    }
-//  }
-  
-  dpm($path);
-  dpm($options);
-  dpm($_GET);
-}
-*/
-
-
-/**
  * Returns user's content.
  */
 function dmm_user_hcNotifyGet_ajax() {
