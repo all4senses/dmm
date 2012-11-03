@@ -5,6 +5,8 @@
  */
 
 function loginza_callback() {
+  dpm($_POST);
+  dpm($_GET);
   if (empty($_POST['token'])) {
     watchdog('loginza', 'token_url call attempt w/out token', array(), WATCHDOG_WARNING);
     drupal_access_denied();
@@ -20,6 +22,7 @@ function loginza_callback() {
   }
 
   $data = drupal_json_decode($result->data);
+  dpm($data);
   if (!empty($data['error_type'])) {
     watchdog('loginza', "Error while Loginza authentication:\r\n<pre>@data</pre>",
       array('@data' => var_export($data, TRUE)), WATCHDOG_WARNING);
