@@ -53,6 +53,8 @@ function dmm_user_menu() {
  * Action upon login via loginza.
  */
 function dmm_user_loginza_data($data, $account) {
+  
+  dpm('in dmm_user_loginza_data');
   dpm($data);
   dpm($account);
   $_SESSION['dmm_user_loginza_login'] = TRUE;
@@ -83,9 +85,17 @@ function dmm_user_drupal_goto_alter(&$path, &$options, &$http_response_code) {
   */
   if (isset($_SESSION['dmm_user_loginza_login'])) {
     unset($_SESSION['dmm_user_loginza_login']);
-    $path = $_SESSION['dmm_user_loginza_login_destination'];
+    if (is_array($_SESSION['dmm_user_loginza_login_destination'])) {
+      $path = $_SESSION['dmm_user_loginza_login_destination']['destination'];
+      $options['query'] = $_SESSION['dmm_user_loginza_login_destination']['query'];
+      $options['fragment'] = $_SESSION['dmm_user_loginza_login_destination']['fragment'];
+    }
+    else {
+      $path = $_SESSION['dmm_user_loginza_login_destination']['destination'];
+      $options = NULL;
+    }
+    dpm('$path = ' . $path);
     dpm($options);
-    $options = NULL;
   }
   
 }

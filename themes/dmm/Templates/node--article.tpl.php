@@ -229,7 +229,13 @@
           echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-ctools-ajax-register-style" href="ajax_register/login/nojs?destination=' . urlencode(ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form') . '">Log</a></div>';
           
           //$GLOBALS['destination'] = 'node/3';
-          $_SESSION['dmm_user_loginza_login_destination']= 'node/3';
+          $query = $_GET;
+          unset($query['q']);
+          $_SESSION['dmm_user_loginza_login_destination'] = array(
+            'destination' => url('node/' . $node->nid),
+            'query' => $query,
+            'fragment' => 'comment-form',
+          );
     
         }
         
