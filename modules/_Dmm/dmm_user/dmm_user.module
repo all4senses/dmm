@@ -55,6 +55,39 @@ function dmm_user_menu() {
 function dmm_user_loginza_data($data, $account) {
   dpm($data);
   dpm($account);
+  $_SESSION['dmm_user_loginza_login'] = TRUE;
+  
+  unset($GLOBALS['destination']);
+}
+
+
+/**
+ * Implements hook_drupal_goto_alter
+ */
+function dmm_user_drupal_goto_alter(&$path, &$options, &$http_response_code) {
+  
+  // This actually may be used also by templates.
+  /*
+  if (isset($GLOBALS['destination'])) {
+    $destination = $GLOBALS['destination'];
+
+    // alter drupal_goto
+    if (is_array($destination)) {
+      $path = $destination[0];
+      $options = $destination[1];
+    }
+    else {
+      $path = $destination;
+    }
+  }
+  */
+  if (isset($_SESSION['dmm_user_loginza_login'])) {
+    unset($_SESSION['dmm_user_loginza_login']);
+    $path = $_SESSION['dmm_user_loginza_login_destination'];
+    dpm($options);
+    $options = NULL;
+  }
+  
 }
 
 
