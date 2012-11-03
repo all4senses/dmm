@@ -210,7 +210,7 @@
           //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . '#comment-form">Modal Login</a></div>';
           
           echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . $_SERVER['REQUEST_URI'] . '#comment-form">Modal Login</a></div>';
-          
+          dpm($content['links']);
         }
         
       ?>
