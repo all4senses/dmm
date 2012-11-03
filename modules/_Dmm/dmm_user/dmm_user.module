@@ -52,6 +52,7 @@ function dmm_user_menu() {
 /**
  * Implements hook_drupal_goto_alter
  */
+/*
 function dmm_user_drupal_goto_alter(&$path, &$options, &$http_response_code) {
   // Note that this functionality cannot be backported do 6.x as Drupal 6 does
   // not call drupal_alter for drupal_goto.
@@ -74,6 +75,7 @@ function dmm_user_drupal_goto_alter(&$path, &$options, &$http_response_code) {
   dpm($options);
   dpm($_GET);
 }
+*/
 
 
 /**
