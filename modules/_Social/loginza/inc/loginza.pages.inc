@@ -61,7 +61,7 @@ function loginza_callback() {
   }
   elseif (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
     // Register new user.
-
+    dpm('new_user');
     // Save response for use in loginza_form_user_register_form_alter().
     $_SESSION['loginza']['data'] = $data;
 
