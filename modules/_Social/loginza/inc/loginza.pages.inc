@@ -5,8 +5,10 @@
  */
 
 function loginza_callback() {
-  dpm($_POST);
-  dpm($_GET);
+  
+  //dpm($_POST);
+  //dpm($_GET);
+  
   if (empty($_POST['token'])) {
     watchdog('loginza', 'token_url call attempt w/out token', array(), WATCHDOG_WARNING);
     drupal_access_denied();
@@ -22,7 +24,6 @@ function loginza_callback() {
   }
 
   $data = drupal_json_decode($result->data);
-  dpm($data);
   if (!empty($data['error_type'])) {
     watchdog('loginza', "Error while Loginza authentication:\r\n<pre>@data</pre>",
       array('@data' => var_export($data, TRUE)), WATCHDOG_WARNING);
@@ -32,7 +33,10 @@ function loginza_callback() {
 
   loginza_save_identity_data($data);
   $account = user_external_load($data['identity']);
+  
+  dpm($data);  
   dpm($account);
+  
   if (isset($account->uid)) {
     if (!variable_get('user_email_verification', TRUE) || $account->login) {
       // Check if user is blocked.
@@ -44,10 +48,6 @@ function loginza_callback() {
         user_login_submit(array(), $form_state);
         // Let other modules act on Loginza login
         module_invoke_all('loginza_data', $data, $account);
-        dpm('final');
-      }
-      else{
-        dpm('error while name validate');
       }
     }
     else {
@@ -61,18 +61,17 @@ function loginza_callback() {
   }
   elseif (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
     // Register new user.
-    dpm('new_user');
     // Save response for use in loginza_form_user_register_form_alter().
     $_SESSION['loginza']['data'] = $data;
 
     $form_state['values'] = array();
     $form_state['values']['op'] = t('Create new account');
     drupal_form_submit('user_register_form', $form_state);
+    
     dpm($form_state);
+    
     if (!empty($form_state['user'])) {
       module_invoke_all('loginza_data', $data, $form_state['user']);
-      dpm('!empty($form_state[user])');
-      dpm($_GET);
       drupal_goto();
     }
 
