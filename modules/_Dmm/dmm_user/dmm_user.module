@@ -52,7 +52,7 @@ function dmm_user_menu() {
 /**
  * Themed user block for the header.
  */
-function dmm_user_userHeaderBlock() {
+function dmm_user_userBlock() {
   
   global $user;
   if ($user->uid) {

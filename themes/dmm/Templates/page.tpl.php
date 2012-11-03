@@ -25,7 +25,7 @@
       </div>
       
       <?php echo '<div id="block-dmm-blocks-header-links"><div class="follow-us">Follow Us</div>', dmm_blocks_get_headerLinks(), '</div>', 
-              dmm_user_loginTop(),
+              '<div class="user-header">', dmm_user_userBlock(), '</div>',
               render($page['header']); ?>
     </nav>
 
