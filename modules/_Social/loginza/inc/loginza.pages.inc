@@ -68,9 +68,10 @@ function loginza_callback() {
     $form_state['values'] = array();
     $form_state['values']['op'] = t('Create new account');
     drupal_form_submit('user_register_form', $form_state);
-
+    dpm($form_state);
     if (!empty($form_state['user'])) {
       module_invoke_all('loginza_data', $data, $form_state['user']);
+      dpm('!empty($form_state[user])');
       drupal_goto();
     }
 
