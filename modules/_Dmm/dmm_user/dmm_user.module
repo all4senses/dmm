@@ -53,13 +53,15 @@ function dmm_user_menu() {
  * Action upon login via loginza.
  */
 function dmm_user_loginza_data($data, $account) {
+  // Prevent a module login_destination from redefining the destination based on the $GLOBALS['destination'] param.
+  unset($GLOBALS['destination']);
+  // Tell a hook function dmm_user_drupal_goto_alter to set the right destination params for logging in via loginza.
+  $_SESSION['dmm_user_loginza_login'] = TRUE;
   
   dpm('in dmm_user_loginza_data');
   dpm($data);
   dpm($account);
-  $_SESSION['dmm_user_loginza_login'] = TRUE;
   
-  unset($GLOBALS['destination']);
 }
 
 
@@ -67,22 +69,9 @@ function dmm_user_loginza_data($data, $account) {
  * Implements hook_drupal_goto_alter
  */
 function dmm_user_drupal_goto_alter(&$path, &$options, &$http_response_code) {
-  
-  // This actually may be used also by templates.
-  /*
-  if (isset($GLOBALS['destination'])) {
-    $destination = $GLOBALS['destination'];
-
-    // alter drupal_goto
-    if (is_array($destination)) {
-      $path = $destination[0];
-      $options = $destination[1];
-    }
-    else {
-      $path = $destination;
-    }
-  }
-  */
+  // Makes sure a user will be redirected to the source page after login via loginza, initiated in a popup window by ajax_login module.
+  // A destination (source) page should define a destination params in $_SESSION['dmm_user_loginza_login_destination'],
+  // and the param $_SESSION['dmm_user_loginza_login'] should be set in hook_loginza_data, informing us that we are in the process of logtinza login.
   if (isset($_SESSION['dmm_user_loginza_login'])) {
     unset($_SESSION['dmm_user_loginza_login']);
     if (is_array($_SESSION['dmm_user_loginza_login_destination'])) {
@@ -94,8 +83,6 @@ function dmm_user_drupal_goto_alter(&$path, &$options, &$http_response_code) {
       $path = $_SESSION['dmm_user_loginza_login_destination']['destination'];
       $options = NULL;
     }
-    dpm('$path = ' . $path);
-    dpm($options);
   }
   
 }

@@ -199,36 +199,16 @@
 
       <?php 
         if (!$user->uid) {
-          //dpm($_SERVER);
-          //dpm($content['links']);
-          echo '<div class="login-to-comment">To post comments log in <a href="/user/login?destination=node/3%23comment-form">with the site account</a></div><div class="login-to-comment-loginza"> or ' . theme('loginza_string') . theme('loginza_button') . '</div>';
-          //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium-dmm" href="/modal_forms/nojs/login?destination=' . url('node/' . $node->nid, array('absolute' => TRUE, 'fragment' => 'comment-form')) . '">Modal Login</a></div>';
-          //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium-dmm" href="/modal_forms/nojs/login?destination=' . url('node/' . $node->nid, array('absolute' => TRUE)) . '%23comment-form">Modal Login</a></div>';
-          //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium-dmm" href="/modal_forms/nojs/login?destination=' . urlencode(url('node/' . $node->nid, array('absolute' => TRUE, 'fragment' => 'comment-form')))  . '">Modal Login</a></div>';
+        
+          // modal_forms doesn't work both for loginza and a usual login PLUS doesn't understand GET params in the url
+          //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . urlencode(ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form') . '">Modal Login</a></div>';
           
-          
-          //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium-dmm" href="/modal_forms/nojs/login?destination=http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . '#comment-form">Modal Login</a></div>';
-          //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . '#comment-form">Modal Login</a></div>';
-          
-          
-          //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form' . '">Modal Login</a></div>';
-          echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . urlencode(ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form') . '">Modal Login</a></div>';
-          echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . urlencode('node/3?t=b#comment-form') . '">Modal Login</a></div>';
-          echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . 'node/3' . urlencode('?t=b#comment-form') . '">Modal Login</a></div>';
-          
-          echo '<div class="login-to-comment">' . l('login ajax', 'user/login', array('query' => array('destination' => ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form'))) . '</div>';
-          
-          
-          // Include css and js for modal dialog.
+          // ajax_login module functionality for popup ajax login.
           _ajax_register_include_modal();
-          //echo '<div class="login-to-comment">' . ctools_modal_text_button(t('Login'), 'ajax_register/login/nojs', t('Login'), 'ctools-modal-ctools-ajax-register-style')  . '</div>';
+          echo '<div class="login-to-comment">' . ctools_modal_text_button(t('Login'), 'ajax_register/login/nojs', t('Login'), 'ctools-modal-ctools-ajax-register-style')  . '</div>';
+
           
-          drupal_add_library('system', 'drupal.ajax');
-          //echo l($text, $dest, array('html' => TRUE, 'attributes' => array('class' => array($type, $class), 'title' => $alt)));
-          echo '<div class="login-to-comment">' . l(t('Login'), 'ajax_register/login/nojs', array('destination' => ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form', 'html' => TRUE, 'attributes' => array('class' => array('ctools-use-modal', 'ctools-modal-ctools-ajax-register-style'), 'title' => t('Login'))))  . '</div>';
-          echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-ctools-ajax-register-style" href="ajax_register/login/nojs?destination=' . urlencode(ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form') . '">Log</a></div>';
-          
-          //$GLOBALS['destination'] = 'node/3';
+
           $query = $_GET;
           unset($query['q']);
           $_SESSION['dmm_user_loginza_login_destination'] = array(
