@@ -52,7 +52,7 @@ function dmm_user_menu() {
 /**
  * Action upon login via loginza.
  */
-function dmm_user_loginza_data($data, &$account) {
+function dmm_user_loginza_data($data, $account) {
   dpm($data);
   dpm($account);
 }
