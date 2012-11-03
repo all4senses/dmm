@@ -72,6 +72,7 @@ function loginza_callback() {
     if (!empty($form_state['user'])) {
       module_invoke_all('loginza_data', $data, $form_state['user']);
       dpm('!empty($form_state[user])');
+      dpm($_GET);
       drupal_goto();
     }
 
