@@ -101,7 +101,7 @@ function dmm_user_initLogin() {
     $_SESSION['dmm_user_loginza_login_destination'] = array(
       'destination' => url($_GET['q']),
       'query' => $query,
-      'fragment' => 'comment-form',
+      //'fragment' => 'comment-form',
     );
     
   }
