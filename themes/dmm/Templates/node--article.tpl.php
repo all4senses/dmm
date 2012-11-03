@@ -217,6 +217,14 @@
           echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . 'node/3' . urlencode('?t=b#comment-form') . '">Modal Login</a></div>';
           
           echo '<div class="login-to-comment">' . l('login ajax', 'user/login', array('query' => array('destination' => ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form'))) . '</div>';
+          
+          
+          // Include css and js for modal dialog.
+          _ajax_register_include_modal();
+          echo '<div class="login-to-comment">' . ctools_modal_text_button(t('Login'), 'ajax_register/login/nojs', t('Login'), 'ctools-modal-ctools-ajax-register-style')  . '</div>';
+    
+    
+    
         }
         
       ?>
