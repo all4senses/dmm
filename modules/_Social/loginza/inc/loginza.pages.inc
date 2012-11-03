@@ -32,6 +32,7 @@ function loginza_callback() {
 
   loginza_save_identity_data($data);
   $account = user_external_load($data['identity']);
+  dpm($account);
   if (isset($account->uid)) {
     if (!variable_get('user_email_verification', TRUE) || $account->login) {
       // Check if user is blocked.
@@ -43,6 +44,10 @@ function loginza_callback() {
         user_login_submit(array(), $form_state);
         // Let other modules act on Loginza login
         module_invoke_all('loginza_data', $data, $account);
+        dpm('final');
+      }
+      else{
+        dpm('error while name validate');
       }
     }
     else {
