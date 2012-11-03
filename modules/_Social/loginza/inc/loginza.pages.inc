@@ -20,8 +20,7 @@ function loginza_callback() {
   }
 
   $data = drupal_json_decode($result->data);
-  dpm($data);
-  return;
+  
   if (!empty($data['error_type'])) {
     watchdog('loginza', "Error while Loginza authentication:\r\n<pre>@data</pre>",
       array('@data' => var_export($data, TRUE)), WATCHDOG_WARNING);
@@ -42,6 +41,16 @@ function loginza_callback() {
         user_login_submit(array(), $form_state);
         // Let other modules act on Loginza login
         module_invoke_all('loginza_data', $data, $account);
+        
+        dpr($data);
+        dpr($_POST);
+        dpr($_GET);
+        die;
+        dpm($data);
+        dpm($_POST);
+        dpm($_GET);
+        return;
+  
       }
     }
     else {
