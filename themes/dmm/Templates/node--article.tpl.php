@@ -214,6 +214,7 @@
           //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form' . '">Modal Login</a></div>';
           echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . urlencode(ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form') . '">Modal Login</a></div>';
           echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . urlencode('node/3?t=b#comment-form') . '">Modal Login</a></div>';
+          echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . 'node/3' . urlencode('?t=b#comment-form') . '">Modal Login</a></div>';
         }
         
       ?>
