@@ -16,7 +16,7 @@
       
       <div id="logo-block">
         <a href="<?php print $front_page; ?>" title="<?php print t('Dom Moej Mechty Home'); ?>" id="logo">
-          <img src="<?php //print '/sites/all/themes/dmm/css/images/dmm-logo.png'; ?>" alt="<?php print t('Dom Moej Mechty home'); ?>" title="<?php print t('Dom Moej Mechty Home'); ?>" />
+          <img src="<?php //print '/sites/all/themes/dmm/css/images/dmm-logo.png'; ?>" alt="<?php print t('Дом Моей Мечты'); ?>" title="<?php print t('Dom Moej Mechty Home'); ?>" />
         </a>
         <div class="descr">
           <div class="title">Dom Moej Mechty</div>
@@ -24,7 +24,9 @@
         </div>
       </div>
       
-      <?php echo '<div id="block-dmm-blocks-header-links"><div class="follow-us">Follow Us</div>', dmm_blocks_get_headerLinks(), '</div>', render($page['header']); ?>
+      <?php echo '<div id="block-dmm-blocks-header-links"><div class="follow-us">Follow Us</div>', dmm_blocks_get_headerLinks(), '</div>', 
+              dmm_user_loginTop(),
+              render($page['header']); ?>
     </nav>
 
     <?php ////if ($breadcrumb): print $breadcrumb; endif;?>

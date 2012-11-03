@@ -203,11 +203,11 @@
           // modal_forms doesn't work both for loginza and a usual login PLUS doesn't understand GET params in the url
           //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . urlencode(ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form') . '">Modal Login</a></div>';
           
+          echo dmm_user_loginToComment();
+          /*
           // ajax_login module functionality for popup ajax login.
           _ajax_register_include_modal();
           echo '<div class="login-to-comment">' . ctools_modal_text_button(t('Login'), 'ajax_register/login/nojs', t('Login'), 'ctools-modal-ctools-ajax-register-style')  . '</div>';
-
-          
 
           $query = $_GET;
           unset($query['q']);
@@ -216,7 +216,8 @@
             'query' => $query,
             'fragment' => 'comment-form',
           );
-    
+          */
+          
         }
         
       ?>

@@ -67,6 +67,11 @@ function dmm_blocks_block_info() {
   );
   
    
+  $blocks['dmm_login'] = array(
+    'info' => t('Dmm user login'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
   return $blocks;
 }
 
@@ -133,6 +138,11 @@ function dmm_blocks_block_view($delta = '') {
       $block['content'] = dmm_image_getSlideshow('AdvancedSlider');
       break;
     
+    case 'dmm_login':
+      $block['subject'] = t('Dmm user login');
+      $block['content'] = dmm_user_loginTop();
+      break;
+  
   }
 
   return $block;

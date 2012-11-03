@@ -50,6 +50,65 @@ function dmm_user_menu() {
 
 
 /**
+ * Themed user block for the header.
+ */
+function dmm_user_userHeaderBlock() {
+  
+  global $user;
+  if ($user->uid) {
+    
+    dmm_user_initLogin();
+    
+    $out = '<div class="user-header">' . ctools_modal_text_button(t('Login'), 'ajax_register/login/nojs', t('Login'), 'ctools-modal-ctools-ajax-register-style')  . '</div>';
+  }
+  else {
+    $out = '<div class="user-header"><span class="user-profile">Hello, ' . l($user->name, 'user/' . $user->uid)  . '</span><span class="user-logout">' . l('Logout', 'user/logout', array('query' => array('destination' => ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form'))) . '</span></div>';
+  }
+  
+  return $out;
+}
+
+
+/**
+ * Themed log in to comment block.
+ */
+function dmm_user_loginToComment() {
+  
+  dmm_user_initLogin();
+  $out = '<div class="login-to-comment">' . ctools_modal_text_button(t('Login to comment'), 'ajax_register/login/nojs', t('Login to comment'), 'ctools-modal-ctools-ajax-register-style')  . '</div>';
+  
+  return $out;
+}
+
+
+/**
+ * Prepare login data for poopup and loginza.
+ */
+function dmm_user_initLogin() {
+  
+  global $dmm_login_initiated;
+  
+  if (!$dmm_login_initiated) {
+    
+    $dmm_login_initiated = TRUE;
+    
+    // ajax_login module functionality for popup ajax login.
+    _ajax_register_include_modal();
+    
+    // Prepare the destination param for log in via loginza. 
+    $query = $_GET;
+    unset($query['q']);
+    $_SESSION['dmm_user_loginza_login_destination'] = array(
+      'destination' => url('node/' . $node->nid),
+      'query' => $query,
+      'fragment' => 'comment-form',
+    );
+    
+  }
+}
+
+
+/**
  * Action upon login via loginza.
  */
 function dmm_user_loginza_data($data, $account) {
