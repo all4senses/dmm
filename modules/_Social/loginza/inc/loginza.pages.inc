@@ -29,6 +29,8 @@ function loginza_callback() {
   }
 
   loginza_save_identity_data($data);
+  dpr($_SESSION);
+  dpr('----------------');
   $account = user_external_load($data['identity']);
   if (isset($account->uid)) {
     if (!variable_get('user_email_verification', TRUE) || $account->login) {
@@ -41,7 +43,8 @@ function loginza_callback() {
         user_login_submit(array(), $form_state);
         // Let other modules act on Loginza login
         module_invoke_all('loginza_data', $data, $account);
-        
+        dpr($GLOBALS['destination']);
+        dpr($_SESSION);
         dpr($data);
         dpr($_POST);
         dpr($_GET);
