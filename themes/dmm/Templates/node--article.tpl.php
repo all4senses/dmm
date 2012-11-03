@@ -204,7 +204,7 @@
           //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium-dmm" href="/modal_forms/nojs/login?destination=' . url('node/' . $node->nid, array('absolute' => TRUE, 'fragment' => 'comment-form')) . '">Modal Login</a></div>';
           //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium-dmm" href="/modal_forms/nojs/login?destination=' . url('node/' . $node->nid, array('absolute' => TRUE)) . '%23comment-form">Modal Login</a></div>';
           //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium-dmm" href="/modal_forms/nojs/login?destination=' . urlencode(url('node/' . $node->nid, array('absolute' => TRUE, 'fragment' => 'comment-form')))  . '">Modal Login</a></div>';
-          echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium-dmm" href="/modal_forms/nojs/login?destination=http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . '%23comment-form">Modal Login</a></div>';
+          echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium-dmm" href="/modal_forms/nojs/login?destination=http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . '#comment-form">Modal Login</a></div>';
           
         }
         
