@@ -55,6 +55,25 @@ function dmm_user_menu() {
 }
 
 
+
+/**
+ * Implements hook form_alter.
+ */
+function dmm_user_form_alter(&$form, &$form_state, $form_id) {
+  
+  dpm($form_id); dpm($form);
+
+  
+  
+  switch($form_id) {
+    case '':
+        break;
+  }
+  
+
+}
+
+
 /**
  * Themed user block for the header.
  */
