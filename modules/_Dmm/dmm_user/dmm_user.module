@@ -168,6 +168,7 @@ function dmm_user_loginza_data($data, $account) {
   // Tell a hook function dmm_user_drupal_goto_alter to set the right destination params for logging in via loginza.
   $_SESSION['dmm_user_loginza_login'] = TRUE;
   
+  $_SESSION['dmm_user_loginza_logged_as'] = $data;
   dpm('in dmm_user_loginza_data');
   dpm($data);
   dpm($account);

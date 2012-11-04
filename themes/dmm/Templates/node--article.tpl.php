@@ -204,7 +204,9 @@
         else {
           print render($content['comments']);
           
-          dpm($_SESSION['loginza']);
+          if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
+            dpm($_SESSION['dmm_user_loginza_logged_as']);
+          }
         }
         
       ?>
