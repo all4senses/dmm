@@ -13,6 +13,12 @@ function dmm_user_menu() {
     'type' => MENU_CALLBACK,
   );
   
+  $items['comments-fragment'] = array(
+    'page callback' => 'dmm_user_addFragmentForCommentForm_ajax',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  
     
   
  /* 
@@ -88,6 +94,18 @@ function dmm_user_loginToComment() {
   $out = '<div class="login-to-comment">' . l(t('Login to comment'), 'ajax_register/login/nojs', array('html' => TRUE, 'attributes' => array('rel' => 'nofollow', 'class' => array('ctools-use-modal', 'ctools-modal-ctools-ajax-register-style'), 'title' => t('Login to comment'))))  . '</div>';
   
   return $out;
+}
+
+
+/**
+ * Add fragment #comment-form to destination if used loginza, popup and was clicked login-to-comment link.
+ */
+function dmm_user_addFragmentForCommentForm_ajax() {
+  $_SESSION['dmm_user_loginza_login_destination'] = array(
+      'fragment' => 'comment-form',
+    );
+  
+  drupal_json_output(array('status' => TRUE));
 }
 
 
