@@ -201,9 +201,12 @@
         if (!$user->uid) {
           echo dmm_user_loginToComment();
         }
+        else {
+          print render($content['comments']);
+        }
         
       ?>
-      <?php print render($content['comments']); ?>
+
 
 <?php if (!$page): ?>
   </article> <!-- /.node -->

@@ -123,6 +123,9 @@ function dmm_user_initLogin() {
       //'fragment' => 'comment-form',
     );
     
+    $path_to_custom_js = drupal_get_path('module', 'dmm_user') . '/js/';
+    drupal_add_js($path_to_custom_js . 'dmm_loginToCommentLink.js');
+    
   }
 }
 
