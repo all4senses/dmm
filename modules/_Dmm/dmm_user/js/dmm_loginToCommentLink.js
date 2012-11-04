@@ -19,7 +19,7 @@
 //                  }
           });
           
-          alert('login-to-comment');
+          //alert('login-to-comment');
          
         });
         
@@ -42,7 +42,7 @@
 //                  }
           });
           
-          alert('login');
+          //alert('login');
         
          
         });
