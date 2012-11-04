@@ -203,6 +203,8 @@
         }
         else {
           print render($content['comments']);
+          
+          dpm($_SESSION['loginza']);
         }
         
       ?>
