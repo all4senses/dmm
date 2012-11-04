@@ -60,10 +60,14 @@ function dmm_user_menu() {
  */
 function dmm_user_form_alter(&$form, &$form_state, $form_id) {
   
-  dpm($form_id); dpm($form);
+  //dpm($form_id); dpm($form);
   
   switch($form['#id']) {
+    
     case 'comment-form':
+      
+        dpm($form);
+      
         $form['picture'] = array(
           '#type' => 'textarea',
           '#title' => 'Test',
