@@ -4,7 +4,24 @@
     attach: function (context, settings) {
        
        $( ".login-to-comment a" ).click(function(event){
-         alert('Click!');
+         
+         
+          $.ajax({
+            //dataType: "jsonp",
+            url: "/comments-fragment"
+            //,cache: false,
+//            data: {
+//                    lang: 'en'
+//                  },
+//            success: function(data){ 
+//
+//                  }
+          });
+
+
+          alert('Click!');
+         
+         
         });
        
        //console.log('blocks test!');
