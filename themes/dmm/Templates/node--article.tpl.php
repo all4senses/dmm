@@ -203,10 +203,6 @@
         }
         else {
           print render($content['comments']);
-          
-          if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
-            dpm($_SESSION['dmm_user_loginza_logged_as']);
-          }
         }
         
       ?>

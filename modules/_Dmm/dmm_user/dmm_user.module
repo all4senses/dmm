@@ -76,7 +76,7 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
       
         
         $form['#submit'][] = 'dmm_user_submitForm_comment';
-        //$form['#validate'][] = 'dmm_user_validateForm_comment';
+        $form['#validate'][] = 'dmm_user_validateForm_comment';
         
         break;
   }
@@ -97,9 +97,32 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
  * @return void
  *   Return nothing.
  */
-function dmm_user_submitForm_comment(&$form, &$form_state) {
+function dmm_user_validateForm_comment(&$form, &$form_state) {
 
   dpm($form_state['values']);
+  
+  if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
+    dpm($_SESSION['dmm_user_loginza_logged_as']);
+  }
+  
+}
+
+
+/**
+ * Custom validate of article type form.
+ *
+ * @param array &$form
+ *   Array with declared form.
+ *
+ * @param array &$form_state
+ *   Array with current form state.
+
+ * @return void
+ *   Return nothing.
+ */
+function dmm_user_submitForm_comment(&$form, &$form_state) {
+
+  //dpm($form_state['values']);
   
 }
 
