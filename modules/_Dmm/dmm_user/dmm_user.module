@@ -67,7 +67,7 @@ function dmm_user_userBlock() {
     // V1, no need to launch drupal_add_library('system', 'drupal.ajax');
     //$out = ctools_modal_text_button(t('Login'), 'ajax_register/login/nojs', t('Login'), 'ctools-modal-ctools-ajax-register-style');
     // V2, need to launch drupal_add_library('system', 'drupal.ajax') in dmm_user_initLogin(), but possible to set more params in l()...
-    $out = l(t('Login'), 'ajax_register/login/nojs', array('html' => TRUE, 'attributes' => array('rel' => 'nofollow', 'class' => array('ctools-use-modal', 'ctools-modal-ctools-ajax-register-style'), 'title' => t('Login'))));
+    $out = l(t('Login'), 'ajax_register/login/nojs', array('html' => TRUE, 'attributes' => array('rel' => 'nofollow', 'class' => array('dmm-login', 'ctools-use-modal', 'ctools-modal-ctools-ajax-register-style'), 'title' => t('Login'))));
   }
   else {
     $out = '<span class="user-profile">Hello, ' . theme('username', array('account' => $user))  . '</span><span class="user-logout">' . l('Logout', 'user/logout', array('query' => array('destination' => ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/')))) . '</span>';
@@ -101,7 +101,20 @@ function dmm_user_loginToComment() {
  * Add fragment #comment-form to destination if used loginza, popup and was clicked login-to-comment link.
  */
 function dmm_user_addFragmentForCommentForm_ajax() {
-  $_SESSION['dmm_user_loginza_login_destination']['fragment'] = 'comment-form';
+  
+  $from = check_plain($_POST['from']);
+  
+  switch ($from) {
+    
+    case 'login-to-comment':
+        $_SESSION['dmm_user_loginza_login_destination']['fragment'] = 'comment-form';
+    case 'login':
+        // Prevent a module login_destination from redefining the destination based on the $GLOBALS['destination'] param.
+        unset($GLOBALS['destination']);
+        // Tell a hook function dmm_user_drupal_goto_alter to set the right destination params for logging in via loginza.
+        $_SESSION['dmm_user_loginza_login'] = TRUE;
+        break;
+  }
   
   drupal_json_output(array('status' => TRUE));
 }
