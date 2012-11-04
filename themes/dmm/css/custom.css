@@ -610,3 +610,6 @@ a.yt-direct:active{outline: none;}
 .modal-content form{text-align: center;}
 div.modal-forms-modal-content div.messages{text-align: center; background-image: none;}
 div.ctools-modal-content .modal-content {overflow: hidden;}
+
+.user-header{position: absolute; top: 55px; right: 10px; color: white;}
+.user-header .user-profile{margin-right: 15px;}
