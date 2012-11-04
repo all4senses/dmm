@@ -58,8 +58,10 @@ function dmm_user_userBlock() {
   if (!$user->uid) {
     
     dmm_user_initLogin();
-    
-    $out = ctools_modal_text_button(t('Login'), 'ajax_register/login/nojs', t('Login'), 'ctools-modal-ctools-ajax-register-style');
+    // V1, no need to launch drupal_add_library('system', 'drupal.ajax');
+    //$out = ctools_modal_text_button(t('Login'), 'ajax_register/login/nojs', t('Login'), 'ctools-modal-ctools-ajax-register-style');
+    // V2, need to launch drupal_add_library('system', 'drupal.ajax') in dmm_user_initLogin(), but possible to set more params in l()...
+    $out = l(t('Login'), 'ajax_register/login/nojs', array('html' => TRUE, 'attributes' => array('class' => array('ctools-use-modal', 'ctools-modal-ctools-ajax-register-style'), 'title' => t('Login'))));
   }
   else {
     $out = '<span class="user-profile">Hello, ' . theme('username', array('account' => $user))  . '</span><span class="user-logout">' . l('Logout', 'user/logout', array('query' => array('destination' => ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/')))) . '</span>';
@@ -74,8 +76,16 @@ function dmm_user_userBlock() {
  */
 function dmm_user_loginToComment() {
   
+  // modal_forms doesn't work both for loginza and a usual login PLUS doesn't understand GET params in the url
+  //echo '<div class="login-to-comment"><a class="ctools-use-modal ctools-modal-modal-popup-medium" href="/modal_forms/nojs/login?destination=' . urlencode(ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/') . '#comment-form') . '">Modal Login</a></div>';
+  
+  // Use with ajax_login module.
   dmm_user_initLogin();
-  $out = '<div class="login-to-comment">' . ctools_modal_text_button(t('Login to comment'), 'ajax_register/login/nojs', t('Login to comment'), 'ctools-modal-ctools-ajax-register-style')  . '</div>';
+  
+  // V1, no need to launch drupal_add_library('system', 'drupal.ajax');
+  //$out = '<div class="login-to-comment">' . ctools_modal_text_button(t('Login to comment'), 'ajax_register/login/nojs', t('Login to comment'), 'ctools-modal-ctools-ajax-register-style')  . '</div>';
+  // V2, need to launch drupal_add_library('system', 'drupal.ajax') in dmm_user_initLogin(), but possible to set more params in l()...
+  $out = '<div class="login-to-comment">' . l(t('Login to comment'), 'ajax_register/login/nojs', array('html' => TRUE, 'attributes' => array('class' => array('ctools-use-modal', 'ctools-modal-ctools-ajax-register-style'), 'title' => t('Login to comment'))))  . '</div>';
   
   return $out;
 }
@@ -94,6 +104,15 @@ function dmm_user_initLogin() {
     
     // ajax_login module functionality for popup ajax login.
     _ajax_register_include_modal();
+    
+    
+    // V1, no need to launch drupal_add_library('system', 'drupal.ajax');
+    //$out = ctools_modal_text_button(t('Login'), 'ajax_register/login/nojs', t('Login'), 'ctools-modal-ctools-ajax-register-style');
+    // V2, need to launch drupal_add_library('system', 'drupal.ajax') in dmm_user_initLogin(), but possible to set more params in l()...
+    //$out = l(t('Login'), 'ajax_register/login/nojs', array('html' => TRUE, 'attributes' => array('class' => array('ctools-use-modal', 'ctools-modal-ctools-ajax-register-style'), 'title' => t('Login'))));
+    
+    // So, comment if plan to use without ctools_modal_text_button()
+    drupal_add_library('system', 'drupal.ajax');
     
     // Prepare the destination param for log in via loginza. 
     $query = $_GET;
