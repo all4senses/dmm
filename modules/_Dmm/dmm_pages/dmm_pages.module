@@ -805,6 +805,15 @@ function dmm_pages_form_alter(&$form, &$form_state, $form_id) {
     $form['field_extra_data']['#access'] = FALSE;
   }
   
+  $form['actions']['save_draft'] = array(
+    '#type' => 'submit',
+    '#value' => 'Save Draft',
+    '#submit' => array('node_form_submit'),
+    '#weight' => 6,
+  );
+      
+  $form['#submit'][] = 'dmm_pages_submitForm_nodeDraft';
+  
   /*
   switch($form_id) {
     case '':
@@ -814,3 +823,30 @@ function dmm_pages_form_alter(&$form, &$form_state, $form_id) {
 
 }
 
+
+/**
+ * Custom validate of article type form.
+ *
+ * @param array &$form
+ *   Array with declared form.
+ *
+ * @param array &$form_state
+ *   Array with current form state.
+
+ * @return void
+ *   Return nothing.
+ */
+function dmm_pages_submitForm_nodeDraft(&$form, &$form_state) {
+
+  //dpm($form_state['values']);
+  if ($form_state['values']['op'] == 'Save Draft') {
+    $form_state['values']['status'] = 0;
+    drupal_set_message(t('Attention! This content is saved as draft and is not published now!'), 'warning');
+      // Doesn't work
+      //form_set_value($form['options'], array('status' => array('#default_value' => 0)), $form_state);
+      //form_set_value($form['options']['status'], array('#default_value' => 0), $form_state);
+  }
+  else {
+    $form_state['values']['status'] = 1;
+  }
+}
