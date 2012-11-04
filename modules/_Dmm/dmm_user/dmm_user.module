@@ -66,7 +66,12 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
   
   
   switch($form_id) {
-    case '':
+    case 'comment-form':
+        $form['picture'] = array(
+          '#type' => 'textarea',
+          '#title' => 'Test',
+          '#default_value' => 'kjhkjhkjhj',
+        );
         break;
   }
   
