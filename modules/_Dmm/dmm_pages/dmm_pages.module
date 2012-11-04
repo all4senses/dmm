@@ -805,14 +805,26 @@ function dmm_pages_form_alter(&$form, &$form_state, $form_id) {
     $form['field_extra_data']['#access'] = FALSE;
   }
   
-  $form['actions']['save_draft'] = array(
-    '#type' => 'submit',
-    '#value' => 'Save Draft',
-    '#submit' => array('node_form_submit'),
-    '#weight' => 6,
-  );
-      
-  $form['#submit'][] = 'dmm_pages_submitForm_nodeDraft';
+  switch($form['#id']) {
+    
+    case 'news_post_node_form':
+    case 'blog_post_node_form':
+    case 'article_node_form':
+    case 'section_node_form':
+    case 'master_class_node_form':
+        $form['actions']['save_draft'] = array(
+          '#type' => 'submit',
+          '#value' => 'Save Draft',
+          '#submit' => array('node_form_submit'),
+          '#weight' => 6,
+        );
+
+        $form['#submit'][] = 'dmm_pages_submitForm_nodeDraft';
+        
+        break;
+  }
+  
+  
   
   /*
   switch($form_id) {
