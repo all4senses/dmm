@@ -201,9 +201,9 @@
         if (!$user->uid) {
           echo dmm_user_loginToComment();
         }
-        else {
-          print render($content['comments']);
-        }
+
+        print render($content['comments']);
+
         
       ?>
 
