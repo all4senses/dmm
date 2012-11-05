@@ -137,7 +137,7 @@ function dmm_user_submitForm_comment(&$form, &$form_state) {
     global $user;
     $result = db_insert('dmm_comment')
       ->fields(array(
-        'uid' => $user->uid,
+        'cid' => $form_state['values']['cid'],
         'data' => serialize($comment_remote_acc_data),
       ))
       ->execute();
