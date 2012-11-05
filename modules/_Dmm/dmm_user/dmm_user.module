@@ -157,10 +157,10 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
 function dmm_user_validateForm_comment(&$form, &$form_state) {
 
   
-  dpm($form_state['values']);
+  //dpm($form_state['values']);
   
   if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
-    dpm($_SESSION['dmm_user_loginza_logged_as']);
+    //dpm($_SESSION['dmm_user_loginza_logged_as']);
   }
   
 }
