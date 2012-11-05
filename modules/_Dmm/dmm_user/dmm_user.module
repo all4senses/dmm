@@ -59,7 +59,8 @@ function dmm_user_menu() {
  * Implements hook drupal_alter for comment_view.
  */
 function dmm_user_comment_view_alter(&$comment) {
-  dpm($comment);
+  
+  //dpm($comment);
   
   
   global $user;

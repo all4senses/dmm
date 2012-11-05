@@ -202,7 +202,6 @@
           echo dmm_user_loginToComment();
         }
 
-        dpm($content['comments']);
         print render($content['comments']);
 
         
