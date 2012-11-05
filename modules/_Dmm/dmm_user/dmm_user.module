@@ -61,15 +61,6 @@ function dmm_user_menu() {
 function dmm_user_comment_view_alter(&$comment) {
   dpm($comment);
   
-  //unset($comment['comment_body']);
-  //unset($comment['#node']);
-  
-  
-  $comment['add'] = array(
-      '#markup' => '<div>test</div>',
-      '#weight' => -1,
-    );;
-  
   // Get the current user's accounts.
   $query = db_select('dmm_comment', 'dc');
   $query->fields('dc', array('data'))  
@@ -79,20 +70,19 @@ function dmm_user_comment_view_alter(&$comment) {
   if ($comment_user_social_data) {
     $comment_user_social_data = unserialize($comment_user_social_data);
     
-    ////unset($comment['comment_body']['#object']);
     
-//    $form['logged_via'] = array(
-//      '#markup' => '<div>' . $current_logged_as['provider'] . '</div>',
-//      '#weight' => -1,
-//    );
-//    $form['picture'] = array(
-//      '#markup' => '<div>' . $current_logged_as['photo'] . '</div>',
-//      '#weight' => -1,
-//    );
-//    $form['author'] = array(
-//      '#markup' => '<div>' . $current_logged_as['nickname'] . '---</div>',
-//      '#weight' => -2,
-//    );
+    $comment['logged_via'] = array(
+      '#markup' => '<div>' . $current_logged_as['provider'] . '</div>',
+      '#weight' => -1,
+    );
+    $comment['picture'] = array(
+      '#markup' => '<div>' . $current_logged_as['photo'] . '</div>',
+      '#weight' => -1,
+    );
+    $comment['author'] = array(
+      '#markup' => '<div>' . $current_logged_as['nickname'] . '---</div>',
+      '#weight' => -2,
+    );
   }
   
   
