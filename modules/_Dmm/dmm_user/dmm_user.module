@@ -60,6 +60,35 @@ function dmm_user_menu() {
  */
 function dmm_user_comment_view_alter(&$comment) {
   dpm($comment);
+  
+  // Get the current user's accounts.
+  $query = db_select('dmm_comment', 'dc');
+  $query->fields('dc', array('data'))  
+        ->condition('dc.cid', $comment['#node']->cid);
+  $comment_user_social_data = $query->execute()->fetchField();
+  
+  if ($comment_user_social_data) {
+    $comment_user_social_data = unserialize($comment_user_social_data);
+    
+    unset($comment['comment_body']['#object']);
+    
+//    $form['logged_via'] = array(
+//      '#markup' => '<div>' . $current_logged_as['provider'] . '</div>',
+//      '#weight' => -1,
+//    );
+//    $form['picture'] = array(
+//      '#markup' => '<div>' . $current_logged_as['photo'] . '</div>',
+//      '#weight' => -1,
+//    );
+//    $form['author'] = array(
+//      '#markup' => '<div>' . $current_logged_as['nickname'] . '---</div>',
+//      '#weight' => -2,
+//    );
+  }
+  
+  
+  
+            
 }
 
 
@@ -80,10 +109,6 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
           
             $current_logged_as = $_SESSION['dmm_user_loginza_logged_as'];
             
-            $form['author']['name']['#value'] = $current_logged_as['nickname'] . '----';
-            
-            unset($form['author']);
-            
             $form['logged_via'] = array(
               '#markup' => '<div>' . $current_logged_as['provider'] . '</div>',
               '#weight' => -1,
@@ -96,7 +121,6 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
               '#markup' => '<div>' . $current_logged_as['nickname'] . '---</div>',
               '#weight' => -2,
             );
-            
 
 
             $form['#submit'][] = 'dmm_user_submitForm_comment';
