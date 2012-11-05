@@ -259,7 +259,10 @@ function dmm_user_loginza_data($data, $account) {
   $query = db_select('dmm_users_social', 'us');
   $query->fields('us', array('data'))  
         ->condition('us.uid', $account->uid);
-  $user_social_data = unserialize($query->execute()->fetchField());
+  $user_social_data = $query->execute()->fetchField();
+  if ($user_social_data) {
+    $user_social_data = unserialize($user_social_data);
+  }
   
   // Add a new (or replace existing) account data by a provider name (loginza_id).
   // Before adding we append an inner dmm_id provider id to a source loginza array.
