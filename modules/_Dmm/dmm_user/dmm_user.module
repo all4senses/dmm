@@ -124,6 +124,23 @@ function dmm_user_validateForm_comment(&$form, &$form_state) {
 function dmm_user_submitForm_comment(&$form, &$form_state) {
 
   //dpm($form_state['values']);
+  if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
+    //dpm($_SESSION['dmm_user_loginza_logged_as']);
+    $dmm_logged_as = $_SESSION['dmm_user_loginza_logged_as'];
+    $comment_remote_acc_data = array(
+      'provider' => $dmm_logged_as['provider'],
+      'identity' => $dmm_logged_as['identity'],
+      'uid' => $dmm_logged_as['uid'],
+      'photo' => $dmm_logged_as['photo'],
+    );
+    global $user;
+    $result = db_insert('dmm_comment')
+      ->fields(array(
+        'uid' => $user->uid,
+        'data' => serialize($comment_remote_acc_data),
+      ))
+      ->execute();
+  }
   
 }
 
@@ -241,8 +258,6 @@ function dmm_user_loginza_data($data, $account) {
   // Tell a hook function dmm_user_drupal_goto_alter to set the right destination params for logging in via loginza.
   $_SESSION['dmm_user_loginza_login'] = TRUE;
   
-  $_SESSION['dmm_user_loginza_logged_as'] = $data;
-  
   // Add a new provider to a list of providers (if does not exist).
   db_merge('dmm_social_providers')
       ->key(array('loginza_id' => $data['provider']))
@@ -274,6 +289,8 @@ function dmm_user_loginza_data($data, $account) {
       ->key(array('uid' => $account->uid))
       ->fields(array('data' => serialize($user_social_data)))
       ->execute();
+  
+  $_SESSION['dmm_user_loginza_logged_as'] = $data;
   
   dpm('in dmm_user_loginza_data');
   dpm($data);
