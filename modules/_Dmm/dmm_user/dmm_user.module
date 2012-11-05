@@ -61,6 +61,13 @@ function dmm_user_menu() {
 function dmm_user_comment_view_alter(&$comment) {
   dpm($comment);
   
+  
+  global $user;
+  if (!$user->uid) {
+    unset($comment['links']['comment']['#links']['comment_forbidden']);
+  }
+  
+  
   // Get the current user's accounts.
   $query = db_select('dmm_comment', 'dc');
   $query->fields('dc', array('data'))  
