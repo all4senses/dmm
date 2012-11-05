@@ -56,6 +56,14 @@ function dmm_user_menu() {
 
 
 /**
+ * Implements hook drupal_alter for comment_view.
+ */
+function dmm_user_comment_view_alter(&$comment) {
+  dpm($comment);
+}
+
+
+/**
  * Implements hook form_alter.
  */
 function dmm_user_form_alter(&$form, &$form_state, $form_id) {
@@ -172,6 +180,15 @@ function dmm_user_user_delete($account) {
     ->execute();
 }
 
+
+/**
+ * Implements hook_comment_delete().
+ */
+function dmm_user_comment_delete($comment) {
+  db_delete('dmm_comment')
+    ->condition('cid', $comment->cid)
+    ->execute();
+}
 
 /**
  * Themed user block for the header.
