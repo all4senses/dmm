@@ -131,6 +131,7 @@ function dmm_user_submitForm_comment(&$form, &$form_state) {
       'provider' => $dmm_logged_as['provider'],
       'identity' => $dmm_logged_as['identity'],
       'uid' => $dmm_logged_as['uid'],
+      'nickname' => $dmm_logged_as['nickname'],
       'photo' => $dmm_logged_as['photo'],
     );
     global $user;
@@ -142,6 +143,16 @@ function dmm_user_submitForm_comment(&$form, &$form_state) {
       ->execute();
   }
   
+}
+
+
+/**
+ * Implements hook_user_delete().
+ */
+function dmm_user_user_delete($account) {
+  db_delete('dmm_users_social')
+    ->condition('uid', $account->uid)
+    ->execute();
 }
 
 
