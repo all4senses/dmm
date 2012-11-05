@@ -110,7 +110,7 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
     
     case 'comment-form':
       
-        dpm($form);
+        //dpm($form);
       
         if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
           
@@ -227,7 +227,7 @@ function dmm_user_comment_delete($comment) {
 function dmm_user_userBlock() {
   
   global $user;
-  dpm($user);
+  
   if (!$user->uid) {
     
     dmm_user_initLogin();
