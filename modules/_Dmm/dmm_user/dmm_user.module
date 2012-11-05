@@ -72,15 +72,15 @@ function dmm_user_comment_view_alter(&$comment) {
     
     
     $comment['logged_via'] = array(
-      '#markup' => '<div>' . $current_logged_as['provider'] . '</div>',
+      '#markup' => '<div>' . $comment_user_social_data['provider'] . '</div>',
       '#weight' => -1,
     );
     $comment['picture'] = array(
-      '#markup' => '<div>' . $current_logged_as['photo'] . '</div>',
+      '#markup' => '<div>' . $comment_user_social_data['photo'] . '</div>',
       '#weight' => -1,
     );
     $comment['author'] = array(
-      '#markup' => '<div>' . $current_logged_as['nickname'] . '---</div>',
+      '#markup' => '<div>' . $comment_user_social_data['nickname'] . '---</div>',
       '#weight' => -2,
     );
   }
