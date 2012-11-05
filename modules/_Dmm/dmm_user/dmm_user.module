@@ -243,10 +243,33 @@ function dmm_user_loginza_data($data, $account) {
   
   $_SESSION['dmm_user_loginza_logged_as'] = $data;
   
-  
+  // Add a new provider to a list of providers (if does not exist).
   db_merge('dmm_social_providers')
       ->key(array('loginza_id' => $data['provider']))
       //->fields(array('data' => NULL))
+      ->execute();
+  
+  // Get a provider dmm_id (existing before or just set).
+  $query = db_select('dmm_social_providers', 'sp');
+  $query->fields('sp', array('dmm_id'))  
+        ->condition('sp.loginza_id', $data['provider']);
+  $dmm_provider_id = $query->execute()->fetchField(); 
+  
+  // Get the current user's accounts.
+  $query = db_select('dmm_users_social', 'us');
+  $query->fields('us', array('data'))  
+        ->condition('sp.uid', $account->uid);
+  $user_social_data = $query->execute()->fetchField();
+  
+  // Add a new (or replace existing) account data by a provider name (loginza_id).
+  // Before adding we append an inner dmm_id provider id to a source loginza array.
+  $data['dmm_id'] = $dmm_provider_id;
+  $user_social_data['accounts'][$data['provider']] = $data;
+  
+  // Put updated user social accounts data arrat back to the db.
+  db_merge('dmm_users_social')
+      ->key(array('uid' => $account->uid))
+      ->fields(array('data' => $user_social_data))
       ->execute();
   
   dpm('in dmm_user_loginza_data');
