@@ -259,7 +259,7 @@ function dmm_user_loginza_data($data, $account) {
   $query = db_select('dmm_users_social', 'us');
   $query->fields('us', array('data'))  
         ->condition('us.uid', $account->uid);
-  $user_social_data = $query->execute()->fetchField();
+  $user_social_data = unserialize($query->execute()->fetchField());
   
   // Add a new (or replace existing) account data by a provider name (loginza_id).
   // Before adding we append an inner dmm_id provider id to a source loginza array.
@@ -269,7 +269,7 @@ function dmm_user_loginza_data($data, $account) {
   // Put updated user social accounts data arrat back to the db.
   db_merge('dmm_users_social')
       ->key(array('uid' => $account->uid))
-      ->fields(array('data' => $user_social_data))
+      ->fields(array('data' => serialize($user_social_data)))
       ->execute();
   
   dpm('in dmm_user_loginza_data');
