@@ -271,7 +271,7 @@ function dmm_user_drupal_goto_alter(&$path, &$options, &$http_response_code) {
       $options['fragment'] = @$_SESSION['dmm_user_loginza_login_destination']['fragment'];
     }
     else {
-      $path = $_SESSION['dmm_user_loginza_login_destination']['destination'];
+      $path = $_SESSION['dmm_user_loginza_login_destination'];
       $options = NULL;
     }
   }
