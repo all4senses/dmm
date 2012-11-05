@@ -84,7 +84,7 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
               '#markup' => '<div>' . $current_logged_as['photo'] . '</div>',
               '#weight' => -1,
             );
-            $form['author']['_author'] = array(
+            $form['author'] = array(
               '#markup' => '<div>' . $current_logged_as['nickname'] . '---</div>',
               '#weight' => -2,
             );
