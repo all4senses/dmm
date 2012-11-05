@@ -237,7 +237,7 @@ function dmm_user_userBlock() {
     $out = l(t('Login'), 'ajax_register/login/nojs', array('html' => TRUE, 'attributes' => array('rel' => 'nofollow', 'class' => array('dmm-login', 'ctools-use-modal', 'ctools-modal-ctools-ajax-register-style'), 'title' => t('Login'))));
   }
   else {
-    $out = '<span class="user-profile">Hello, ' . theme('username', array('account' => $user))  . '</span><span class="user-logout">' . l('Logout', 'user/logout', array('query' => array('destination' => ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/')))) . '</span>';
+    $out = '<span class="user-profile">Hello, ' . theme('username', array('account' => $user, 'link_path' => 'user/' . $user->uid))  . '</span><span class="user-logout">' . l('Logout', 'user/logout', array('query' => array('destination' => ltrim(str_replace('#comment-form', '', $_SERVER['REQUEST_URI']), '/')))) . '</span>';
   }
   
   return $out;
