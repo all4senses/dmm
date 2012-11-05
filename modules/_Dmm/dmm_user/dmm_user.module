@@ -73,7 +73,9 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
             $current_logged_as = $_SESSION['dmm_user_loginza_logged_as'];
             
             $form['author']['name']['#value'] = $current_logged_as['nickname'] . '----';
-
+            
+            unset($form['author']);
+            
             $form['logged_via'] = array(
               '#markup' => '<div>' . $current_logged_as['provider'] . '</div>',
               '#weight' => -1,
