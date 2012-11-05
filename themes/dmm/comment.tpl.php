@@ -36,7 +36,7 @@
 
   <?php if (!empty($content['links'])): ?>
     <footer>
-      <?php print render($content['links']) ?>
+      <?php dpm($content['links']); print render($content['links']) ?>
     </footer>
   <?php endif; ?>
 
