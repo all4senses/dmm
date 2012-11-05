@@ -68,10 +68,15 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
       
         dpm($form);
       
+        $current_logged_as = $_SESSION['dmm_user_loginza_logged_as'];
+        $form['logged_via'] = array(
+          '#markup' => $current_logged_as['provider'],
+        );
+        $form['nickname'] = array(
+          '#markup' => $current_logged_as['nickname'],
+        );
         $form['picture'] = array(
-          '#type' => 'textarea',
-          '#title' => 'Test',
-          '#default_value' => 'kjhkjhkjhj',
+          '#markup' => $current_logged_as['photo'],
         );
       
         
