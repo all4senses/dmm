@@ -733,20 +733,20 @@ function dmm_user_user_presave(&$edit, $account, $category) {
  */
 function dmm_user_user_insert(&$edit, $account) {
   
-  
+      dpm('pic start');
+      
+      dpm($edit);
+      dpm($account);
+      dpm('pic finish');
   
   // Retrieve the user's picture from remote social network.
   if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
       
     $loginza_data = $_SESSION['dmm_user_loginza_logged_as'];
-    
+    dpm($loginza_data);
     
           
-      dpm('pic start');
-      dpm($loginza_data);
-      dpm($edit);
-      dpm($account);
-      dpm('pic finish');
+      
 
   
     $picture_directory =  file_default_scheme() . '://' . variable_get('user_picture_path', 'avatars');
