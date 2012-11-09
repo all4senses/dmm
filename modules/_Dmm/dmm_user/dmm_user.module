@@ -417,19 +417,29 @@ function dmm_user_initLogin() {
 /**
  * Action upon login via loginza, refine data.
  */
-function dmm_user_loginza_data_refine(&$data, $account) {
+function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
   
-  // Add a new provider to a list of providers (if does not exist).
-  db_merge('dmm_social_providers')
-      ->key(array('loginza_id' => $data['provider']))
-      //->fields(array('data' => NULL))
-      ->execute();
   
-  // Get a provider dmm_id (existing before or just set).
+  // Get a provider dmm_pid (existing before or just set).
   $query = db_select('dmm_social_providers', 'sp');
-  $query->fields('sp', array('dmm_id'))  
+  $query->fields('sp', array('dmm_pid'))  
         ->condition('sp.loginza_id', $data['provider']);
-  $dmm_provider_id = $query->execute()->fetchField(); 
+  
+  if(!$dmm_provider_id = $query->execute()->fetchField()) {
+    // Add a new provider to a list of providers (if does not exist).
+    db_merge('dmm_social_providers')
+        ->key(array('loginza_id' => $data['provider']))
+        //->fields(array('data' => NULL))
+        ->execute();
+
+    // Get a provider dmm_pid (existing before or just set).
+    $query = db_select('dmm_social_providers', 'sp');
+    $query->fields('sp', array('dmm_pid'))  
+          ->condition('sp.loginza_id', $data['provider']);
+    $dmm_provider_id = $query->execute()->fetchField();
+  }
+  
+  
   
   // Get the current user's accounts.
   $query = db_select('dmm_users_social', 'us');
@@ -441,8 +451,12 @@ function dmm_user_loginza_data_refine(&$data, $account) {
   }
   
   // Add a new (or replace existing) account data by a provider name (loginza_id).
-  // Before adding we append an inner dmm_id provider id to a source loginza array.
-  $data['dmm_id'] = $dmm_provider_id;
+  // Before adding we append an inner dmm_pid provider id to a source loginza array.
+  $data['dmm_pid'] = $dmm_provider_id;
+  
+  // Get user's avatar.
+  $data['photo_local'] = dmm_user_loginza_getUserAvatar($data, $account, $registration);
+  
   $user_social_data['accounts'][$data['provider']] = $data;
   
   // Put updated user social accounts data arrat back to the db.
@@ -601,8 +615,8 @@ function dmm_user_getUserContent($account, $content_title, $content_type){
  */
 function dmm_user_user_load($users) {
   
-  $users['67']->picture = NULL;
-  dpm($users);
+  //$users['67']->picture = NULL;
+  //dpm($users);
 }
 
 
@@ -711,6 +725,69 @@ function dmm_user_user_presave(&$edit, $account, $category) {
 }
 
 
+
+/**
+ * Get user's remote social avatar.
+ * $registration = TRUE means it's a registration and we have to set a remote picture as a main user picture.
+ */
+function dmm_user_loginza_getUserAvatar($loginza_data, &$account, $registration = FALSE) {
+  
+  if (!$loginza_data['photo']) {
+    return FALSE;
+  }
+  
+  $success = FALSE;
+  
+  $file_default_scheme = file_default_scheme();
+  $user_picture_path = variable_get('user_picture_path', 'avatars');
+  $picture_directory_uri =  $file_default_scheme . '://' . $user_picture_path;
+  $picture_filepath = '/s/u' . $account->uid . '-s' . $loginza_data['dmm_pid'] . '.' . $picture_ext;
+  // Build local file path url to return to save it in user's loginza data.
+  $picture_path_url = variable_get('file_' . $file_default_scheme . '_path', '/f') . '/' . $user_picture_path . $picture_filepath;
+
+  if($registration && $picture_result = drupal_http_request($loginza_data['photo']) && file_prepare_directory($picture_directory_uri, FILE_CREATE_DIRECTORY)){
+    
+      //$picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/picture-' . $account->uid . '-' . REQUEST_TIME . '.jpg');
+
+      if(isset($picture_result->headers['content-type']) && strpos($picture_result->headers['content-type'], 'mage/') && !$picture_ext = str_replace('image/', '', $picture_result->headers['content-type'])) {
+        $picture_ext = 'jpeg';
+      }
+    
+      $picture_path_uri = file_stream_wrapper_uri_normalize($picture_directory_uri . $picture_filepath);
+      $picture_file = file_save_data($picture_result->data, $picture_path_uri, FILE_EXISTS_REPLACE);
+
+      // Check to make sure the picture isn't too large for the site settings.
+      $max_dimensions = variable_get('user_picture_dimensions', '85x85');
+      file_validate_image_resolution($picture_file, $max_dimensions);
+
+      // Update the user record.
+      $picture_file->uid = $account->uid;
+      $picture_file = file_save($picture_file);
+      file_usage_add($picture_file, 'user', 'user', $account->uid);
+  
+      db_update('users')
+        ->fields(array(
+        'picture' => $picture_file->fid,
+        ))
+        ->condition('uid', $account->uid)
+        ->execute();
+
+      //$account['picture'] = $picture_file->fid;
+      
+      $success = TRUE;
+      
+  } // End of if($picture_result = drupal_http_request($loginza_data['photo']) && file_prepare_directory($picture_directory_uri, FILE_CREATE_DIRECTORY)){
+  elseif(!$registration) {
+    $file_local_abs = DRUPAL_ROOT . '/' . $picture_path_url;
+    if (dmm_misc_curl_file_from_remote_site_likeBrowser($loginza_data['photo'], $file_local_abs)) {
+      $success = TRUE;
+    }
+  }
+
+  return $success ? $picture_path_url : NULL;
+}
+
+
 /**
  * Implements hook_user_insert().
  */
@@ -724,40 +801,7 @@ function dmm_user_user_insert(&$edit, $account) {
     
     $loginza_data = $_SESSION['dmm_user_loginza_initial_data'];
    
-    dmm_user_loginza_data_refine($loginza_data, $account);
-    
-    $picture_directory =  file_default_scheme() . '://' . variable_get('user_picture_path', 'avatars');
-    
-    if(file_prepare_directory($picture_directory, FILE_CREATE_DIRECTORY)){
-      
-      $picture_result = drupal_http_request($loginza_data['photo']);
-      //$picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/picture-' . $account->uid . '-' . REQUEST_TIME . '.jpg');
-      
-      if(isset($picture_result->headers['content-type']) && strpos($picture_result->headers['content-type'], 'mage/') && !$picture_ext = str_replace('image/', '', $picture_result->headers['content-type'])) {
-        $picture_ext = 'jpeg';
-      }
-      $picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/s/u' . $account->uid . '-s' . $loginza_data['dmm_id'] . '.' . $picture_ext);
-      
-      $picture_file = file_save_data($picture_result->data, $picture_path, FILE_EXISTS_REPLACE);
-
-      // Check to make sure the picture isn't too large for the site settings.
-      $max_dimensions = variable_get('user_picture_dimensions', '85x85');
-      file_validate_image_resolution($picture_file, $max_dimensions);
-
-      // Update the user record.
-      $picture_file->uid = $account->uid;
-      $picture_file = file_save($picture_file);
-      file_usage_add($picture_file, 'user', 'user', $account->uid);
-      
-      db_update('users')
-        ->fields(array(
-        'picture' => $picture_file->fid,
-        ))
-        ->condition('uid', $account->uid)
-        ->execute();
-      
-      //$edit['picture'] = $picture_file->fid;
-    }
+    dmm_user_loginza_data_refine($loginza_data, $account, TRUE); // $registration = TRUE means it's a registration and we have to set remote picture as a main user picture
     
     
   } // End of if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
