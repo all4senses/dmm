@@ -455,9 +455,10 @@ function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
   $data['dmm_pid'] = $dmm_provider_id;
   
   // Get user's avatar, if it's not pulled yet.
-  if (empty($user_social_data['accounts'][$data['provider']]['photo_local'])) {
+  dpm('photo_local = ' . $user_social_data['accounts'][$data['provider']]['photo_local']);
+  //if (empty($user_social_data['accounts'][$data['provider']]['photo_local'])) {
     $data['photo_local'] = dmm_user_loginza_getUserAvatar($data, $account, $registration);
-  }
+  //}
   
   $user_social_data['accounts'][$data['provider']] = $data;
   
