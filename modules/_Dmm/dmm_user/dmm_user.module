@@ -65,7 +65,7 @@ function dmm_user_comment_view_alter(&$comment) {
   
   global $user;
   if (!$user->uid) {
-    unset($comment['links']['comment']['#links']['comment_forbidden']);
+    //unset($comment['links']['comment']['#links']['comment_forbidden']);
   }
   
   
@@ -105,7 +105,7 @@ function dmm_user_comment_view_alter(&$comment) {
 function dmm_user_preprocess_comment(&$variables) {
   //$comment = $variables['elements']['#comment'];
   $node = $variables['elements']['#node'];
-  dpm($comment);
+  //dpm($comment);
   dpm($variables);
   
   // Get the current user's accounts.
