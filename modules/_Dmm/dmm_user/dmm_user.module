@@ -423,19 +423,19 @@ function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
   // Get a provider dmm_pid (existing before or just set).
   $query = db_select('dmm_social_providers', 'sp');
   $query->fields('sp', array('dmm_pid'))  
-        ->condition('sp.loginza_id', $data['provider']);
+        ->condition('sp.loginza_pid', $data['provider']);
   
   if(!$dmm_provider_id = $query->execute()->fetchField()) {
     // Add a new provider to a list of providers (if does not exist).
     db_merge('dmm_social_providers')
-        ->key(array('loginza_id' => $data['provider']))
+        ->key(array('loginza_pid' => $data['provider']))
         //->fields(array('data' => NULL))
         ->execute();
 
     // Get a provider dmm_pid (existing before or just set).
     $query = db_select('dmm_social_providers', 'sp');
     $query->fields('sp', array('dmm_pid'))  
-          ->condition('sp.loginza_id', $data['provider']);
+          ->condition('sp.loginza_pid', $data['provider']);
     $dmm_provider_id = $query->execute()->fetchField();
   }
   
@@ -450,7 +450,7 @@ function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
     $user_social_data = unserialize($user_social_data);
   }
   
-  // Add a new (or replace existing) account data by a provider name (loginza_id).
+  // Add a new (or replace existing) account data by a provider name (loginza_pid).
   // Before adding we append an inner dmm_pid provider id to a source loginza array.
   $data['dmm_pid'] = $dmm_provider_id;
   
