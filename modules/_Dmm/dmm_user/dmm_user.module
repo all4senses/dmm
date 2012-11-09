@@ -415,13 +415,9 @@ function dmm_user_initLogin() {
 
 
 /**
- * Action upon login via loginza.
+ * Action upon login via loginza, refine data.
  */
-function dmm_user_loginza_data($data, $account) {
-  // Prevent a module login_destination from redefining the destination based on the $GLOBALS['destination'] param.
-  unset($GLOBALS['destination']);
-  // Tell a hook function dmm_user_drupal_goto_alter to set the right destination params for logging in via loginza.
-  $_SESSION['dmm_user_loginza_login'] = TRUE;
+function dmm_user_loginza_data_refine(&$data, $account) {
   
   // Add a new provider to a list of providers (if does not exist).
   db_merge('dmm_social_providers')
@@ -460,6 +456,22 @@ function dmm_user_loginza_data($data, $account) {
   dpm('in dmm_user_loginza_data');
   dpm($data);
   dpm($account);
+}
+
+
+/**
+ * Action upon login via loginza.
+ */
+function dmm_user_loginza_data($data, $account) {
+  // Prevent a module login_destination from redefining the destination based on the $GLOBALS['destination'] param.
+  unset($GLOBALS['destination']);
+  // Tell a hook function dmm_user_drupal_goto_alter to set the right destination params for logging in via loginza.
+  $_SESSION['dmm_user_loginza_login'] = TRUE;
+  
+  // It could be initialized in hook_user_register_alter().
+  if(!isset($_SESSION['dmm_user_loginza_logged_as'])) {
+    dmm_user_loginza_data_refine($data, $account);
+  }
   
 }
 
@@ -633,10 +645,13 @@ function dmm_user_form_user_register_form_alter(&$form, &$form_state) {
   dpm($form);
   dpm('reg form finish');
   
-  if (isset($_SESSION['loginza']['data']))
-  {
+  if (isset($_SESSION['loginza']['data'])) {
     $data = $_SESSION['loginza']['data'];
-
+    
+    // It's necessary in hook_user_insert() because $_SESSION['loginza']['data'] will be cleared by loginza before that time.
+    $_SESSION['dmm_user_loginza_initial_data'] = $_SESSION['loginza']['data'];
+   
+    
     $form['account']['name']['#default_value'] = dmm_user_loginza_username($data); //strtolower(str_replace(' ', '.', $data['name']['full_name'])); //_loginza_username($data);
     $form['field_first_name']['und'][0]['value']['#default_value'] = @$data['name']['first_name'];
     $form['field_last_name']['und'][0]['value']['#default_value'] = @$data['name']['last_name'];
@@ -733,22 +748,23 @@ function dmm_user_user_presave(&$edit, $account, $category) {
  */
 function dmm_user_user_insert(&$edit, $account) {
   
+  
+  // Retrieve the user's picture from remote social network.
+
+  // $_SESSION['dmm_user_loginza_initial_data'] is set in user_register_folr_alter because before that time the source var from Loginza are cleared by :oginza.
+  if (isset($_SESSION['dmm_user_loginza_initial_data'])) {
+    
+    $loginza_data = $_SESSION['dmm_user_loginza_initial_data'];
+   
+    dmm_user_loginza_data_refine($loginza_data, $account);
+    
       dpm('pic start');
-      
+      dpm($loginza_data);
       dpm($edit);
       dpm($account);
       dpm('pic finish');
-  
-  // Retrieve the user's picture from remote social network.
-  if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
-      
-    $loginza_data = $_SESSION['dmm_user_loginza_logged_as'];
-    dpm($loginza_data);
-    
-          
-      
 
-  
+    
     $picture_directory =  file_default_scheme() . '://' . variable_get('user_picture_path', 'avatars');
     
     if(file_prepare_directory($picture_directory, FILE_CREATE_DIRECTORY)){
@@ -762,23 +778,28 @@ function dmm_user_user_insert(&$edit, $account) {
       dpm($picture_result);
       dpm($picture_path);
       
-//      $picture_file = file_save_data($picture_result->data, $picture_path, FILE_EXISTS_REPLACE);
-//
-//      // Check to make sure the picture isn't too large for the site settings.
-//      $max_dimensions = variable_get('user_picture_dimensions', '85x85');
-//      file_validate_image_resolution($picture_file, $max_dimensions);
-//
-//      // Update the user record.
-//      $picture_file->uid = $account->uid;
-//      $picture_file = file_save($picture_file);
-//      file_usage_add($picture_file, 'user', 'user', $account->uid);
-//      db_update('users')
-//        ->fields(array(
-//        'picture' => $picture_file->fid,
-//        ))
-//        ->condition('uid', $account->uid)
-//        ->execute();
+      $picture_file = file_save_data($picture_result->data, $picture_path, FILE_EXISTS_REPLACE);
+
+      // Check to make sure the picture isn't too large for the site settings.
+      $max_dimensions = variable_get('user_picture_dimensions', '85x85');
+      file_validate_image_resolution($picture_file, $max_dimensions);
+
+      // Update the user record.
+      $picture_file->uid = $account->uid;
+      $picture_file = file_save($picture_file);
+      file_usage_add($picture_file, 'user', 'user', $account->uid);
+      /*
+      db_update('users')
+        ->fields(array(
+        'picture' => $picture_file->fid,
+        ))
+        ->condition('uid', $account->uid)
+        ->execute();
+      */
+      $edit['picture'] = $picture_file->fid;
     }
+    
+    
   } // End of if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
 
 }
