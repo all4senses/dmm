@@ -626,7 +626,7 @@ function dmm_user_user_load($users) {
  * Implements hook_user_view().
  */
 function dmm_user_user_view($account, $view_mode, $langcode) {
-  dpm($account);
+  //dpm($account);
 /*    
 //  $dmm_user_mode = variable_get('dmm_user_mode', dmm_user_SITE_dmm_user | dmm_user_USER_dmm_userS);
 //  if ($dmm_user_mode & dmm_user_USER_dmm_userS) {
