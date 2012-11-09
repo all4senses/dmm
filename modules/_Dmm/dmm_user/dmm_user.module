@@ -107,7 +107,7 @@ function dmm_user_preprocess_comment(&$variables) {
   $author_uid = $variables['elements']['#comment']->uid;
   $node = $variables['elements']['#node'];
   //dpm($comment);
-  dpm($variables);
+  //dpm($variables);
   
   global $user;
   if (!$user->uid) {
@@ -145,7 +145,7 @@ function dmm_user_preprocess_comment(&$variables) {
   if ($comment_user_social_data) {
     $comment_user_social_data = unserialize($comment_user_social_data);
     dpm($comment_user_social_data);
-    $variables['author'] = '<div><span>' . l($comment_user_social_data['nickname'], $comment_user_social_data['identity'], array('external' => TRUE)) . '</span><span> via ' . $comment_user_social_data['provider'] . '</span><span> (' . l('local profile', 'user/' . $author_uid) . ')</span></div>';
+    $variables['author'] = '<div><span>' . l($comment_user_social_data['nickname'], $comment_user_social_data['identity'], array('external' => TRUE, 'attributes' => array('target' => '_blank'))) . '</span><span> via ' . $comment_user_social_data['provider'] . '</span><span> (' . l('local profile', 'user/' . $author_uid) . ')</span></div>';
     $variables['picture'] = '<div>' . $comment_user_social_data['photo'] . '</div>';
   }
   
