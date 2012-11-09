@@ -124,7 +124,7 @@ function dmm_user_preprocess_comment(&$variables) {
     $comment_user_social_data = unserialize($comment_user_social_data);
     //dpm($comment_user_social_data);
     $variables['author'] = '<div><span>' . l($comment_user_social_data['nickname'], $comment_user_social_data['identity'], array('external' => TRUE, 'attributes' => array('target' => '_blank'))) . '</span><span> via ' . $comment_user_social_data['provider'] . '</span><span> (' . l('local profile', 'user/' . $author_uid) . ')</span></div>';
-    $variables['picture'] = '<div>' . $comment_user_social_data['photo'] . '</div>';
+    //$variables['picture'] = '<div>' . $comment_user_social_data['photo'] . '</div>';
   }
 
   // Original code from comment.module
@@ -594,12 +594,23 @@ function dmm_user_getUserContent($account, $content_title, $content_type){
 }
 
 
+
+
+/**
+ * Implements hook_user_load().
+ */
+function dmm_user_user_load($account, $view_mode, $langcode) {
+  dpm($account);
+
+}
+
+
 /**
  * Implements hook_user_view().
  */
-/*
 function dmm_user_user_view($account, $view_mode, $langcode) {
-    
+  dpm($account);
+/*    
 //  $dmm_user_mode = variable_get('dmm_user_mode', dmm_user_SITE_dmm_user | dmm_user_USER_dmm_userS);
 //  if ($dmm_user_mode & dmm_user_USER_dmm_userS) {
 //    if (user_access('access user dmm_users') && empty($account->data['dmm_user_status'])) {
@@ -626,9 +637,9 @@ unset($gbook['links']['comment']); // remove link "add new comment as we have a 
         //'#attributes' => array('class' => 'dmm_user'),
         '#weight' => 10,
       );
-
-}
 */
+}
+
 
 
 
@@ -641,9 +652,9 @@ function dmm_user_form_user_register_form_alter(&$form, &$form_state) {
   // Set up the right nickname (username) for user registered via loginza
   // !!!!!!!!!!!!!!!!!!!!!  MUST have weight bigger then loginza in a system table
   
-  dpm('reg form start');
-  dpm($form);
-  dpm('reg form finish');
+  //dpm('reg form start');
+  //dpm($form);
+  //dpm('reg form finish');
   
   if (isset($_SESSION['loginza']['data'])) {
     $data = $_SESSION['loginza']['data'];
@@ -689,56 +700,12 @@ function dmm_user_user_presave(&$edit, $account, $category) {
   }
   */
   
-  //dpm($edit);
-  
   // Set a full_name if it's empty.
   if(!isset($edit['field_full_name']['und'][0]['value']) || !$edit['field_full_name']['und'][0]['value']) {
     if( (isset($edit['field_first_name']['und'][0]['value']) && $edit['field_first_name']['und'][0]['value']) || (isset($edit['field_last_name']['und'][0]['value']) && $edit['field_last_name']['und'][0]['value'])) {
       $edit['field_full_name']['und'][0]['value'] = trim(@$edit['field_first_name']['und'][0]['value'] . ' ' . @$edit['field_last_name']['und'][0]['value']);
     }
   }
-  
-  
-  
-  
-  // Retrieve the user's picture from remote social network.
-  if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
-      
-//    $loginza_data = $_SESSION['dmm_user_loginza_logged_as'];
-//    dpm($loginza_data);
-//  
-//    $picture_directory =  file_default_scheme() . '://' . variable_get('user_picture_path', 'avatars');
-//    
-//    if(file_prepare_directory($picture_directory, FILE_CREATE_DIRECTORY)){
-//      
-//      $picture_result = drupal_http_request($loginza_data['photo']);
-//      //$picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/picture-' . $account->uid . '-' . REQUEST_TIME . '.jpg');
-//      if(!$picture_ext = str_replace('image/', '', $picture_result->headers['content_type'])) {
-//        $picture_ext = 'jpeg';
-//      }
-//      $picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/s/u' . $account->uid . '-s' . $loginza_data['dmm_id'] . '.' . $picture_ext);
-//      dpm($picture_result);
-//      dpm($picture_path);
-     
-//      $picture_file = file_save_data($picture_result->data, $picture_path, FILE_EXISTS_REPLACE);
-//
-//      // Check to make sure the picture isn't too large for the site settings.
-//      $max_dimensions = variable_get('user_picture_dimensions', '85x85');
-//      file_validate_image_resolution($picture_file, $max_dimensions);
-//
-//      // Update the user record.
-//      $picture_file->uid = $account->uid;
-//      $picture_file = file_save($picture_file);
-//      file_usage_add($picture_file, 'user', 'user', $account->uid);
-//      db_update('users')
-//        ->fields(array(
-//        'picture' => $picture_file->fid,
-//        ))
-//        ->condition('uid', $account->uid)
-//        ->execute();
-//    }
-  } // End of if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
-
   
 }
 
@@ -758,13 +725,6 @@ function dmm_user_user_insert(&$edit, $account) {
    
     dmm_user_loginza_data_refine($loginza_data, $account);
     
-      dpm('pic start');
-      dpm($loginza_data);
-      dpm($edit);
-      dpm($account);
-      dpm('pic finish');
-
-    
     $picture_directory =  file_default_scheme() . '://' . variable_get('user_picture_path', 'avatars');
     
     if(file_prepare_directory($picture_directory, FILE_CREATE_DIRECTORY)){
@@ -776,8 +736,6 @@ function dmm_user_user_insert(&$edit, $account) {
         $picture_ext = 'jpeg';
       }
       $picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/s/u' . $account->uid . '-s' . $loginza_data['dmm_id'] . '.' . $picture_ext);
-      dpm($picture_result);
-      dpm($picture_path);
       
       $picture_file = file_save_data($picture_result->data, $picture_path, FILE_EXISTS_REPLACE);
 
@@ -788,7 +746,6 @@ function dmm_user_user_insert(&$edit, $account) {
       // Update the user record.
       $picture_file->uid = $account->uid;
       $picture_file = file_save($picture_file);
-      dpm($picture_file);
       file_usage_add($picture_file, 'user', 'user', $account->uid);
       
       db_update('users')
