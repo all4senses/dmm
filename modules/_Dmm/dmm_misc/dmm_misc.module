@@ -561,6 +561,8 @@ function dmm_misc_curl_file_from_remote_site_likeBrowser($url, $file_local_abs)
 
     if ($data === false) {
       $data = curl_error($curl);
+      dpm('curl error');
+      dpm($data);
       // close the connection
       curl_close($curl);
       return $data;

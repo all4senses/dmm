@@ -789,10 +789,16 @@ function dmm_user_loginza_getUserAvatar($loginza_data, &$account, $registration 
   } // End of if($picture_result = drupal_http_request($loginza_data['photo']) && file_prepare_directory($picture_directory_uri, FILE_CREATE_DIRECTORY)){
   elseif(!$registration) {
     $file_local_abs = DRUPAL_ROOT . '/' . $picture_path_url;
-    if (dmm_misc_curl_file_from_remote_site_likeBrowser($loginza_data['photo'], $file_local_abs)) {
+    
+    dpm('avatar in login');
+    dpm('$picture_path_url = ' . $picture_path_url);
+    dpm('$file_local_abs = ' . $file_local_abs);
+    dpm('$loginza_data[photo] = ' . $loginza_data['photo']);
+    
+    if (!dmm_misc_curl_file_from_remote_site_likeBrowser($loginza_data['photo'], $file_local_abs)) {
       $success = TRUE;
     }
-    dpm('avatar in login');
+    
   }
 
   return $success ? $picture_path_url : NULL;
