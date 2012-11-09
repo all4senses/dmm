@@ -108,11 +108,18 @@ function dmm_user_preprocess_comment(&$variables) {
   //dpm($comment);
   dpm($variables);
   
+  global $user;
+  if (!$user->uid) {
+    unset($variables['elements']['links']['comment']['#links']['comment_forbidden']);
+  }
+  
   // Get the current user's accounts.
   $query = db_select('dmm_comment', 'dc');
   $query->fields('dc', array('data'))  
         ->condition('dc.cid', $node->cid);
   $comment_user_social_data = $query->execute()->fetchField();
+  
+  
 
 //  if ($comment_user_social_data) {
 //    
@@ -136,6 +143,7 @@ function dmm_user_preprocess_comment(&$variables) {
   
   if ($comment_user_social_data) {
     $comment_user_social_data = unserialize($comment_user_social_data);
+    dpm($comment_user_social_data);
     $variables['author'] = '<div><span>' . $comment_user_social_data['nickname'] . '</span><span> via ' . $comment_user_social_data['provider'] . '</span></div>';
     $variables['picture'] = '<div>' . $comment_user_social_data['photo'] . '</div>';
   }
