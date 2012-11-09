@@ -657,7 +657,7 @@ function dmm_user_user_presave(&$edit, $account, $category) {
   }
   */
   
-  //dpm($edit);
+  dpm($edit);
   
   if(!isset($edit['field_full_name']['und'][0]['value']) || !$edit['field_full_name']['und'][0]['value']) {
     if( (isset($edit['field_first_name']['und'][0]['value']) && $edit['field_first_name']['und'][0]['value']) || (isset($edit['field_last_name']['und'][0]['value']) && $edit['field_last_name']['und'][0]['value'])) {
