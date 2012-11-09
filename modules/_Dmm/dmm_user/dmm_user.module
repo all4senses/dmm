@@ -790,15 +790,15 @@ function dmm_user_user_insert(&$edit, $account) {
       $picture_file = file_save($picture_file);
       dpm($picture_file);
       file_usage_add($picture_file, 'user', 'user', $account->uid);
-      /*
+      
       db_update('users')
         ->fields(array(
         'picture' => $picture_file->fid,
         ))
         ->condition('uid', $account->uid)
         ->execute();
-      */
-      $edit['picture'] = $picture_file->fid;
+      
+      //$edit['picture'] = $picture_file->fid;
     }
     
     
