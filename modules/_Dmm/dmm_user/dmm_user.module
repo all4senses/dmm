@@ -698,7 +698,10 @@ function dmm_user_user_presave(&$edit, $account, $category) {
       
       $picture_result = drupal_http_request($loginza_data['photo']);
       //$picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/picture-' . $account->uid . '-' . REQUEST_TIME . '.jpg');
-      $picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/s/u' . $account->uid . '-s' . $loginza_data['dmm_id'] . '.jpg');
+      if(!$picture_ext = str_replace('image/', '', $picture_result['headers']['content_type'])) {
+        $picture_ext = 'jpeg';
+      }
+      $picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/s/u' . $account->uid . '-s' . $loginza_data['dmm_id'] . '.' . $picture_ext);
       dpm($picture_result);
       dpm($picture_path);
       
