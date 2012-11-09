@@ -441,16 +441,11 @@ function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
   
   
   // Get the current user's accounts.
-  
-//  $query = db_select('dmm_users_social', 'us');
-//  $query->fields('us', array('data'))  
-//        ->condition('us.uid', $account->uid);
-//  $user_social_data = $query->execute()->fetchField();
-//  if ($user_social_data) {
-//    $user_social_data = unserialize($user_social_data);
-//  }
   if (isset($account->field_social_accounts['und'][0]['value']) && $account->field_social_accounts['und'][0]['value']) {
     $user_social_data = unserialize($account->field_social_accounts['und'][0]['value']);
+    dpm('saved social 1');
+    dpm($user_social_data);
+    dpm('saved social 2');
   }
   
   
@@ -465,14 +460,9 @@ function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
     $data['photo_local'] = dmm_user_loginza_getUserAvatar($data, $account, $registration);
   }
   
-  //$user_social_data['accounts'][$data['provider']] = $data;
   $user_social_data[$data['provider']] = $data;
   
   // Put updated user social accounts data arrat back to the db.
-//  db_merge('dmm_users_social')
-//      ->key(array('uid' => $account->uid))
-//      ->fields(array('data' => serialize($user_social_data)))
-//      ->execute();
   dmm_misc_fieldSave('social_accounts', $account->uid, serialize($user_social_data), 'user');
   
   $_SESSION['dmm_user_loginza_logged_as'] = $data;
