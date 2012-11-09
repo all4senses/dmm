@@ -689,16 +689,20 @@ function dmm_user_user_presave(&$edit, $account, $category) {
   // Retrieve the user's picture from remote social network.
   if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
       
-      $loginza_data = $_SESSION['dmm_user_loginza_logged_as'];
-      dpm($loginza_data);
+    $loginza_data = $_SESSION['dmm_user_loginza_logged_as'];
+    dpm($loginza_data);
   
-//    $picture_directory =  file_default_scheme() . '://' . variable_get('user_picture_path', 'avatars');
-//    
-//    if(file_prepare_directory($picture_directory, FILE_CREATE_DIRECTORY)){
-//      
-//      $picture_result = drupal_http_request('https://graph.facebook.com/' . $fbuser->id . '/picture?type=large');
-//      $picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/picture-' . $account->uid . '-' . REQUEST_TIME . '.jpg');
-//      $picture_file = file_save_data($picture_result->data, $picture_path, FILE_EXISTS_REPLACE);
+    $picture_directory =  file_default_scheme() . '://' . variable_get('user_picture_path', 'avatars');
+    
+    if(file_prepare_directory($picture_directory, FILE_CREATE_DIRECTORY)){
+      
+      $picture_result = drupal_http_request($loginza_data['photo']);
+      //$picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/picture-' . $account->uid . '-' . REQUEST_TIME . '.jpg');
+      $picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/s/u' . $account->uid . '-s' . $loginza_data['dmm_id'] . '.jpg');
+      dpm($picture_result);
+      dpm($picture_path);
+      
+      //$picture_file = file_save_data($picture_result->data, $picture_path, FILE_EXISTS_REPLACE);
 //
 //      // Check to make sure the picture isn't too large for the site settings.
 //      $max_dimensions = variable_get('user_picture_dimensions', '85x85');
@@ -714,8 +718,8 @@ function dmm_user_user_presave(&$edit, $account, $category) {
 //        ))
 //        ->condition('uid', $account->uid)
 //        ->execute();
-//    }
-  } // End of if (isset($_SESSION['loginza']['data'])) {
+    }
+  } // End of if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
 
   
 }
