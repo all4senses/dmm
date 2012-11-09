@@ -454,8 +454,10 @@ function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
   // Before adding we append an inner dmm_pid provider id to a source loginza array.
   $data['dmm_pid'] = $dmm_provider_id;
   
-  // Get user's avatar.
-  $data['photo_local'] = dmm_user_loginza_getUserAvatar($data, $account, $registration);
+  // Get user's avatar, if it's not pulled yet.
+  if (empty($user_social_data['accounts'][$data['provider']]['photo_local'])) {
+    $data['photo_local'] = dmm_user_loginza_getUserAvatar($data, $account, $registration);
+  }
   
   $user_social_data['accounts'][$data['provider']] = $data;
   
@@ -741,18 +743,23 @@ function dmm_user_loginza_getUserAvatar($loginza_data, &$account, $registration 
   $file_default_scheme = file_default_scheme();
   $user_picture_path = variable_get('user_picture_path', 'avatars');
   $picture_directory_uri =  $file_default_scheme . '://' . $user_picture_path;
-  $picture_filepath = '/s/u' . $account->uid . '-s' . $loginza_data['dmm_pid'] . '.' . $picture_ext;
-  // Build local file path url to return to save it in user's loginza data.
-  $picture_path_url = variable_get('file_' . $file_default_scheme . '_path', '/f') . '/' . $user_picture_path . $picture_filepath;
-
-  if($registration && $picture_result = drupal_http_request($loginza_data['photo']) && file_prepare_directory($picture_directory_uri, FILE_CREATE_DIRECTORY)){
+  
+  if($picture_result = drupal_http_request($loginza_data['photo'])) {
+    if(isset($picture_result->headers['content-type']) && strpos($picture_result->headers['content-type'], 'mage/') && !$picture_ext = str_replace('image/', '', $picture_result->headers['content-type'])) {
+      $picture_ext = 'jpeg';
+    }
+    $picture_filepath = '/s/u' . $account->uid . '-s' . $loginza_data['dmm_pid'] . '.' . $picture_ext;
+    // Build local file path url to return to save it in user's loginza data.
+    $picture_path_url = variable_get('file_' . $file_default_scheme . '_path', '/f') . '/' . $user_picture_path . $picture_filepath;
+  }
+  else {
+    return FALSE;
+  }
+  
+  if($registration && file_prepare_directory($picture_directory_uri, FILE_CREATE_DIRECTORY)){
     
       //$picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/picture-' . $account->uid . '-' . REQUEST_TIME . '.jpg');
-
-      if(isset($picture_result->headers['content-type']) && strpos($picture_result->headers['content-type'], 'mage/') && !$picture_ext = str_replace('image/', '', $picture_result->headers['content-type'])) {
-        $picture_ext = 'jpeg';
-      }
-    
+      
       $picture_path_uri = file_stream_wrapper_uri_normalize($picture_directory_uri . $picture_filepath);
       $picture_file = file_save_data($picture_result->data, $picture_path_uri, FILE_EXISTS_REPLACE);
 
@@ -776,12 +783,15 @@ function dmm_user_loginza_getUserAvatar($loginza_data, &$account, $registration 
       
       $success = TRUE;
       
+      dpm('avatar in register');
+      
   } // End of if($picture_result = drupal_http_request($loginza_data['photo']) && file_prepare_directory($picture_directory_uri, FILE_CREATE_DIRECTORY)){
   elseif(!$registration) {
     $file_local_abs = DRUPAL_ROOT . '/' . $picture_path_url;
     if (dmm_misc_curl_file_from_remote_site_likeBrowser($loginza_data['photo'], $file_local_abs)) {
       $success = TRUE;
     }
+    dpm('avatar in login');
   }
 
   return $success ? $picture_path_url : NULL;
