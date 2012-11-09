@@ -69,29 +69,29 @@ function dmm_user_comment_view_alter(&$comment) {
   }
   
   
-  // Get the current user's accounts.
-  $query = db_select('dmm_comment', 'dc');
-  $query->fields('dc', array('data'))  
-        ->condition('dc.cid', $comment['#node']->cid);
-  $comment_user_social_data = $query->execute()->fetchField();
-  
-  if ($comment_user_social_data) {
-    $comment_user_social_data = unserialize($comment_user_social_data);
-    
-    
-    $comment['logged_via'] = array(
-      '#markup' => '<div>' . $comment_user_social_data['provider'] . '</div>',
-      '#weight' => -1,
-    );
-    $comment['picture'] = array(
-      '#markup' => '<div>' . $comment_user_social_data['photo'] . '</div>',
-      '#weight' => -1,
-    );
-    $comment['author'] = array(
-      '#markup' => '<div>' . $comment_user_social_data['nickname'] . '---</div>',
-      '#weight' => -2,
-    );
-  }
+//  // Get the current user's accounts.
+//  $query = db_select('dmm_comment', 'dc');
+//  $query->fields('dc', array('data'))  
+//        ->condition('dc.cid', $comment['#node']->cid);
+//  $comment_user_social_data = $query->execute()->fetchField();
+//  
+//  if ($comment_user_social_data) {
+//    $comment_user_social_data = unserialize($comment_user_social_data);
+//    
+//    
+//    $comment['logged_via'] = array(
+//      '#markup' => '<div>' . $comment_user_social_data['provider'] . '</div>',
+//      '#weight' => -1,
+//    );
+//    $comment['picture'] = array(
+//      '#markup' => '<div>' . $comment_user_social_data['photo'] . '</div>',
+//      '#weight' => -1,
+//    );
+//    $comment['author'] = array(
+//      '#markup' => '<div>' . $comment_user_social_data['nickname'] . '---</div>',
+//      '#weight' => -2,
+//    );
+//  }
            
 }
 
@@ -102,14 +102,47 @@ function dmm_user_comment_view_alter(&$comment) {
  * @see comment.tpl.php
  */
 function dmm_user_preprocess_comment(&$variables) {
-  $comment = $variables['elements']['#comment'];
+  //$comment = $variables['elements']['#comment'];
   $node = $variables['elements']['#node'];
+  //dpm($comment);
   
-  dpm($comment);
+  // Get the current user's accounts.
+  $query = db_select('dmm_comment', 'dc');
+  $query->fields('dc', array('data'))  
+        ->condition('dc.cid', $node->cid);
+  $comment_user_social_data = $query->execute()->fetchField();
+
+//  if ($comment_user_social_data) {
+//    
+//    $comment_user_social_data = unserialize($comment_user_social_data);
+//    
+//    $comment['logged_via'] = array(
+//      '#markup' => '<div>' . $comment_user_social_data['provider'] . '</div>',
+//      '#weight' => -1,
+//    );
+//    $comment['picture'] = array(
+//      '#markup' => '<div>' . $comment_user_social_data['photo'] . '</div>',
+//      '#weight' => -1,
+//    );
+//    $comment['author'] = array(
+//      '#markup' => '<div>' . $comment_user_social_data['nickname'] . '---</div>',
+//      '#weight' => -2,
+//    );
+//  }
+  
+  
+  
+  if ($comment_user_social_data) {
+    $comment_user_social_data = unserialize($comment_user_social_data);
+    $variables['author'] = '<div>' . $comment_user_social_data['nickname'] . '</div><div>' . $comment_user_social_data['provider'] . '</div>';
+    $variables['picture'] = '<div>' . $comment_user_social_data['photo'] . '</div>';
+  }
   
 //  $variables['comment']   = $comment;
 //  $variables['node']      = $node;
 //  $variables['author']    = theme('username', array('account' => $comment));
+  
+  
 //  $variables['created']   = format_date($comment->created);
 //  $variables['changed']   = format_date($comment->changed);
 //

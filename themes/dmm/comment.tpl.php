@@ -1,6 +1,6 @@
 <article class="<?php print $classes . ' ' . $zebra; ?>"<?php print $attributes; ?>>
   
-  <?php /*
+  
   <header>
     
     
@@ -23,7 +23,7 @@
       <span class="new"><?php print $new ?></span>
     <?php endif; ?>
   </header>
-  */?>
+  
     
   <div class="content"<?php print $content_attributes; ?>>
     <?php hide($content['links']); print render($content); ?>
