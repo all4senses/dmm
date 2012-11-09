@@ -599,8 +599,8 @@ function dmm_user_getUserContent($account, $content_title, $content_type){
 /**
  * Implements hook_user_load().
  */
-function dmm_user_user_load($account, $view_mode, $langcode) {
-  dpm($account);
+function dmm_user_user_load($users) {
+  dpm($users);
 
 }
 
