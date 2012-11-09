@@ -62,15 +62,15 @@ function dmm_user_comment_view_alter(&$comment) {
   
   //dpm($comment);
   
-  
+/*  
   global $user;
   if (!$user->uid) {
-    //unset($comment['links']['comment']['#links']['comment_forbidden']);
+    unset($comment['links']['comment']['#links']['comment_forbidden']);
   }
   
   
   // Get the current user's social accounts.
-/*
+
   $query = db_select('dmm_comment', 'dc');
   $query->fields('dc', array('data'))  
         ->condition('dc.cid', $comment['#node']->cid);
@@ -106,11 +106,11 @@ function dmm_user_preprocess_comment(&$variables) {
   //$comment = $variables['elements']['#comment'];
   $author_uid = $variables['elements']['#comment']->uid;
   $node = $variables['elements']['#node'];
-  //dpm($comment);
-  //dpm($variables);
+  //dpm($comment); //dpm($variables);
   
   global $user;
   if (!$user->uid) {
+    // Hide links "login or register" for each comment, for anonymous
     unset($variables['elements']['links']['comment']['#links']['comment_forbidden'], $variables['content']['links']['comment']['#links']['comment_forbidden']);
   }
   
@@ -120,90 +120,69 @@ function dmm_user_preprocess_comment(&$variables) {
         ->condition('dc.cid', $node->cid);
   $comment_user_social_data = $query->execute()->fetchField();
   
-  
-
-//  if ($comment_user_social_data) {
-//    
-//    $comment_user_social_data = unserialize($comment_user_social_data);
-//    
-//    $comment['logged_via'] = array(
-//      '#markup' => '<div>' . $comment_user_social_data['provider'] . '</div>',
-//      '#weight' => -1,
-//    );
-//    $comment['picture'] = array(
-//      '#markup' => '<div>' . $comment_user_social_data['photo'] . '</div>',
-//      '#weight' => -1,
-//    );
-//    $comment['author'] = array(
-//      '#markup' => '<div>' . $comment_user_social_data['nickname'] . '---</div>',
-//      '#weight' => -2,
-//    );
-//  }
-  
-  
-  
   if ($comment_user_social_data) {
     $comment_user_social_data = unserialize($comment_user_social_data);
-    dpm($comment_user_social_data);
+    //dpm($comment_user_social_data);
     $variables['author'] = '<div><span>' . l($comment_user_social_data['nickname'], $comment_user_social_data['identity'], array('external' => TRUE, 'attributes' => array('target' => '_blank'))) . '</span><span> via ' . $comment_user_social_data['provider'] . '</span><span> (' . l('local profile', 'user/' . $author_uid) . ')</span></div>';
     $variables['picture'] = '<div>' . $comment_user_social_data['photo'] . '</div>';
   }
-  
-//  $variables['comment']   = $comment;
-//  $variables['node']      = $node;
-//  $variables['author']    = theme('username', array('account' => $comment));
-  
-  
-//  $variables['created']   = format_date($comment->created);
-//  $variables['changed']   = format_date($comment->changed);
-//
-//  $variables['new']       = !empty($comment->new) ? t('new') : '';
-//  $variables['picture']   = theme_get_setting('toggle_comment_user_picture') ? theme('user_picture', array('account' => $comment)) : '';
-//  $variables['signature'] = $comment->signature;
-//
-//  $uri = entity_uri('comment', $comment);
-//  $uri['options'] += array('attributes' => array('class' => 'permalink', 'rel' => 'bookmark'));
-//
-//  $variables['title']     = l($comment->subject, $uri['path'], $uri['options']);
-//  $variables['permalink'] = l(t('Permalink'), $uri['path'], $uri['options']);
-//  $variables['submitted'] = t('Submitted by !username on !datetime', array('!username' => $variables['author'], '!datetime' => $variables['created']));
-//
-//  // Preprocess fields.
-//  field_attach_preprocess('comment', $comment, $variables['elements'], $variables);
-//
-//  // Helpful $content variable for templates.
-//  foreach (element_children($variables['elements']) as $key) {
-//    $variables['content'][$key] = $variables['elements'][$key];
-//  }
-//
-//  // Set status to a string representation of comment->status.
-//  if (isset($comment->in_preview)) {
-//    $variables['status'] = 'comment-preview';
-//  }
-//  else {
-//    $variables['status'] = ($comment->status == COMMENT_NOT_PUBLISHED) ? 'comment-unpublished' : 'comment-published';
-//  }
-//
-//  // Gather comment classes.
-//  // 'comment-published' class is not needed, it is either 'comment-preview' or
-//  // 'comment-unpublished'.
-//  if ($variables['status'] != 'comment-published') {
-//    $variables['classes_array'][] = $variables['status'];
-//  }
-//  if ($variables['new']) {
-//    $variables['classes_array'][] = 'comment-new';
-//  }
-//  if (!$comment->uid) {
-//    $variables['classes_array'][] = 'comment-by-anonymous';
-//  }
-//  else {
-//    if ($comment->uid == $variables['node']->uid) {
-//      $variables['classes_array'][] = 'comment-by-node-author';
-//    }
-//    if ($comment->uid == $variables['user']->uid) {
-//      $variables['classes_array'][] = 'comment-by-viewer';
-//    }
-//  }
+
+  // Original code from comment.module
+/*  
+  $variables['comment']   = $comment;
+  $variables['node']      = $node;
+  $variables['author']    = theme('username', array('account' => $comment));
+  $variables['created']   = format_date($comment->created);
+  $variables['changed']   = format_date($comment->changed);
+
+  $variables['new']       = !empty($comment->new) ? t('new') : '';
+  $variables['picture']   = theme_get_setting('toggle_comment_user_picture') ? theme('user_picture', array('account' => $comment)) : '';
+  $variables['signature'] = $comment->signature;
+
+  $uri = entity_uri('comment', $comment);
+  $uri['options'] += array('attributes' => array('class' => 'permalink', 'rel' => 'bookmark'));
+
+  $variables['title']     = l($comment->subject, $uri['path'], $uri['options']);
+  $variables['permalink'] = l(t('Permalink'), $uri['path'], $uri['options']);
+  $variables['submitted'] = t('Submitted by !username on !datetime', array('!username' => $variables['author'], '!datetime' => $variables['created']));
+
+  // Preprocess fields.
+  field_attach_preprocess('comment', $comment, $variables['elements'], $variables);
+
+  // Helpful $content variable for templates.
+  foreach (element_children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+
+  // Set status to a string representation of comment->status.
+  if (isset($comment->in_preview)) {
+    $variables['status'] = 'comment-preview';
+  }
+  else {
+    $variables['status'] = ($comment->status == COMMENT_NOT_PUBLISHED) ? 'comment-unpublished' : 'comment-published';
+  }
+
+  // Gather comment classes.
+  // 'comment-published' class is not needed, it is either 'comment-preview' or
+  // 'comment-unpublished'.
+  if ($variables['status'] != 'comment-published') {
+    $variables['classes_array'][] = $variables['status'];
+  }
+  if ($variables['new']) {
+    $variables['classes_array'][] = 'comment-new';
+  }
+  if (!$comment->uid) {
+    $variables['classes_array'][] = 'comment-by-anonymous';
+  }
+  else {
+    if ($comment->uid == $variables['node']->uid) {
+      $variables['classes_array'][] = 'comment-by-node-author';
+    }
+    if ($comment->uid == $variables['user']->uid) {
+      $variables['classes_array'][] = 'comment-by-viewer';
+    }
+  }
+*/  
 }
 
 
@@ -645,7 +624,6 @@ unset($gbook['links']['comment']); // remove link "add new comment as we have a 
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-/*
 function dmm_user_form_user_register_form_alter(&$form, &$form_state) {
     
   // Set up the right nickname (username) for user registered via loginza
@@ -655,41 +633,67 @@ function dmm_user_form_user_register_form_alter(&$form, &$form_state) {
   {
     $data = $_SESSION['loginza']['data'];
 
-    //if($data['email'])
-    //   $form['account']['name']['#default_value'] = $data['email'];
-    //else
-        $form['account']['name']['#default_value'] = strtolower(str_replace(' ', '.', $data['name']['full_name'])); //_loginza_username($data);
-        //
-    //if (!empty($data['email'])) $form['account']['mail']['#default_value'] = $data['email'];
+    $form['account']['name']['#default_value'] = dmm_user_loginza_username($data); //strtolower(str_replace(' ', '.', $data['name']['full_name'])); //_loginza_username($data);
+
  }
 
 }
-*/
+
 
 
 /**
  * Implements hook_user_presave().
  */
-/*
 function dmm_user_user_presave(&$edit, $account, $category) {
+  /*
   foreach (array('dmm_user_status', 'dmm_user_send_email', 'dmm_user_intro') as $key) {
     if (isset($edit[$key])) {
       $edit['data'][$key] = $edit[$key];
     }
   }
+  */
+  
+  dpm($edit);
 }
-*/
+
+
 
 /**
- * Implements hook_user_delete().
+ * Corrected replace for _loginza_username($data).
  */
-/*
-function dmm_user_user_delete($account) {
-  db_delete('dmm_user')
-    ->condition('recipient', $account->uid)
-    ->execute();
+function dmm_user_loginza_username($data) {
+  $name = '';
+  if (isset($data['name'])) {
+    if (!empty($data['name']['full_name'])) {
+      $name = $data['name']['full_name'];
+    }
+    else {
+      $name_parts = array();
+      if (!empty($data['name']['first_name'])) {
+        $name_parts[] = $data['name']['first_name'];
+      }
+      if (!empty($data['name']['last_name'])) {
+        $name_parts[] = $data['name']['last_name'];
+      }
+      $name = trim(implode(' ', $name_parts));
+    }
+  }
+
+  if (empty($name)) {
+    $name = empty($data['nickname']) ? variable_get('loginza_default_name', 'user@dmm') : $data['nickname'];
+  }
+
+  // check duplicate user name
+  $base_name = $name;
+  $count = NULL;
+  while (TRUE) {
+    $uid = db_query("SELECT uid FROM {users} WHERE name = :name", array(':name' => $name))->fetchField();
+    if (empty($uid)) break;
+    $name = $base_name . ' ' . ++$count;
+  }
+
+  return $name;
 }
-*/
 
 
 /**
