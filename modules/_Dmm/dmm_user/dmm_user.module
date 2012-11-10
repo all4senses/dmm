@@ -206,21 +206,20 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
         if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
           
             $current_logged_as = $_SESSION['dmm_user_loginza_logged_as'];
+
+            //dpm($comment_user_social_data);
+            $variables['author'] = '<div><span>' . l($comment_user_social_data['nickname'], $comment_user_social_data['identity'], array('external' => TRUE, 'attributes' => array('target' => '_blank'))) . '</span><span> via ' . $comment_user_social_data['provider'] . '</span><span> (' . l('local profile', 'user/' . $author_uid) . ')</span></div>';
+            if (isset($current_logged_as['photo_local_uri'])) {
+              $form['picture'] = array(
+                '#markup' => '<div class="comment-avatar">' . theme('image_style', array( 'path' =>  $comment_user_social_data['photo_local_uri'], 'style_name' => 'comment_avatar', 'alt' => $comment_user_social_data['name']['full_name'], 'title' => $comment_user_social_data['name']['full_name'], 'attributes' => array('rel' => 'v:photo'))) . '</div>',
+                '#weight' => -1,
+              );
+            }
             
-            $form['logged_via'] = array(
-              '#markup' => '<div>' . $current_logged_as['provider'] . '</div>',
-              '#weight' => -1,
-            );
-            $form['picture'] = array(
-              '#markup' => '<div>' . $current_logged_as['photo'] . '</div>',
-              '#weight' => -1,
+            $form['author']['_author'] = array(
+              '#markup' => '<div><span>' . $current_logged_as['name']['full_name'] . '</span></span> via ' . $current_logged_as['provider'] . '</span></div>',
             );
             $form['author']['#weight'] = -2;
-            $form['author']['_author'] = array(
-              '#markup' => '<div>' . $current_logged_as['nickname'] . '---</div>',
-              //'#weight' => -2,
-            );
-
 
             $form['#submit'][] = 'dmm_user_submitForm_comment';
             $form['#validate'][] = 'dmm_user_validateForm_comment';
