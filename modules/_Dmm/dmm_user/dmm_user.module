@@ -129,6 +129,25 @@ function dmm_user_preprocess_comment(&$variables) {
     if (isset($comment_user_social_data['photo_local_uri'])) {
       $variables['picture'] = '<div class="comment-avatar">' . theme('image_style', array( 'path' =>  $comment_user_social_data['photo_local_uri'], 'style_name' => 'comment_avatar', 'alt' => $comment_user_social_data['full_name'], 'title' => $comment_user_social_data['full_name'], 'attributes' => array('rel' => 'v:photo'))) . '</div>';
     }
+    else {
+      // Show the main account picture, if no social picture is presented.
+      if (isset($comment->picture) && is_numeric($comment->picture)) {
+        $comment->picture = file_load($comment->picture);
+        if (!empty($comment->picture->uri)) {
+          $variables['picture'] = '<div class="comment-avatar">' . theme('image_style', array( 'path' =>  $comment->picture->uri, 'style_name' => 'comment_avatar'/*, 'alt' => $comment_user_social_data['full_name'], 'title' => $comment_user_social_data['full_name']*/, 'attributes' => array('rel' => 'v:photo'))) . '</div>';
+        }
+      }
+      
+    }
+  }
+  else {
+    // Show the main account picture, if no social data is presented.
+    if (isset($comment->picture) && is_numeric($comment->picture)) {
+      $comment->picture = file_load($comment->picture);
+      if (!empty($comment->picture->uri)) {
+        $variables['picture'] = '<div class="comment-avatar">' . theme('image_style', array( 'path' =>  $comment->picture->uri, 'style_name' => 'comment_avatar'/*, 'alt' => $comment_user_social_data['full_name'], 'title' => $comment_user_social_data['full_name']*/, 'attributes' => array('rel' => 'v:photo'))) . '</div>';
+      }
+    }
   }
 
   // Original code from comment.module
