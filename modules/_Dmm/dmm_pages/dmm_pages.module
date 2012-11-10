@@ -321,6 +321,7 @@ function dmm_pages_getContentFeedWithControls($type, $uid = NULL, $default_list_
   $url_tags = NULL;
   $selectTags = NULL;
   
+  // Get all tags for a specific content type.
   $query = db_select('taxonomy_term_data', 'td')
         ->fields('td', array('name', 'tid'));
   $query->leftJoin('taxonomy_index', 'ti', 'ti.tid = td.tid');
@@ -350,7 +351,7 @@ function dmm_pages_getContentFeedWithControls($type, $uid = NULL, $default_list_
   
   $currentUrl = ltrim($_SERVER['REDIRECT_URL'], '/');
   
-  // Teasers by default
+  // Set a view style (teasers/titles). Teasers by default.
   if ($default_list_view_style == 'teaser') {
     $currentViewStyle = (isset($_GET['view']) && $_GET['view'] == 'titles') ? 'titles' : 'teasers';
   }
@@ -403,6 +404,7 @@ function dmm_pages_getContentFeedWithControls($type, $uid = NULL, $default_list_
       $viewsFilterOptions_user = array('id' => 'uid', 'value' => array(0 => $url_uid));
       $view->add_item($display_name, 'filter', 'node', 'uid', $viewsFilterOptions_user);
     }
+    
     // Get all users that have content of a specific type
 
     $query = db_select('node', 'n');

@@ -662,11 +662,9 @@ function dmm_user_getUserContent($account, $content_title, $content_type){
         break;
       }
     }
-  
-    $user_content = dmm_pages_getContentFeedWithControls($content_type, $account->uid);
-    
   } // End of if($field_prefaces_ids = field_get_items('user', $account, 'field_user_prefaces')) {
   
+  $user_content = dmm_pages_getContentFeedWithControls($content_type, $account->uid);
   drupal_set_title($title = t("@name's " . $content_title, array('@name' => format_username($account))), PASS_THROUGH);
   
   // If a preface is defined, don't show the title (using preface's one).
