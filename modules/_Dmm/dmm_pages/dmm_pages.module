@@ -463,7 +463,7 @@ function dmm_pages_getContentFeedWithControls($type, $uid = NULL, $default_list_
   }
   
   // Build a tags block.
-  if ( ($allTags && $view->total_rows) || (!$view->total_rows && $allTags && $url_tags) ) {
+  if ( ($allTags && $view->total_rows) || (!$view->total_rows && !empty($allTags) && !empty($url_tags)) ) {
 
     $selectTags = '<div class="filter-block">' . dmm_pages_themeTagsSelect($allTags, $url_tags) . '</div>';
 
