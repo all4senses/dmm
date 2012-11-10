@@ -201,10 +201,12 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
     
     case 'comment-form':
       
-        dpm($form);
+        //dpm($form);
       
         if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
           
+            global $user;
+            
             $current_logged_as = $_SESSION['dmm_user_loginza_logged_as'];
 
             //dpm($comment_user_social_data);
@@ -217,7 +219,7 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
             }
             
             $form['author']['_author'] = array(
-              '#markup' => '<div><span>' . l($current_logged_as['name']['full_name'], $current_logged_as['identity'], array('external' => TRUE, 'attributes' => array('target' => '_blank'))) . '</span><span> via ' . $current_logged_as['provider'] . '</span><span> (' . l('local profile', 'user/' . $form['uid']) . ')</span></div>',
+              '#markup' => '<div><span>' . l($current_logged_as['name']['full_name'], $current_logged_as['identity'], array('external' => TRUE, 'attributes' => array('target' => '_blank'))) . '</span><span> via ' . $current_logged_as['provider'] . '</span><span> (' . l('local profile', 'user/' . $user->uid) . ')</span></div>',
             );
             $form['author']['#weight'] = -2;
 
