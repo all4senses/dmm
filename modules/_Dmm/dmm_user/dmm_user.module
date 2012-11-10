@@ -105,9 +105,9 @@ function dmm_user_comment_view_alter(&$comment) {
 function dmm_user_preprocess_comment(&$variables) {
   $comment = $variables['elements']['#comment'];
   //dpm($comment); 
-  dpm($variables);
+  //dpm($variables);
   $author_uid = $variables['elements']['#comment']->uid;
-  $node = $variables['elements']['#node'];
+  //$node = $variables['elements']['#node'];
   
   
   global $user;
@@ -119,7 +119,7 @@ function dmm_user_preprocess_comment(&$variables) {
   // Get a current comment's social data, if any.
   $query = db_select('dmm_comment', 'dc');
   $query->fields('dc', array('data'))  
-        ->condition('dc.cid', $node->cid);
+        ->condition('dc.cid', $comment->cid);
   $comment_user_social_data = $query->execute()->fetchField();
   
   if ($comment_user_social_data) {
