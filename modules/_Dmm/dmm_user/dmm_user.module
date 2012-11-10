@@ -280,7 +280,8 @@ function dmm_user_submitForm_comment(&$form, &$form_state) {
       'identity' => $dmm_logged_as['identity'],
       'uid' => $dmm_logged_as['uid'],
       'nickname' => $dmm_logged_as['nickname'],
-      'photo' => $dmm_logged_as['photo'],
+      'full_name' => $dmm_logged_as['full_name'],
+      'photo' => $dmm_logged_as['photo_local_uri'],
     );
     global $user;
     $result = db_insert('dmm_comment')
