@@ -105,7 +105,7 @@ function dmm_user_comment_view_alter(&$comment) {
 function dmm_user_preprocess_comment(&$variables) {
   $comment = $variables['elements']['#comment'];
   //dpm($comment); 
-  //dpm($variables);
+  dpm($variables);
   $author_uid = $variables['elements']['#comment']->uid;
   $node = $variables['elements']['#node'];
   
