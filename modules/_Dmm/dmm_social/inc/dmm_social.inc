@@ -4,32 +4,6 @@
  * Class for social actions.
  */
 
-/*
-function dmm_social_menu() {
-    
-  $items = array();
-        
-  $items['user/%user/social'] = array( 
-      'title' => t('Social connect'),
-      'page callback' => 'drupal_get_form',
-      'page arguments' => array('dmm_social_socialPageForm', 1),
-      ////'page callback' => 'dmm_social_socialPageShow', 
-      //'page arguments' => array(1, 'album', 'album', 'albums', array('t','mini'), 'dmm_pages_buildMiniTeasersSet'),
-      ////'page arguments' => array(1),
-      
-      'access arguments' => array('access content'),
-      'type' => MENU_LOCAL_TASK,
-    );  
-
-  $items['authsub'] = array (
-    'page callback' => 'dmm_social_authsub_redirect',
-    'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
-  );
-  
-  return $items;
-}
-*/
 
 
 /*
@@ -664,7 +638,7 @@ class SocialConnect{
 
     protected function getServiceId()
     {
-        $services_ids = variable_get('dmm_services_ids', array('facebook'=>1, 'google'=>2, 'picasa'=>3, 'mail.ru'=>4, 'vkontakte.ru'=>4));
+        $services_ids = variable_get('dmm_services_ids', array('facebook'=>1, 'google'=>2, 'picasa'=>3, 'mail.ru'=>4, 'vkontakte.ru'=>5));
         return $services_ids[$this->service];
     }
     
