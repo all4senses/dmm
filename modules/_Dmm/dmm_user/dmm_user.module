@@ -447,8 +447,8 @@ function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
   
   
   // Get the current user's accounts.
-  if (isset($account->field_social_accounts['und'][0]['value']) && $account->field_social_accounts['und'][0]['value']) {
-    $user_social_data = unserialize($account->field_social_accounts['und'][0]['value']);
+  if (isset($account->field_social_loginza['und'][0]['value']) && $account->field_social_loginza['und'][0]['value']) {
+    $user_social_data = unserialize($account->field_social_loginza['und'][0]['value']);
     dpm('saved social 1');
     dpm($user_social_data);
     dpm('saved social 2');
