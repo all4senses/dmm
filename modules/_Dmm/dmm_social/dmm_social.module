@@ -89,7 +89,7 @@ function dmm_social_authsub_redirect()
 function dmm_social_theme($existing, $type, $theme, $path) {
   return array(
     'dmm_social_socialPageForm' => array(
-      'path' => path_to_theme() . '/templates',
+      'path' => path_to_theme() . '/Templates',
       'template' => 'dmm_socialPage',
       'render element' => 'form',
     ),  

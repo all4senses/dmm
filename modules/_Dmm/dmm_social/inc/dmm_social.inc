@@ -166,21 +166,6 @@ function dmm_social_socialPageForm($arg1, $arg2)
     return $form;
 }
 
-/*
-function dmm_social_theme($existing, $type, $theme, $path) {
-  return array(
-    'dmm_social_socialPageForm' => array(
-      'path' => path_to_theme() . '/templates',
-      'template' => 'dmm_socialPage',
-      'render element' => 'form',
-    ),  
-            
-  );
-}
-*/
-
-
-
 class SocialInit{
    
     // site api credentials for domMoejMechty.com.ua
