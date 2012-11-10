@@ -463,8 +463,12 @@ function dmm_pages_getContentFeedWithControls($type, $uid = NULL, $default_list_
   }
   
   // Build a tags block.
+  dpm($view->total_rows);
+  dpm($allTags);
+  dpm($url_tags);
+  
   if ( ($allTags && $view->total_rows) || (!$view->total_rows && !empty($allTags) && !empty($url_tags)) ) {
-
+    dpm('xxx');
     $selectTags = '<div class="filter-block">' . dmm_pages_themeTagsSelect($allTags, $url_tags) . '</div>';
 
     drupal_add_js('sites/all/libraries/jquery.plugins/chosen.jquery/chosen.jquery.js');
