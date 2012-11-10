@@ -336,8 +336,6 @@ function dmm_pages_getContentFeedWithControls($type, $uid = NULL, $default_list_
   }
   
   
-  $url_tags = explode(',', @$_GET['tags']);
-  
   
   $currentUrl = ltrim($_SERVER['REDIRECT_URL'], '/');
   
@@ -357,8 +355,8 @@ function dmm_pages_getContentFeedWithControls($type, $uid = NULL, $default_list_
   $view->add_item($display_name, 'filter', 'node', 'type', $viewsFilterOptions_nodeType);
   
   
-  if ($url_tags) {
-    //$url_tags = explode(',', $_GET['tags']); //array('бисер', 'дизайн');
+  if (isset($_GET['tags'])) {
+    $url_tags = explode(',', $_GET['tags']); //array('бисер', 'дизайн');
     $query = db_select('taxonomy_term_data', 'td');
     $query->fields('td', array('tid'))
           ->condition('td.name', $url_tags, 'IN');
