@@ -47,15 +47,15 @@ function dmm_social_socialPageForm($arg1, $arg2)
      
     /*
     //dpr($user);
-    $results = db_query("SELECT * FROM {field_data_field_u_social} WHERE entity_id = :uid", array('uid' => $user_uid));
+    $results = db_query("SELECT * FROM {field_data_field_social_credentials} WHERE entity_id = :uid", array('uid' => $user_uid));
     if($results->rowCount())
         foreach($results as $result)
             $connected[] = $result;
     */
     
-    //$user_url->field_u_social = array(0 => array('name' => 'picasa', 'data' => 'picasa data'), 1 => array('name' => 'facebook', 'data' => 'facebook data') );
+    //$user_url->field_social_credentials = array(0 => array('name' => 'picasa', 'data' => 'picasa data'), 1 => array('name' => 'facebook', 'data' => 'facebook data') );
  /*
-    $user_url->field_u_social = array(
+    $user_url->field_social_credentials = array(
                md5('facebook_423434') => array(
                                 'service' => 'facebook', 
                                 'service_id' => 1, 
@@ -83,7 +83,7 @@ function dmm_social_socialPageForm($arg1, $arg2)
    */
     
                 
-    $connected_accounts = (isset($user_url->field_u_social['und'])?unserialize($user_url->field_u_social['und'][0]['value']):null);
+    $connected_accounts = (isset($user_url->field_social_credentials['und'])?unserialize($user_url->field_social_credentials['und'][0]['value']):null);
     //dpr($connected_accounts);
     $socialInit = new SocialInit($user_url->uid, $connected_accounts, array('disable_same_service_accounts' => false));
   
@@ -108,7 +108,7 @@ function dmm_social_socialPageForm($arg1, $arg2)
     // show connected accounts form section
     $socialInit->addToForm_connectedAccountsData_section($form);
     /*
-    if(!empty($user_url->field_u_social))
+    if(!empty($user_url->field_social_credentials))
     {
         $has_connections = true;
         
@@ -119,7 +119,7 @@ function dmm_social_socialPageForm($arg1, $arg2)
             '#collapsed' => false,
            );
         
-        foreach($user_url->field_u_social as $account_key => $connectedAccount)
+        foreach($user_url->field_social_credentials as $account_key => $connectedAccount)
         {
             $form['connectedAccounts'][$account_key] = array(
                '#markup' => '<div>' . $connectedAccount['name'] . ' => '  . $connectedAccount['data'] . '</div>',
@@ -325,7 +325,7 @@ class SocialInit{
         if($this->connectedAccounts AND !empty($this->connectedAccounts))
         {
             /*
-            $user_url->field_u_social = array(
+            $user_url->field_social_credentials = array(
                md5('facebook_423434') => array(
                                 'service' => 'facebook', 
                                 'service_id' => 1, 
@@ -858,7 +858,7 @@ class SocialConnect{
     
     
     
-    protected function deleteAllAccountsFromDB($user_uid = null, $field = 'field_u_social')
+    protected function deleteAllAccountsFromDB($user_uid = null, $field = 'field_social_credentials')
     {
         if(!$user_uid)
             $user_uid = $this->user_uid;
@@ -876,7 +876,7 @@ class SocialConnect{
     
     
     
-    protected function insertAccountToDB($data, $user_uid = null, $field = 'field_u_social')
+    protected function insertAccountToDB($data, $user_uid = null, $field = 'field_social_credentials')
     {
         if(!$user_uid)
             $user_uid = $this->user_uid;
@@ -911,7 +911,7 @@ class SocialConnect{
     }
     
     
-    protected function updateAccountInDB($data, $user_uid = null, $field = 'field_u_social')
+    protected function updateAccountInDB($data, $user_uid = null, $field = 'field_social_credentials')
     {
         if(!$user_uid)
             $user_uid = $this->user_uid;

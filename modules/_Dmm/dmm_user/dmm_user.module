@@ -479,7 +479,7 @@ function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
   $user_social_data[$data['provider']] = $data;
   
   // Put updated user social accounts data arrat back to the db.
-  dmm_misc_fieldSave('social_accounts', $account->uid, serialize($user_social_data), 'user');
+  dmm_misc_fieldSave('social_loginza', $account->uid, serialize($user_social_data), 'user');
   
   $_SESSION['dmm_user_loginza_logged_as'] = $data;
   
