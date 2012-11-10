@@ -221,11 +221,13 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
     case 'comment-form':
       
         //dpm($form);
-      
+        global $user;
+        dpm($user);
+        
         if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
           
-            global $user;
-            dpm($user);
+            
+            
             
             $current_logged_as = $_SESSION['dmm_user_loginza_logged_as'];
 
