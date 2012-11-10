@@ -103,10 +103,12 @@ function dmm_user_comment_view_alter(&$comment) {
  * @see comment.tpl.php
  */
 function dmm_user_preprocess_comment(&$variables) {
-  //$comment = $variables['elements']['#comment'];
+  $comment = $variables['elements']['#comment'];
+  dpm($comment); 
+  dpm($variables);
   $author_uid = $variables['elements']['#comment']->uid;
   $node = $variables['elements']['#node'];
-  //dpm($comment); //dpm($variables);
+  
   
   global $user;
   if (!$user->uid) {
@@ -124,8 +126,8 @@ function dmm_user_preprocess_comment(&$variables) {
     $comment_user_social_data = unserialize($comment_user_social_data);
     //dpm($comment_user_social_data);
     $variables['author'] = '<div><span>' . l($comment_user_social_data['nickname'], $comment_user_social_data['identity'], array('external' => TRUE, 'attributes' => array('target' => '_blank'))) . '</span><span> via ' . $comment_user_social_data['provider'] . '</span><span> (' . l('local profile', 'user/' . $author_uid) . ')</span></div>';
-    if (!empty($comment_user_social_data['photo_local'])) {
-      $variables['picture'] = '<div>' . $comment_user_social_data['photo_local'] . '</div>';
+    if (!isset($comment_user_social_data['photo_local_uri'])) {
+      $variables['picture'] = '<div class="comment-avatar">' . theme('image_style', array( 'path' =>  $comment_user_social_data['photo_local_uri'], 'style_name' => 'comment_avatar', 'alt' => $comment_user_social_data['name']['full_name'], 'title' => $comment_user_social_data['name']['full_name'], 'attributes' => array('rel' => 'v:photo'))) . '</div>';
     }
   }
 
@@ -458,9 +460,19 @@ function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
   
   // Get user's avatar, if it's not pulled yet.
   //if (empty($user_social_data['accounts'][$data['provider']]['photo_local'])) {
-  if (empty($user_social_data[$data['provider']]['photo_local'])) {
-    $data['photo_local'] = dmm_user_loginza_getUserAvatar($data, $account, $registration);
+  if (empty($user_social_data[$data['provider']]['photo_local_url'])) {
+    dmm_user_loginza_getUserAvatar($data, $account, $registration);
   }
+  else {
+    $data['photo_local_url'] = $user_social_data[$data['provider']]['photo_local_url'];
+    $data['photo_local_uri'] = $user_social_data[$data['provider']]['photo_local_uri'];
+  }
+  
+  if (!isset($data['name']['full_name'])) {
+    $data['name']['full_name'] = dmm_user_loginza_fullname($data);
+  }
+  
+  // Set a full_name if it's not set.
   
   $user_social_data[$data['provider']] = $data;
   
@@ -732,7 +744,7 @@ function dmm_user_user_presave(&$edit, $account, $category) {
  * Get user's remote social avatar.
  * $registration = TRUE means it's a registration and we have to set a remote picture as a main user picture.
  */
-function dmm_user_loginza_getUserAvatar($loginza_data, &$account, $registration = FALSE) {
+function dmm_user_loginza_getUserAvatar(&$loginza_data, &$account, $registration = FALSE) {
   
   if (!$loginza_data['photo']) {
     return FALSE;
@@ -756,11 +768,12 @@ function dmm_user_loginza_getUserAvatar($loginza_data, &$account, $registration 
     return FALSE;
   }
   
+  $picture_path_uri = file_stream_wrapper_uri_normalize($picture_directory_uri . $picture_filepath);
+          
   if($registration && file_prepare_directory($picture_directory_uri, FILE_CREATE_DIRECTORY)){
     
       //$picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/picture-' . $account->uid . '-' . REQUEST_TIME . '.jpg');
       
-      $picture_path_uri = file_stream_wrapper_uri_normalize($picture_directory_uri . $picture_filepath);
       $picture_file = file_save_data($picture_result->data, $picture_path_uri, FILE_EXISTS_REPLACE);
 
       // Check to make sure the picture isn't too large for the site settings.
@@ -791,7 +804,10 @@ function dmm_user_loginza_getUserAvatar($loginza_data, &$account, $registration 
     }
   }
 
-  return $success ? $picture_path_url : NULL;
+  if ($success) {
+    $loginza_data['photo_local_url'] = $picture_path_url;
+    $loginza_data['photo_local_uri'] = $picture_path_uri;
+  }
 }
 
 
@@ -813,6 +829,35 @@ function dmm_user_user_insert(&$edit, $account) {
     
   } // End of if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
 
+}
+
+
+/**
+ * Get a full_name from loginza data. Corrected version of dmm_user_loginza_username($data)
+ */
+function dmm_user_loginza_fullname($data) {
+  $name = '';
+  if (isset($data['name'])) {
+    if (!empty($data['name']['full_name'])) {
+      $name = $data['name']['full_name'];
+    }
+    else {
+      $name_parts = array();
+      if (!empty($data['name']['first_name'])) {
+        $name_parts[] = $data['name']['first_name'];
+      }
+      if (!empty($data['name']['last_name'])) {
+        $name_parts[] = $data['name']['last_name'];
+      }
+      $name = trim(implode(' ', $name_parts));
+    }
+  }
+
+  if (empty($name)) {
+    $name = empty($data['nickname']) ? variable_get('loginza_default_name', 'user@dmm') : $data['nickname'];
+  }
+
+  return $name;
 }
 
 
