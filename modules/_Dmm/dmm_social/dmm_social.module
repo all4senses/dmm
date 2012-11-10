@@ -6,21 +6,21 @@
 function dmm_social_menu() {
     
   $items = array();
-  
-  /*
+
   // Look at the inc file.      
   $items['user/%user/social'] = array( 
-      'title' => t('Social connect'),
-      'page callback' => 'drupal_get_form',
-      'page arguments' => array('dmm_social_socialPageForm', 1),
-      ////'page callback' => 'dmm_social_socialPageShow', 
-      //'page arguments' => array(1, 'album', 'album', 'albums', array('t','mini'), 'dmm_pages_buildMiniTeasersSet'),
-      ////'page arguments' => array(1),
-      
-      'access arguments' => array('access content'),
-      'type' => MENU_LOCAL_TASK,
-    );  
-*/
+    'title' => t('Social connect'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dmm_social_socialPageForm', 1),
+    ////'page callback' => 'dmm_social_socialPageShow', 
+    //'page arguments' => array(1, 'album', 'album', 'albums', array('t','mini'), 'dmm_pages_buildMiniTeasersSet'),
+    ////'page arguments' => array(1),
+
+    'access arguments' => array('access content'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'inc/dmm_social.inc',
+  );  
+  
   $items['authsub'] = array (
     'page callback' => 'dmm_social_authsub_redirect',
     'access arguments' => array('access content'),

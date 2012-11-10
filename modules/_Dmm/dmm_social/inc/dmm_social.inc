@@ -83,11 +83,13 @@ function dmm_social_socialPageForm($arg1, $arg2)
    */
     
                 
-    $connected_accounts = (isset($user_url->field_social_credentials['und'])?unserialize($user_url->field_social_credentials['und'][0]['value']):null);
-    //dpr($connected_accounts);
+    $connected_accounts = (isset($user_url->field_social_credentials['und'][0]['value']) ? unserialize($user_url->field_social_credentials['und'][0]['value']) : null);
+    //dpm($connected_accounts);
+    
     $socialInit = new SocialInit($user_url->uid, $connected_accounts, array('disable_same_service_accounts' => false));
   
     $socialInit->connectNewAccount_fromUrlToken();
+    
     /*
     if(isset($_SESSION['connect_to']) AND (isset($_GET['token']) OR isset($_GET['code']) ))
     {
@@ -183,9 +185,9 @@ function dmm_social_socialPageForm($arg1, $arg2)
     
     
     $form['text'] = array(
-           '#type' => 'textfield',
-           '#default_value' => 'Some text field',
-           );
+      '#type' => 'textfield',
+      '#default_value' => 'Some text field',
+    );
     
     return $form;
 }
