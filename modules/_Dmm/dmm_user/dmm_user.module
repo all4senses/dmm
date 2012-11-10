@@ -257,7 +257,7 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
         } // End of if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
         else {
           // Show the main account picture, if no social data is presented.
-          if (isset($user->picture) && is_numeric($user->picture)) {
+          if (isset($user->picture)) {
             $picture = file_load($user->picture);
             if (!empty($picture->uri)) {
               $variables['picture'] = '<div class="comment-avatar">' . theme('image_style', array( 'path' =>  $picture->uri, 'style_name' => 'comment_avatar'/*, 'alt' => $comment_user_social_data['full_name'], 'title' => $comment_user_social_data['full_name']*/, 'attributes' => array('rel' => 'v:photo'))) . '</div>';
