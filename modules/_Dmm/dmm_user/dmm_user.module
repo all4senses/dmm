@@ -104,7 +104,7 @@ function dmm_user_comment_view_alter(&$comment) {
  */
 function dmm_user_preprocess_comment(&$variables) {
   $comment = $variables['elements']['#comment'];
-  dpm($comment); 
+  //dpm($comment); 
   //dpm($variables);
   $author_uid = $variables['elements']['#comment']->uid;
   //$node = $variables['elements']['#node'];
@@ -225,6 +225,7 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
         if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
           
             global $user;
+            dpm($user);
             
             $current_logged_as = $_SESSION['dmm_user_loginza_logged_as'];
 
@@ -235,6 +236,15 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
                 '#markup' => '<div class="comment-avatar">' . theme('image_style', array( 'path' =>  $current_logged_as['photo_local_uri'], 'style_name' => 'comment_avatar', 'alt' => $current_logged_as['name']['full_name'], 'title' => $current_logged_as['name']['full_name'], 'attributes' => array('rel' => 'v:photo'))) . '</div>',
                 '#weight' => -5,
               );
+            }
+            else {
+              // Show the main account picture, if no social data is presented.
+//              if (isset($user->picture->fid)) {
+//                $picture = file_load($comment->picture->fid);
+//                if (!empty($picture->uri)) {
+//                  $variables['picture'] = '<div class="comment-avatar">' . theme('image_style', array( 'path' =>  $picture->uri, 'style_name' => 'comment_avatar'/*, 'alt' => $comment_user_social_data['full_name'], 'title' => $comment_user_social_data['full_name']*/, 'attributes' => array('rel' => 'v:photo'))) . '</div>';
+//                }
+//              }
             }
             
             $form['author']['_author'] = array(
