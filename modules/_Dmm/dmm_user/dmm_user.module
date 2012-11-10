@@ -792,7 +792,7 @@ function dmm_user_user_presave(&$edit, $account, $category) {
  */
 function dmm_user_loginza_getUserAvatar(&$loginza_data, &$account, $registration = FALSE) {
   
-  if (!$loginza_data['photo']) {
+  if (!isset($loginza_data['photo'])) {
     return FALSE;
   }
   

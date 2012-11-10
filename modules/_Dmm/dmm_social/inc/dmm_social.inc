@@ -934,9 +934,9 @@ class SocialConnect{
     protected function getUserAlbums_fromDB($aid = null)
     {
         if($aid)
-            $albums = db_query("SELECT * FROM {dmm_users_albums} WHERE uid = $this->user_uid AND service_id = $this->service_id AND aid = '$aid'");
+            $albums = db_query("SELECT * FROM {dmm_social_albums} WHERE uid = $this->user_uid AND service_id = $this->service_id AND aid = '$aid'");
         else
-            $albums = db_query("SELECT * FROM {dmm_users_albums} WHERE uid = $this->user_uid AND service_id = $this->service_id");
+            $albums = db_query("SELECT * FROM {dmm_social_albums} WHERE uid = $this->user_uid AND service_id = $this->service_id");
         
         if(!$albums->rowCount())
             return false;
@@ -1025,9 +1025,9 @@ class SocialConnect{
             }
             
             
-            if(db_query("SELECT aid FROM {dmm_users_albums} WHERE uid = $this->user_uid AND service_id = $this->service_id AND aid = '$aid'")->fetchField())
+            if(db_query("SELECT aid FROM {dmm_social_albums} WHERE uid = $this->user_uid AND service_id = $this->service_id AND aid = '$aid'")->fetchField())
             {
-                $albums_updated += db_update('dmm_users_albums')
+                $albums_updated += db_update('dmm_social_albums')
                   ->fields(array(
                   'album_info' => serialize($album['info']),
                   'album_info_raw' => $save_raw_data?serialize($album['data']):null, 
@@ -1042,7 +1042,7 @@ class SocialConnect{
             }
             else
             {
-                $albums_updated += db_insert('dmm_users_albums') 
+                $albums_updated += db_insert('dmm_social_albums') 
                   ->fields(array(
                   'uid' => $this->user_uid,
                   'service_id' => $this->service_id,
@@ -1543,7 +1543,7 @@ class SocialConnectVkontakte extends SocialConnect
             'api_id' => $this->siteCreds['client_id'],
             'method' => $function,
             //'session_key' => $this->existing_account->auth_key,
-            'session_key' => $this->existing_account['access_token'],
+            'session_key' => @$this->existing_account['access_token'],
             'format' => 'json',
             'timestamp' => time(),
             'random' => time()/2,
@@ -1603,8 +1603,9 @@ class SocialConnectVkontakte extends SocialConnect
         //die;
         
         $this->access_token = $result->access_token;
+        $this->existing_account['access_token'] = $result->access_token;
         unset($result->access_token);
-
+        
         $this->existing_account['data'] = $result;
         $this->existing_account['id'] = $result->user_id;
         
@@ -2050,9 +2051,9 @@ class SocialConnectGooglePicasa extends SocialConnectGoogle
         
         foreach($userFeed[0]->author as $key => $author)
         {
-            $data['author'][$key]['name'] = $author->name->text;
-            $data['author'][$key]['email'] = $author->email->text;
-            $data['author'][$key]['uri'] = $author->uri->text;
+            $data['author'][$key]['name'] = @$author->name->text;
+            $data['author'][$key]['email'] = @$author->email->text;
+            $data['author'][$key]['uri'] = @$author->uri->text;
         }
         
 
