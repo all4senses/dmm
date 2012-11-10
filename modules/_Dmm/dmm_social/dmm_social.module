@@ -88,12 +88,14 @@ function dmm_social_authsub_redirect()
  */
 function dmm_social_theme($existing, $type, $theme, $path) {
   return array(
+    //does theming for a form, if enabled.
+    /*  
     'dmm_social_socialPageForm' => array(
       'path' => path_to_theme() . '/Templates',
       'template' => 'dmm_socialPage',
       'render element' => 'form',
     ),  
-            
+    */      
   );
 }
 
