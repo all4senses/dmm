@@ -317,7 +317,8 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
         $form['#submit'][] = 'dmm_user_submitForm_comment';
         $form['#validate'][] = 'dmm_user_validateForm_comment';
         
-        dpm($form);
+        $form['actions']['submit']['#value'] = t('Comment it!');
+
         
         break;
   }
