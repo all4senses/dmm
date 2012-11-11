@@ -307,7 +307,7 @@ class SocialInit{
         if(!$get)
             $get = $_GET;
         
-        if(isset($get['service']) AND isset($this->connect_to[$get['service']]))
+        if(isset($get['service']) AND isset(SocialInit::$connect_to[$get['service']]))
         {
             $_SESSION['connect_to'] = $get['service'];
 
@@ -317,8 +317,8 @@ class SocialInit{
                 {
                     $form['connectNew']['auth'] = array(
                         '#type' => 'item',
-                        '#title' => t('Authorization on ') . $this->connect_to[$get['service']]['title'],
-                        '#markup' => 'Please, <a href="' . $oauth_link . '">authorize on ' . $this->connect_to[$get['service']]['title'] . '</a> to grant our site the access to your ' . ($this->has_other_connections?'another ':'') . 'account data.',
+                        '#title' => t('Authorization on ') . SocialInit::$connect_to[$get['service']]['title'],
+                        '#markup' => 'Please, <a href="' . $oauth_link . '">authorize on ' . SocialInit::$connect_to[$get['service']]['title'] . '</a> to grant our site the access to your ' . ($this->has_other_connections?'another ':'') . 'account data.',
                         //'#description' => t(''),
                     );
                 }
@@ -402,7 +402,7 @@ class SocialInit{
 
                 // disable connect several accounts of the same service
                 if($this->disable_same_service_accounts)
-                    unset($this->connect_to[$connectedAccount['service']]);
+                    unset(SocialInit::$connect_to[$connectedAccount['service']]);
             }
             
             
@@ -523,7 +523,7 @@ class SocialInit{
     public function addToForm_connectNewAccount_section(&$form)
     {
         // connect new account form
-        if(!empty($this->connect_to))
+        if(!empty(SocialInit::$connect_to))
         {
             if(!$this->currentUrl)
                 $this->currentUrl = $this->getCurrentUrl();
@@ -605,8 +605,8 @@ class SocialInit{
     
     public function getNetworks()
     {
-        //$keys = array_keys($this->connect_to);
-        foreach($this->connect_to as $key => $value)
+        //$keys = array_keys(SocialInit::$connect_to);
+        foreach(SocialInit::$connect_to as $key => $value)
             $networks[$key] = $key;
         
         return $networks;
@@ -622,13 +622,13 @@ class SocialInit{
                 $oauthLink = SocialConnectGoogle::getOauthLink($service);
                 break;
             case 'facebook':
-                $oauthLink = SocialConnectFacebook::getOauthLink($this->connect_to[$service], $redirect_url);
+                $oauthLink = SocialConnectFacebook::getOauthLink(SocialInit::$connect_to[$service], $redirect_url);
                 break;
             case 'vkontakte.ru':
-                $oauthLink = SocialConnectVkontakte::getOauthLink($this->connect_to[$service], $redirect_url);
+                $oauthLink = SocialConnectVkontakte::getOauthLink(SocialInit::$connect_to[$service], $redirect_url);
                 break;
             case 'mail.ru':
-                $oauthLink = SocialConnectMailRu::getOauthLink($this->connect_to[$service], $redirect_url);
+                $oauthLink = SocialConnectMailRu::getOauthLink(SocialInit::$connect_to[$service], $redirect_url);
                 break;
         }
         
