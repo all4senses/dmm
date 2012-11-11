@@ -255,7 +255,7 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
     'hierarchy' => 1,
   );
   
-  //$view->add_item($display_name, 'filter', 'taxonomy_index', 'tid', $viewsFilterOptions_authors);
+  $view->add_item($display_name, 'filter', 'taxonomy_index', 'tid', $viewsFilterOptions_authors);
 
   $results = $view->preview($display_name);
   //dpm($results);
