@@ -168,6 +168,24 @@ function dmm_social_socialPageForm($arg1, $arg2)
     return $form;
 }
 
+
+/**
+ * Implements hook_form_submit().
+ *
+ * @return $form
+ *   Return nothing.
+ */
+function dmm_social_socialPageForm_submit(&$form, &$form_state) {
+  dpm($form_state['values']);
+  //drupal_set_message('On Submit, Ok!', 'warning');
+  
+  
+}
+  
+  
+  
+  
+
 class SocialInit{
    
     // site api credentials for domMoejMechty.com.ua
@@ -460,8 +478,7 @@ class SocialInit{
             
             // Use defined styles for reviews.
             //$form['#attributes']['class'][] = 'gv-edit-review-page';
-
-
+            
 
             $form['actions'] = array('#type' => 'actions');
             $form['actions']['submit'] = array(
