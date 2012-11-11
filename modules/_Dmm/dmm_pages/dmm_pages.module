@@ -479,7 +479,7 @@ function dmm_pages_getContentFeedWithControls($type, $uid = NULL, $default_list_
   $viewStyle = !@$currentViewStyleTitle ? '' : '<div class="view-style"><span>' . $currentViewStyleTitle . '</span>  | ' . l($newViewStyleTitle, $currentUrl, array('query' => $get)) . '</div>';
   $controlBlock = '<div class="feed-control">' . $viewStyle . $users_select . $selectTags . '</div>';
   
-  return $controlBlock . $results;
+  return $controlBlock . $results . '<div class="bottom-clear"></div>';
 }
 
 
