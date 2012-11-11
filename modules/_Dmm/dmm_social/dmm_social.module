@@ -15,8 +15,12 @@ function dmm_social_menu() {
     ////'page callback' => 'dmm_social_socialPageShow', 
     //'page arguments' => array(1, 'album', 'album', 'albums', array('t','mini'), 'dmm_pages_buildMiniTeasersSet'),
     ////'page arguments' => array(1),
-
-    'access arguments' => array('access content'),
+    
+    //'access arguments' => array('access content'),
+    'access callback' => 'isCurrentUserAllowedToViewPrivateProfileSections',
+    //'access arguments' => array(1), // permission
+    
+      
     'type' => MENU_LOCAL_TASK,
     'file' => 'inc/dmm_social.inc',
   );  

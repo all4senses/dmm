@@ -22,6 +22,14 @@ function dmm_misc_menu() {
 /**
  * Convert path from Drupal stream uri.
  */
+function isCurrentUserAllowedToViewPrivateProfileSections() {
+  global $user;
+  return $user->uid == arg(1) ? TRUE : FALSE;
+}
+
+/**
+ * Convert path from Drupal stream uri.
+ */
 function dmm_misc_testPage() {
   return 'test page';
 }
