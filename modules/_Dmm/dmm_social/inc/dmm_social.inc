@@ -169,25 +169,6 @@ function dmm_social_socialPageForm($arg1, $arg2)
 }
 
 
-
-/**
- * Implements hook_form_submit().
- *
- * @return $form
- *   Return nothing.
- */
-function dmm_social_getUserConnectedAccounts($user_uid) {
-  $query = db_select('field_data_field_social_credentials', 'sc')
-    ->fields('sc', array('field_social_credentials_value'));
-  $query->condition('sc.entity_id', $form_state['values']['user_uid']);
-  $connectedAccounts = $query->execute()->fetchField();
-  if ($connectedAccounts) {
-    $connectedAccounts = unserialize($connectedAccounts);
-  }
-  return $connectedAccounts;
-  
-}
-
 /**
  * Implements hook_form_submit().
  *

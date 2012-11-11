@@ -272,14 +272,13 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
         
         
         // Show autoposting options checkboxes.
-        //require_once('inc/dmm_social.inc');
-        module_load_include('inc', 'dmm_social', 'inc/dmm_social');
-        $tmp = SocialInit::$connect_to;
-        dpm($tmp);
         if ($connectedAccounts = dmm_social_getUserConnectedAccounts($user->uid)) {
           
+          module_load_include('inc', 'dmm_social', 'inc/dmm_social');
+          $socialDefaults = SocialInit::$connect_to;
+          
           foreach($connectedAccounts as $account_key => $connectedAccount) {
-            if (isset($this->connect_to[$connectedAccount['service']]['autoposting'])) {
+            if (isset($socialDefaults[$connectedAccount['service']]['autoposting'])) {
 
               $account_title = ucfirst($connectedAccount['service']) . ' ' . ($connectedAccount['nick']?$connectedAccount['nick']:$connectedAccount['id']);
 
@@ -292,11 +291,12 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
             }
           }
 
-          $form['autopostingOptions']['comments'] = array(
+          $form['autopostingOptions'] = array(
             '#type' => 'checkboxes',
             '#options' => $autopostingComments,
             '#default_value' => $autopostingCommentsChecked,
             '#title' => t('Comments autoposting to:'),
+            '#weight' => 10,
           );
         }
         

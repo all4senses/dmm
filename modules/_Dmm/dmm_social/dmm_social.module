@@ -36,6 +36,24 @@ function dmm_social_menu() {
 
 
 /**
+ * Implements hook_form_submit().
+ *
+ * @return $form
+ *   Return nothing.
+ */
+function dmm_social_getUserConnectedAccounts($user_uid) {
+  $query = db_select('field_data_field_social_credentials', 'sc')
+    ->fields('sc', array('field_social_credentials_value'));
+  $query->condition('sc.entity_id', $user_uid);
+  $connectedAccounts = $query->execute()->fetchField();
+  if ($connectedAccounts) {
+    $connectedAccounts = unserialize($connectedAccounts);
+  }
+  return $connectedAccounts;
+}
+
+
+/**
  * Socialite social buttons.
  */
 function dmm_social_getSocialiteButtons($url = NULL, $title = NULL) {
