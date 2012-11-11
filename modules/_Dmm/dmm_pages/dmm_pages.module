@@ -317,8 +317,8 @@ function dmm_pages_themeAuthorsSelect($selected_username = NULL, $all_authors = 
 function dmm_pages_getContentFeedWithControls($type, $uid = NULL, $default_list_view_style = 'teaser') {
   
   $terms = NULL;
-  $allTags = NULL;
-  $url_tags = NULL;
+  $allTags = array();
+  $url_tags = array();
   $selectTags = NULL;
   
   // Get all tags for a specific content type.
@@ -461,12 +461,12 @@ function dmm_pages_getContentFeedWithControls($type, $uid = NULL, $default_list_
   }
   
   // Build a tags block.
-  dpm($view->total_rows);
-  dpm($allTags);
-  dpm($url_tags);
+  //dpm($view->total_rows);
+  //dpm($allTags);
+  //dpm($url_tags);
   
-  if ( ($allTags && $view->total_rows) || (!$view->total_rows && !empty($allTags) && !empty($url_tags)) ) {
-    dpm('xxx');
+  if ( (!empty($allTags) && $view->total_rows) || (!$view->total_rows && !empty($allTags) && !empty($url_tags)) ) {
+
     $selectTags = '<div class="filter-block">' . dmm_pages_themeTagsSelect($allTags, $url_tags) . '</div>';
 
     drupal_add_js('sites/all/libraries/jquery.plugins/chosen.jquery/chosen.jquery.js');
