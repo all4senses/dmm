@@ -472,7 +472,7 @@ class SocialInit{
                   
                   $account_title = ucfirst($connectedAccount['service']) . ' ' . ($connectedAccount['nick']?$connectedAccount['nick']:$connectedAccount['id']);
                   
-                  $commentOption = isset($connectedAccount['autoposting']['comment']) ? TRUE : FALSE;
+                  $commentOption = !empty($connectedAccount['autoposting']['comment']) ? TRUE : FALSE;
                   $autopostingComments[$account_key] = $account_title;
                   if ($commentOption) {
                     $autopostingCommentsChecked[] = $account_key;
@@ -482,7 +482,7 @@ class SocialInit{
                       'post' => $commentOption,
                   );
                   
-                  $postOption = isset($connectedAccount['autoposting']['post']) ? TRUE : FALSE;
+                  $postOption = !empty($connectedAccount['autoposting']['post']) ? TRUE : FALSE;
                   $autopostingPosts[$account_key] = $account_title;
                   if ($postOption) {
                     $autopostingPostsChecked[] = $account_key;
