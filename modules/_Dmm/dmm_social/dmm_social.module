@@ -41,7 +41,7 @@ function dmm_social_menu() {
 function dmm_social_postToSocials($user_uid, $connectedAccounts, $accountsToAutoposting) {
   
   //module_load_include('inc', 'dmm_social', 'inc/dmm_social');
-  $socialInit = new SocialInit($user_uid, $connectedAccount);
+  $socialInit = new SocialInit($user_uid, $connectedAccounts);
   dpm($socialInit);
   foreach ($accountsToAutoposting as $account_key => $connectedAccount) {
     $accountObject = $socialInit->getAccountObjectByServiceName(null, null, null, $connectedAccount['service'], $account_key);
