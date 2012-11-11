@@ -186,6 +186,10 @@ function dmm_social_socialPageForm_submit(&$form, &$form_state) {
   
   $autopostIsChanged = FALSE;
   foreach ($social_credentials as $account_key => $connectedAccount) {
+    if (!isset($form_state['values']['comments'][$account_key])) {
+      continue;
+    }
+    
     $oldValue = (isset($connectedAccount['autoposting']['comment']) && $connectedAccount['autoposting']['comment']) ? 1 : 0;
     $newValue = $form_state['values']['comments'][$account_key] ? 1 : 0;
     if ($newValue != $oldValue) {
