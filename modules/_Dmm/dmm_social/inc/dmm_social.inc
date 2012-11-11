@@ -154,6 +154,8 @@ function dmm_social_socialPageForm($arg1, $arg2)
     }
     */
     
+    $socialInit->addToForm_autopostingOptions_section($form);
+    
     $socialInit->addToForm_accountAlbums_fromUrl($form);
 
     
@@ -181,12 +183,14 @@ class SocialInit{
                         'title' => 'Facebook',
                         'client_id' => 138241656284512, //170848282985782,
                         'client_secret' => '99ebdb160b628174358c38d29d2af3cf', //'814c6f051addd0369e55d83ae22b805c',
+                        'autoposting' => TRUE, // We have a functionality for autoposting for this social provider.
                        ),
         'vkontakte.ru' => array(
                         // deepsaeon@gmail.com                        
                         'title' => 'Vkontakte.ru',
                         'client_id' => 2706510, // 2421528,
                         'client_secret' => 'uZ69MqrM3Pm3dLkEWDM9', // 'Uyp3IwG9EsDfNgRhUgyF',
+                        'autoposting' => TRUE, // We have a functionality for autoposting for this social provider.
                        ),
         'mail.ru' => array(
                         // alexxhome@mail.ru
@@ -194,6 +198,7 @@ class SocialInit{
                         'client_id' => 655252,
                         'client_secret' => '8b2317b11afd968e3764d1b5e7222a13',
                         'client_private' => 'fdebb1370a19d2f5e7df41ba4495c8b9',
+                        'autoposting' => TRUE, // We have a functionality for autoposting for this social provider.
                        ),
         );
     
@@ -359,6 +364,101 @@ class SocialInit{
         } // end of if(!empty($connectedAccounts))
         
         return $this->has_other_connections;
+        
+    } // end of public function addToForm_connectedAccountsData_section(&$form, $connectedAccounts)
+    
+    
+    public function addToForm_autopostingOptions_section(&$form)
+    {
+        if(!empty($this->connectedAccounts))
+        {
+            /*
+            $user_url->field_social_credentials = array(
+               md5('facebook_423434') => array(
+                                'service' => 'facebook', 
+                                'service_id' => 1, 
+                                'user_uid' => 1,
+                                'id' => '423434',
+                                'nick' => 'some nick',
+                                'access_token' => '34234234234',
+                                'account_key' => md5('facebook_423434'),
+                                
+                                'data' => array('data 1' => 'some data 1'), // or stdClass
+                              ),
+               md5('picasa_dsfsdfsdf') => array(
+                                'service' => 'picasa', 
+                                'service_id' => 3, 
+                                'user_uid' => 1,
+                                'id' => 'dsfsdfsdf',
+                                'nick' => 'some nick 2',
+                                'access_token' => 'ljhlfjhlfkj',
+                                'account_key' => md5('picasa_dsfsdfsdf'),
+                                
+                                'data' => array('data 2' => 'some data 2'), // or stdClass
+                              ),
+            
+                    );
+            */
+             
+            $this->has_other_connections = true;
+
+            $form['autopostingOptions'] = array(
+                '#type' => 'fieldset',
+                '#title' => 'Autoposting Options for connected accounts',
+                '#collapsible' => true,
+                '#collapsed' => false,
+               );
+
+            $autopostingOptionsSource = array();
+            $autopostingComments = array();
+            $autopostingPosts = array();
+            $autopostingCommentsChecked = array();
+            $autopostingPostsChecked = array();
+            
+            foreach($this->connectedAccounts as $account_key => $connectedAccount)
+            {
+                if (isset($this->connect_to[$connectedAccount['service']]['autoposting'])) {
+                  
+                  $account_title = ucfirst($connectedAccount['service']) . ' ' . ($connectedAccount['nick']?$connectedAccount['nick']:$connectedAccount['id']);
+                  
+                  $commentOption = isset($connectedAccount['autoposting']['comment']) ? TRUE : FALSE;
+                  $autopostingComments[$account_key] = $account_title;
+                  if ($commentOption) {
+                    $autopostingCommentsChecked[] = $account_key;
+                  }
+                  $autopostingOptionsSource['comments'][$account_key] = array(
+                      'title' => $account_title,
+                      'post' => $commentOption,
+                  );
+                  
+                  $postOption = isset($connectedAccount['autoposting']['post']) ? TRUE : FALSE;
+                  $autopostingPosts[$account_key] = $account_title;
+                  if ($postOption) {
+                    $autopostingPostsChecked[] = $account_key;
+                  }
+                  
+                  $autopostingOptionsSource['posts'][$account_key] = array(
+                      'title' => $account_title,
+                      'post' => $postOption,
+                  );
+                  
+                }
+            }
+            
+            $form['autopostingOptions']['comments'] = array(
+                '#type' => 'checkboxes',
+                '#options' => $autopostingComments,
+                '#default_value' => $autopostingCommentsChecked,
+                '#title' => t('Comments autoposting options'),
+            );
+            $form['autopostingOptions']['posts'] = array(
+                '#type' => 'checkboxes',
+                '#options' => $autopostingPosts,
+                '#default_value' => $autopostingPostsChecked,
+                '#title' => t('Posts autoposting options'),
+            );
+            
+        } // end of if(!empty($connectedAccounts))
         
     } // end of public function addToForm_connectedAccountsData_section(&$form, $connectedAccounts)
     
