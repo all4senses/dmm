@@ -20,11 +20,11 @@ function dmm_misc_menu() {
 
 
 /**
- * Convert path from Drupal stream uri.
+ * Allow to view profile's private sections to their owners and to the root.
  */
 function isCurrentUserAllowedToViewPrivateProfileSections() {
   global $user;
-  return $user->uid == arg(1) ? TRUE : FALSE;
+  return ($user->uid == 1 || $user->uid == arg(1)) ? TRUE : FALSE;
 }
 
 /**
