@@ -186,20 +186,23 @@ function dmm_social_socialPageForm_submit(&$form, &$form_state) {
   
   $autopostIsChanged = FALSE;
   foreach ($social_credentials as $account_key => $connectedAccount) {
-    $oldValue = (isset($connectedAccount['autoposting']['comment']) && $connectedAccount['autoposting']['comment']) ? TRUE : FALSE;
-    $newValue = $form_state['values']['comments'][$account_key] ? TRUE : FALSE;
+    $oldValue = (isset($connectedAccount['autoposting']['comment']) && $connectedAccount['autoposting']['comment']) ? 1 : 0;
+    $newValue = $form_state['values']['comments'][$account_key] ? 1 : 0;
     if ($newValue != $oldValue) {
       $social_credentials[$account_key]['autoposting']['comment'] = $newValue;
       $autopostIsChanged = TRUE;
     }
     
-    $oldValue = (isset($connectedAccount['autoposting']['post']) && $connectedAccount['autoposting']['post']) ? TRUE : FALSE;
-    $newValue = $form_state['values']['posts'][$account_key] ? TRUE : FALSE;
+    $oldValue = (isset($connectedAccount['autoposting']['post']) && $connectedAccount['autoposting']['post']) ? 1 : 0;
+    $newValue = $form_state['values']['posts'][$account_key] ? 1 : 0;
     if ($newValue != $oldValue) {
       $social_credentials[$account_key]['autoposting']['post'] = $newValue;
       $autopostIsChanged = TRUE;
     }
   }
+  
+
+  dpm($social_credentials);
   
   if ($autopostIsChanged) {
     dmm_misc_fieldSave('social_credentials', $form_state['values']['user_uid'], serizlize($data), 'user');
