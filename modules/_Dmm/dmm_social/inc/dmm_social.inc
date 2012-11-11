@@ -449,15 +449,30 @@ class SocialInit{
                 '#type' => 'checkboxes',
                 '#options' => $autopostingComments,
                 '#default_value' => $autopostingCommentsChecked,
-                '#title' => t('Comments autoposting options'),
+                '#title' => t('Comments autoposting to:'),
             );
             $form['autopostingOptions']['posts'] = array(
                 '#type' => 'checkboxes',
                 '#options' => $autopostingPosts,
                 '#default_value' => $autopostingPostsChecked,
-                '#title' => t('Posts autoposting options'),
+                '#title' => t('Posts autoposting to:'),
             );
             
+            // Use defined styles for reviews.
+            //$form['#attributes']['class'][] = 'gv-edit-review-page';
+
+
+
+            $form['actions'] = array('#type' => 'actions');
+            $form['actions']['submit'] = array(
+              '#type' => 'submit',
+              '#value' => t('Save settings'),
+            ); 
+
+            // Send a user to the right tab with a reviews.
+            //$form['#action'] = url('node/' . $node->nid, array('fragment' => 'user-reviews'));
+
+
         } // end of if(!empty($connectedAccounts))
         
     } // end of public function addToForm_connectedAccountsData_section(&$form, $connectedAccounts)
