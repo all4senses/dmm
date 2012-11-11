@@ -1681,7 +1681,7 @@ class SocialConnectFacebook extends SocialConnect
     } // end of public function getUserAlbums(&$albums)
     
     
-    protected function postMessageToWall($message)
+    public function postMessageToWall($message)
     {
         if(!$albums_object = $this->fbOpenGraph(null, array('connection'=>'albums'))) {
           return 'Error: reading fbOpenGraph';
