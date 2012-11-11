@@ -205,7 +205,7 @@ function dmm_social_socialPageForm_submit(&$form, &$form_state) {
   dpm($social_credentials);
   
   if ($autopostIsChanged) {
-    dmm_misc_fieldSave('social_credentials', $form_state['values']['user_uid'], serizlize($data), 'user');
+    dmm_misc_fieldSave('social_credentials', $form_state['values']['user_uid'], serialize($data), 'user');
   }
   
   drupal_set_message('Settings are saved!', 'warning');
