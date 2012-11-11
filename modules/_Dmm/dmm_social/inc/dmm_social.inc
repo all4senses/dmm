@@ -183,6 +183,28 @@ function dmm_social_socialPageForm_submit(&$form, &$form_state) {
   $query->condition('sc.entity_id', $form_state['values']['user_uid']);
   $social_credentials = unserialize($query->execute()->fetchField());
   dpm($social_credentials);
+  
+  $autopostIsChanged = FALSE;
+  foreach ($social_credentials as $account_key => $connectedAccount) {
+    $oldValue = (isset($connectedAccount['autoposting']['comment']) && $connectedAccount['autoposting']['comment']) ? TRUE : FALSE;
+    $newValue = $form_state['values']['comments'][$account_key] ? TRUE : FALSE;
+    if ($newValue != $oldValue) {
+      $social_credentials[$account_key]['autoposting']['comment'] = $newValue;
+      $autopostIsChanged = TRUE;
+    }
+    
+    $oldValue = (isset($connectedAccount['autoposting']['post']) && $connectedAccount['autoposting']['post']) ? TRUE : FALSE;
+    $newValue = $form_state['values']['posts'][$account_key] ? TRUE : FALSE;
+    if ($newValue != $oldValue) {
+      $social_credentials[$account_key]['autoposting']['post'] = $newValue;
+      $autopostIsChanged = TRUE;
+    }
+  }
+  
+  if ($autopostIsChanged) {
+    dmm_misc_fieldSave('social_credentials', $form_state['values']['user_uid'], serizlize($data), 'user');
+  }
+  
   drupal_set_message('Settings are saved!', 'warning');
 }
   
