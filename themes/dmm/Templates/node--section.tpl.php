@@ -69,3 +69,5 @@
     }
   }
 ?>
+  
+<div class="bottom-clear"></div>
