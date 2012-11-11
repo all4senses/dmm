@@ -192,7 +192,7 @@
         // Used only for sections.
         if (isset($node->sectionBlocks)) {
           foreach ($node->sectionBlocks as $sectionBlock) {
-            echo $sectionBlock;
+            echo '<div class="section-block">' . $sectionBlock . '</div><div class="bottom-clear"></div>';
           }
         }
       ?>
