@@ -259,6 +259,7 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
 
   $results = $view->preview($display_name);
   dpm($results);
+  dpm($view);
   //if ($view->total_rows) {
   if ($view->result) {
     $node->sectionBlocks['authors'] = '<h3>' . 'Авторы' . '</h3>' . $results;
