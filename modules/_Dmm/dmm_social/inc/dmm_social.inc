@@ -1013,6 +1013,9 @@ class SocialConnect{
         if(!$user_uid)
             $user_uid = $this->user_uid;
         
+        dmm_misc_fieldSave('social_credentials', $user_uid, serialize($data), 'user');
+        
+        /*
         db_insert('field_data_' . $field)
           ->fields(array(
           'entity_type'=> 'user',
@@ -1040,6 +1043,7 @@ class SocialConnect{
           ->execute();
 
         field_cache_clear();
+        */
     }
     
     
@@ -1048,6 +1052,9 @@ class SocialConnect{
         if(!$user_uid)
             $user_uid = $this->user_uid;
         
+        dmm_misc_fieldSave('social_credentials', $user_uid, serialize($data), 'user');
+        
+        /*
         db_update('field_data_' . $field) 
           ->fields(array(
           'entity_id' => $user_uid,
@@ -1069,6 +1076,7 @@ class SocialConnect{
           ->execute();
 
         field_cache_clear(); 
+        */
         
     } // end of public function insertAccountToDB($data, $user_uid = null)
     
