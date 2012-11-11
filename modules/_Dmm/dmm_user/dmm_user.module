@@ -298,6 +298,10 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
             '#title' => t('Comments autoposting to:'),
             '#weight' => 10,
           );
+          $form['user_uid'] = array(
+            '#type' => 'hidden',
+            '#value' => $user->uid,
+          );
         }
         
         $form['#submit'][] = 'dmm_user_submitForm_comment';
@@ -325,14 +329,11 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
  *   Return nothing.
  */
 function dmm_user_validateForm_comment(&$form, &$form_state) {
-
-  
   //dpm($form_state['values']);
   
-  if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
-    //dpm($_SESSION['dmm_user_loginza_logged_as']);
-  }
-  
+//  if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
+//    //dpm($_SESSION['dmm_user_loginza_logged_as']);
+//  }
 }
 
 
@@ -369,6 +370,33 @@ function dmm_user_submitForm_comment(&$form, &$form_state) {
         'data' => serialize($comment_remote_acc_data),
       ))
       ->execute();
+  }
+  
+  // Autoposting.
+  if (isset($form_state['values']['autopostingOptions'])) {
+    
+      $connectedAccounts = dmm_social_getUserConnectedAccounts($form_state['values']['user_uid']);
+
+      $autopostIsChanged = FALSE;
+      foreach ($connectedAccounts as $account_key => $connectedAccount) {
+        if (!isset($form_state['values']['autopostingOptions'][$account_key])) {
+          continue;
+        }
+
+        $oldValue = (isset($connectedAccount['autoposting']['comment']) && $connectedAccount['autoposting']['comment']) ? 1 : 0;
+        $newValue = $form_state['values']['autopostingOptions'][$account_key] ? 1 : 0;
+        if ($newValue != $oldValue) {
+          $connectedAccounts[$account_key]['autoposting']['comment'] = $newValue;
+          $autopostIsChanged = TRUE;
+        }
+
+      }
+
+      if ($autopostIsChanged) {
+        dmm_misc_fieldSave('social_credentials', $form_state['values']['user_uid'], serialize($connectedAccounts), 'user');
+        drupal_set_message('Autoposting settings are changed!', 'warning');
+      }
+
   }
   
 }
