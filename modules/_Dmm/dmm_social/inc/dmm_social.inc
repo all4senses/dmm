@@ -177,9 +177,13 @@ function dmm_social_socialPageForm($arg1, $arg2)
  */
 function dmm_social_socialPageForm_submit(&$form, &$form_state) {
   dpm($form_state['values']);
-  //drupal_set_message('On Submit, Ok!', 'warning');
   
-  
+  $query = db_select('field_data_field_social_credentials', 'sc')
+    ->fields('sc', array('field_social_credentials_value'));
+  $query->condition('sc.entity_id', $form_state['values']['user_uid']);
+  $social_credentials = unserialize($query->execute()->fetchField());
+  dpm($social_credentials);
+  drupal_set_message('Settings are saved!', 'warning');
 }
   
   
@@ -476,7 +480,7 @@ class SocialInit{
                 '#title' => t('Posts autoposting to:'),
             );
             
-            $form['user_uid_hidden'] = array(
+            $form['user_uid'] = array(
                 '#type' => 'hidden',
                 '#value' => $this->user_uid,
             );
