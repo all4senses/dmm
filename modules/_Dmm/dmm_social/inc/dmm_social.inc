@@ -476,6 +476,11 @@ class SocialInit{
                 '#title' => t('Posts autoposting to:'),
             );
             
+            $form['user_uid_hidden'] = array(
+                '#type' => 'hidden',
+                '#value' => $this->user_uid,
+            );
+            
             // Use defined styles for reviews.
             //$form['#attributes']['class'][] = 'gv-edit-review-page';
             
