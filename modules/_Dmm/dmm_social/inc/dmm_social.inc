@@ -1630,7 +1630,7 @@ class SocialConnectFacebook extends SocialConnect
     }
     
     
-    protected function getUserAlbums_fromRemote($aid = null)
+    protected function getUserAlbums_fromRemote($album_id = null)
     {
         if(!$albums_object = $this->fbOpenGraph(null, array('connection'=>'albums')))
             return 'Error: reading fbOpenGraph';
@@ -1638,6 +1638,11 @@ class SocialConnectFacebook extends SocialConnect
         foreach ($albums_object->data as $key1 => $albumEntry) 
         {
             //dpm($albumEntry);
+          
+            // Save locally only a requested album (skip others).
+            if ($album_id && $album_id != $albumEntry->id) {
+              continue;
+            }
             $aid = $albumEntry->id;
             $this->albums[$aid]['info']['title'] = $albumEntry->name;
             $this->albums[$aid]['info']['aid'] = $aid;
@@ -1675,6 +1680,18 @@ class SocialConnectFacebook extends SocialConnect
         
     } // end of public function getUserAlbums(&$albums)
     
+    
+    protected function postMessageToWall($message)
+    {
+        if(!$albums_object = $this->fbOpenGraph(null, array('connection'=>'albums'))) {
+          return 'Error: reading fbOpenGraph';
+        }
+        
+        dpm($albums_object);
+        
+        return null; // success
+        
+    } // end of public function getUserAlbums(&$albums)
     
 
 } // end of class SocialConnectFacebook extends SocialConnect
