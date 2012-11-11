@@ -82,7 +82,7 @@ function dmm_pages_getPrefaceByKey($key) {
  */
 function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') {
   
-  if (!isset($node->field_tags['und']) || empty($node->field_tags['und'])) {
+  if (/*!isset($node->field_tags['und']) || */empty($node->field_tags['und'])) {
     return;
   }
   
@@ -135,7 +135,7 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
   
   // Set a view type.
   
-  // Teasers by default
+  // Set a view style. Teasers by default
   if ($default_list_view_style == 'teaser') {
     $currentViewStyle = (isset($_GET['view']) && $_GET['view'] == 'titles') ? 'titles' : 'teasers';
   }
@@ -258,6 +258,7 @@ function dmm_pages_getSectionBlocks($node, $default_list_view_style = 'teaser') 
   $view->add_item($display_name, 'filter', 'taxonomy_index', 'tid', $viewsFilterOptions_authors);
 
   $results = $view->preview($display_name);
+  dpm($results);
   //if ($view->total_rows) {
   if ($view->result) {
     $node->sectionBlocks['authors'] = '<h3>' . 'Авторы' . '</h3>' . $results;
