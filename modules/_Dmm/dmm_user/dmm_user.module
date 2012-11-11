@@ -254,8 +254,7 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
             );
             $form['author']['#weight'] = -2;
 
-            $form['#submit'][] = 'dmm_user_submitForm_comment';
-            $form['#validate'][] = 'dmm_user_validateForm_comment';
+            
             
         } // End of if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
         else {
@@ -270,6 +269,39 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
             }
           }
         }
+        
+        
+        // Show autoposting options checkboxes.
+        $tmp = SocialInit::$connect_to;
+        dpm($tmp);
+        if ($connectedAccounts = dmm_social_getUserConnectedAccounts($user->uid)) {
+          
+          foreach($connectedAccounts as $account_key => $connectedAccount) {
+            if (isset($this->connect_to[$connectedAccount['service']]['autoposting'])) {
+
+              $account_title = ucfirst($connectedAccount['service']) . ' ' . ($connectedAccount['nick']?$connectedAccount['nick']:$connectedAccount['id']);
+
+              $commentOption = !empty($connectedAccount['autoposting']['comment']) ? TRUE : FALSE;
+              $autopostingComments[$account_key] = $account_title;
+              if ($commentOption) {
+                $autopostingCommentsChecked[] = $account_key;
+              }
+
+            }
+          }
+
+          $form['autopostingOptions']['comments'] = array(
+            '#type' => 'checkboxes',
+            '#options' => $autopostingComments,
+            '#default_value' => $autopostingCommentsChecked,
+            '#title' => t('Comments autoposting to:'),
+          );
+        }
+        
+        $form['#submit'][] = 'dmm_user_submitForm_comment';
+        $form['#validate'][] = 'dmm_user_validateForm_comment';
+        
+        
         
         break;
   }

@@ -169,6 +169,25 @@ function dmm_social_socialPageForm($arg1, $arg2)
 }
 
 
+
+/**
+ * Implements hook_form_submit().
+ *
+ * @return $form
+ *   Return nothing.
+ */
+function dmm_social_getUserConnectedAccounts($user_uid) {
+  $query = db_select('field_data_field_social_credentials', 'sc')
+    ->fields('sc', array('field_social_credentials_value'));
+  $query->condition('sc.entity_id', $form_state['values']['user_uid']);
+  $connectedAccounts = $query->execute()->fetchField();
+  if ($connectedAccounts) {
+    $connectedAccounts = unserialize($connectedAccounts);
+  }
+  return $connectedAccounts;
+  
+}
+
 /**
  * Implements hook_form_submit().
  *
@@ -176,16 +195,12 @@ function dmm_social_socialPageForm($arg1, $arg2)
  *   Return nothing.
  */
 function dmm_social_socialPageForm_submit(&$form, &$form_state) {
-  dpm($form_state['values']);
+  //dpm($form_state['values']);
   
-  $query = db_select('field_data_field_social_credentials', 'sc')
-    ->fields('sc', array('field_social_credentials_value'));
-  $query->condition('sc.entity_id', $form_state['values']['user_uid']);
-  $social_credentials = unserialize($query->execute()->fetchField());
-  dpm($social_credentials);
+  $connectedAccounts = dmm_social_getUserConnectedAccounts($form_state['values']['user_uid']);
   
   $autopostIsChanged = FALSE;
-  foreach ($social_credentials as $account_key => $connectedAccount) {
+  foreach ($connectedAccounts as $account_key => $connectedAccount) {
     if (!isset($form_state['values']['comments'][$account_key])) {
       continue;
     }
@@ -193,26 +208,24 @@ function dmm_social_socialPageForm_submit(&$form, &$form_state) {
     $oldValue = (isset($connectedAccount['autoposting']['comment']) && $connectedAccount['autoposting']['comment']) ? 1 : 0;
     $newValue = $form_state['values']['comments'][$account_key] ? 1 : 0;
     if ($newValue != $oldValue) {
-      $social_credentials[$account_key]['autoposting']['comment'] = $newValue;
+      $connectedAccounts[$account_key]['autoposting']['comment'] = $newValue;
       $autopostIsChanged = TRUE;
     }
     
     $oldValue = (isset($connectedAccount['autoposting']['post']) && $connectedAccount['autoposting']['post']) ? 1 : 0;
     $newValue = $form_state['values']['posts'][$account_key] ? 1 : 0;
     if ($newValue != $oldValue) {
-      $social_credentials[$account_key]['autoposting']['post'] = $newValue;
+      $connectedAccounts[$account_key]['autoposting']['post'] = $newValue;
       $autopostIsChanged = TRUE;
     }
   }
   
-
-  dpm($social_credentials);
-  
   if ($autopostIsChanged) {
-    dmm_misc_fieldSave('social_credentials', $form_state['values']['user_uid'], serialize($social_credentials), 'user');
+    dmm_misc_fieldSave('social_credentials', $form_state['values']['user_uid'], serialize($connectedAccounts), 'user');
+    drupal_set_message('Settings are saved!', 'warning');
   }
   
-  drupal_set_message('Settings are saved!', 'warning');
+  
 }
   
   
@@ -477,21 +490,12 @@ class SocialInit{
                   if ($commentOption) {
                     $autopostingCommentsChecked[] = $account_key;
                   }
-                  $autopostingOptionsSource['comments'][$account_key] = array(
-                      'title' => $account_title,
-                      'post' => $commentOption,
-                  );
                   
                   $postOption = !empty($connectedAccount['autoposting']['post']) ? TRUE : FALSE;
                   $autopostingPosts[$account_key] = $account_title;
                   if ($postOption) {
                     $autopostingPostsChecked[] = $account_key;
                   }
-                  
-                  $autopostingOptionsSource['posts'][$account_key] = array(
-                      'title' => $account_title,
-                      'post' => $postOption,
-                  );
                   
                 }
             }
