@@ -272,6 +272,8 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
         
         
         // Show autoposting options checkboxes.
+        //require_once('inc/dmm_social.inc');
+        module_load_include('inc', 'dmm_social', 'inc/dmm_social');
         $tmp = SocialInit::$connect_to;
         dpm($tmp);
         if ($connectedAccounts = dmm_social_getUserConnectedAccounts($user->uid)) {
