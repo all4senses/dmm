@@ -463,7 +463,7 @@ class SocialInit{
             foreach($this->connectedAccounts as $account_key => $connectedAccount)
             {
                 //if (isset($this->connect_to[$connectedAccount['service']]['autoposting'])) {
-                if (isset(SocialInit::$connect_to[$connectedAccount['service']]['autoposting'])) {
+                if (!empty(SocialInit::$connect_to[$connectedAccount['service']]['autoposting'])) {
                   
                   
                   $account_title = ucfirst($connectedAccount['service']) . ' ' . ($connectedAccount['nick']?$connectedAccount['nick']:$connectedAccount['id']);
@@ -775,8 +775,8 @@ class SocialConnect{
         }
         
         
-        $socialInit = new SocialInit;
-        $this->siteCreds = $socialInit->connect_to[$this->service];
+        //$socialInit = new SocialInit;
+        $this->siteCreds = SocialInit::$connect_to[$this->service];
     }
 
     protected function getServiceId()
