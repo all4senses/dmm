@@ -65,9 +65,7 @@
 <?php 
   if (isset($node->sectionBlocks)) {
     foreach ($node->sectionBlocks as $sectionBlock) {
-      echo $sectionBlock . '<div class="bottom-clear"></div>';
+      echo '<div class="section-block">' . $sectionBlock . '</div><div class="bottom-clear"></div>';
     }
   }
 ?>
-  
-<div class="bottom-clear"></div>
