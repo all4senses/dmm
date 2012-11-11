@@ -237,7 +237,7 @@ class SocialInit{
     // site api credentials for domMoejMechty.com.ua
     var $user_uid, $currentUrl = false, $connectedAccounts = false, $disable_same_service_accounts = false, $has_other_connections = false;
     
-    var $connect_to = array(
+    static $connect_to = array(
         'picasa' => array(
                         // all4senses@gmail.com
                         'title' => 'Picasa',
