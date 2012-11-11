@@ -462,7 +462,9 @@ class SocialInit{
             
             foreach($this->connectedAccounts as $account_key => $connectedAccount)
             {
-                if (isset($this->connect_to[$connectedAccount['service']]['autoposting'])) {
+                //if (isset($this->connect_to[$connectedAccount['service']]['autoposting'])) {
+                if (isset(SocialInit::$connect_to[$connectedAccount['service']]['autoposting'])) {
+                  
                   
                   $account_title = ucfirst($connectedAccount['service']) . ' ' . ($connectedAccount['nick']?$connectedAccount['nick']:$connectedAccount['id']);
                   
