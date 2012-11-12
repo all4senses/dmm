@@ -321,7 +321,6 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
         
         $form['actions']['submit']['#value'] = t('Comment it!');
 
-        dpm($_SERVER);
         break;
   }
   
