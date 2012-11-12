@@ -38,16 +38,16 @@ function dmm_social_menu() {
 /**
  * Implements hook_user_delete().
  */
-function dmm_social_postToSocials($message, $user_uid, $connectedAccounts, $accountsToAutoposting) {
+function dmm_social_postToSocials($message, $comment_id, $node_id, $user_uid, $connectedAccounts, $accountsToAutoposting) {
   
   //module_load_include('inc', 'dmm_social', 'inc/dmm_social');
   $socialInit = new SocialInit($user_uid, $connectedAccounts);
   $options = array(
     //'caption' => 'CaptionX',
-    'link' => 'http://dommoejmechty.com.ua/articles/dekor-vashego-doma#comment-29',
+    'link' => url('node/' . $node_id, array('absolute' => TRUE)),
     'message' => 'Оставил(а) комментарий на сайте "Дом Моей Мечты", на странице...',
     'description' => 'Текст комментария: ' . $message,
-    'actions' => '{"name": "' . 'Ответить на комментарий на сайте' . '", "link": "' . 'http://dommoejmechty.com.ua' . '"}',
+    'actions' => '{"name": "' . 'Ответить на комментарий' . '", "link": "' . 'http://' . $_SERVER['server'] . '/comment/reply/3/' . $comment_id . '"}',
     //'picture' => 'http://dommoejmechty.com.ua/f/styles/comment_avatar/public/avatars/picture-1-1352439021.jpg',
   );
   foreach ($accountsToAutoposting as $account_key => $connectedAccount) {
