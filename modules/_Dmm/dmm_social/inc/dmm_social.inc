@@ -1712,7 +1712,7 @@ class SocialConnectFacebook extends SocialConnect
           'message' => $options['title'],
           'link' => $options['link_page'],
           'description' => $options['message'],
-          'actions' => '{"name": "' . $options['link_reply'] . '", "link": "' . $options['text_reply'] . '"}',
+          'actions' => '{"name": "' . $options['text_reply'] . '", "link": "' . $options['link_reply'] . '"}',
         );
         
         if (isset($options['picture'])) {
