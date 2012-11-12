@@ -1450,11 +1450,11 @@ class SocialConnect{
     public function getAccountAlbumPhotos_themedToSlideshow($albumId, $photosObject, $thumbs_height = '70px')
     {
         
-        drupal_add_css("sites/all/libraries/jquery.plugins/adgallery/css/jquery.ad-gallery.css", array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
-        drupal_add_css("sites/all/libraries/jquery.plugins/adgallery/css/jquery.ad-gallery_custom.css", array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
+        drupal_add_css("sites/all/libraries/jquery.plugins/adgallery/css/jquery.adgallery.css", array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
+        drupal_add_css("sites/all/libraries/jquery.plugins/adgallery/css/jquery.adgallery_custom.css", array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
 
         //drupal_add_js('sites/all/libraries/jquery.plugins/adgallery/dmm_image_gallery_ad.js');
-        drupal_add_js('sites/all/libraries/jquery.plugins/adgallery/jquery.ad-gallery.js');
+        drupal_add_js('sites/all/libraries/jquery.plugins/adgallery/jquery.adgallery.js');
         
         drupal_add_js(array('dmm_image' => array('group_' . $albumId => 1)), 'setting');
         $path_to_module = drupal_get_path('module', 'dmm_image');
