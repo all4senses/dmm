@@ -1938,6 +1938,8 @@ class SocialConnectMailRu extends SocialConnect
             $base_params = array_merge($base_params, $ext_params);
 
         ksort($base_params);
+        
+        dpm($base_params);
 
         $base_params_str = null;
         foreach($base_params as $key => $value)
@@ -1952,6 +1954,8 @@ class SocialConnectMailRu extends SocialConnect
         $full_params = $base_params_str . '&sig=' . $sig; //. '&ext_perm=widget'; 
         $url = $base_url . $full_params;
 
+        dpm($url);
+        
         $result = $this->processCurl($url, 'string');
         if($result['ok'])
             return json_decode($result['result']);
