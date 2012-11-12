@@ -1706,8 +1706,21 @@ class SocialConnectFacebook extends SocialConnect
         $options['connection'] = 'feed';
         $options['method'] = 'post';
         
-        if(!$result = $this->fbOpenGraph(null, $options)) {
-          return 'Error: reading fbOpenGraph';
+        $params = array(
+          'connection' => 'feed',
+          'method' => 'post',
+          'message' => $options['title'],
+          'link' => $options['link_page'],
+          'description' => $options['message'],
+          'actions' => '{"name": "' . $options['link_reply'] . '", "link": "' . $options['text_reply'] . '"}',
+        );
+        
+        if (isset($options['picture'])) {
+          $params['picture'] = $options['picture'];
+        }
+        
+        if(!$result = $this->fbOpenGraph(null, $params)) {
+          return 'Error: processing fbOpenGraph function';
         }
         
         dpm($result);
@@ -1932,7 +1945,7 @@ class SocialConnectMailRu extends SocialConnect
             'method' => $function,
             'secure' => 1,
             'session_key' => $this->access_token,
-            );
+        );
 
         if($ext_params)
             $base_params = array_merge($base_params, $ext_params);
@@ -2026,20 +2039,22 @@ class SocialConnectMailRu extends SocialConnect
         // http://api.mail.ru/docs/reference/rest/stream-post/
       
         $ext_params = array(
-          //'uids' => $this->existing_account['id'],
-          'user_text' => 'user_textX',
-          'text' => 'textX',
-          'title' => 'titleX',
-          'user_text' => 'user_textX',
+          //'uids' => $this->existing_account['id'], // for users.getInfo
+          'user_text' => $options['title'],
+          'text' => $options['message'],
+          'title' => 'Страница "' . $options['page_title'] . '"',
           'link1_text' => 'default',
-          'link1_href' => 'http://dommoejmechty.com.ua/articles/dekor-vashego-doma#comment-35',
-          'link2_text' => 'link2_textX',
-          'link2_href' => 'http://dommoejmechty.com.ua',
-          'img_url' => 'http://dommoejmechty.com.ua/f/styles/comment_avatar/public/avatars/picture-1-1352439021.jpg',
+          'link1_href' => $options['link_page'],
+          'link2_text' => $options['text_reply'],
+          'link2_href' => $options['link_reply'],
         );
         
+        if (isset($options['picture'])) {
+          $ext_params['img_url'] = $options['picture'];
+        }
+        
         if(!$result = $this->processRest('stream.post', $ext_params))
-            return 'Error: reading mail.ru REST users.getInfo';
+            return 'Error: reading mail.ru REST stream.post';
         
         dpm($result);
     }

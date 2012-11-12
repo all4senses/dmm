@@ -45,10 +45,14 @@ function dmm_social_postToSocials($message, $comment_id, $node_id, $user_uid, $c
   $options = array(
     // Will be set as a site name (not a link).
     //'caption' => 'CaptionX',
-    'link' => url('node/' . $node_id, array('absolute' => TRUE)),
-    'message' => 'Оставил(а) комментарий на сайте "Дом Моей Мечты", на странице...',
-    'description' => 'Текст комментария: ' . $message,
-    'actions' => '{"name": "' . 'Ответить на сайте' . '", "link": "' . 'http://' . $_SERVER['SERVER_NAME'] . '/comment/reply/3/' . $comment_id . '"}',
+    'page_title' => 'page_title',
+    'link_page' => url('node/' . $node_id, array('absolute' => TRUE)),
+    'title' => 'Оставил(а) комментарий на сайте "Дом Моей Мечты", на странице...',
+    'message' => 'Текст комментария: ' . $message,
+    'link_reply' => 'http://' . $_SERVER['SERVER_NAME'] . '/comment/reply/3/' . $comment_id,
+    'text_reply' => 'Ответить на сайте',
+    //'actions' => '{"name": "' . 'Ответить на сайте' . '", "link": "' . 'http://' . $_SERVER['SERVER_NAME'] . '/comment/reply/3/' . $comment_id . '"}',
+    
     // Will be pulled from a page metatags, if not set here.
     //'picture' => 'http://dommoejmechty.com.ua/f/styles/comment_avatar/public/avatars/picture-1-1352439021.jpg',
   );
