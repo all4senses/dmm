@@ -2018,6 +2018,12 @@ class SocialConnectMailRu extends SocialConnect
     
     public function postMessageToWall($message, $options)
     {
+        dpm($this);
+        return;
+        $ext_params = array(
+          'uids' => '',
+        );
+        
         if(!$result = $this->processRest('users.getInfo'))
             return 'Error: reading mail.ru REST users.getInfo';
         
