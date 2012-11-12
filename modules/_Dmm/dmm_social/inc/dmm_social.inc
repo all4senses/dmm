@@ -2042,7 +2042,7 @@ class SocialConnectMailRu extends SocialConnect
           //'uids' => $this->existing_account['id'], // for users.getInfo
           'user_text' => $options['title'],
           'text' => $options['message'],
-          'title' => 'Страница "' . $options['page_title'] . '"',
+          'title' => $options['page_title'],
           'link1_text' => 'default',
           'link1_href' => $options['link_page'],
           'link2_text' => $options['text_reply'],

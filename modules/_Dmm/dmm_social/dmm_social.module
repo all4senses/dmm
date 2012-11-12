@@ -54,7 +54,7 @@ function dmm_social_postToSocials($message, $comment_id, $node_id, $node_title, 
     //'actions' => '{"name": "' . 'Ответить на сайте' . '", "link": "' . 'http://' . $_SERVER['SERVER_NAME'] . '/comment/reply/3/' . $comment_id . '"}',
     
     // Will be pulled from a page metatags, if not set here.
-    //'picture' => 'http://dommoejmechty.com.ua/f/styles/comment_avatar/public/avatars/picture-1-1352439021.jpg',
+    'picture' => 'http://dommoejmechty.com.ua/f/styles/comment_avatar/public/avatars/picture-1-1352439021.jpg',
   );
   foreach ($accountsToAutoposting as $account_key => $connectedAccount) {
     $accountObject = $socialInit->getAccountObjectByServiceName(null, null, null, $connectedAccount['service'], $connectedAccount);
