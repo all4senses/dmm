@@ -1621,6 +1621,17 @@ class SocialConnectFacebook extends SocialConnect
         //. '?access_token=' . $user_account->auth_key;
         . '?access_token=' . $this->access_token;
 
+        unset($options['connection']);
+        if (!empty($options)) {
+          $additionalParams = '';
+          foreach ($options as $key => $value) {
+            $additionalParams .= '&' . $key . '=' . urlencode($value);
+          }
+          $url .= $additionalParams;
+        }
+        dpm('$url = ' . $url);
+        return NULL;
+        
         $result = $this->processCurl($url, 'string');
         
         if(!$result['ok'])
@@ -1681,9 +1692,12 @@ class SocialConnectFacebook extends SocialConnect
     } // end of public function getUserAlbums(&$albums)
     
     
-    public function postMessageToWall($message)
+    public function postMessageToWall($message, $options)
     {
-        if(!$albums_object = $this->fbOpenGraph(null, array('connection'=>'albums'))) {
+        $options['connection'] = 'feed';
+        $options['method'] = 'post';
+        
+        if(!$albums_object = $this->fbOpenGraph(null, $options)) {
           return 'Error: reading fbOpenGraph';
         }
         

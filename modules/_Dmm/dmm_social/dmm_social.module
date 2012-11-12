@@ -42,18 +42,24 @@ function dmm_social_postToSocials($message, $user_uid, $connectedAccounts, $acco
   
   //module_load_include('inc', 'dmm_social', 'inc/dmm_social');
   $socialInit = new SocialInit($user_uid, $connectedAccounts);
-  dpm($socialInit);
+  $options = array(
+    'caption' => 'CaptionX',
+    'link' => 'http://dommoejmechty.com.ua/articles/dekor-vashego-doma',
+    'message' => 'MessageX',
+    'description' => 'DescriptionX',
+    'actions' => '{"name": "' . 'ActionsTitleX' . '", "link": "' . 'http://dommoejmechty.com.ua' . '"}',
+  );
   foreach ($accountsToAutoposting as $account_key => $connectedAccount) {
     $accountObject = $socialInit->getAccountObjectByServiceName(null, null, null, $connectedAccount['service'], $connectedAccount);
-    
-    if ($errorMessage = $accountObject->postMessageToWall($message)) {
+    dpm($accountObject);
+    if ($errorMessage = $accountObject->postMessageToWall($message, $options)) {
       drupal_set_message('Error while posting to ' . $connectedAccount['service'] . '!', 'warning');
     }
     else {
       drupal_set_message('Successfully posted to ' . $connectedAccount['service'] . '!');
     }
     
-    dpm($accountObject);
+    
   }
 }
 
