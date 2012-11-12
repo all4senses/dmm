@@ -894,6 +894,10 @@ class SocialConnect{
                                 'access_token' => $this->access_token,
                             );
         
+        if (isset($this->access_token_expires)) {
+          $account_to_save['access_token_expires'] = $this->access_token_expires;
+        }
+        
         $account_index = false;
         if($this->connectedAccounts)
         {
@@ -1578,6 +1582,11 @@ class SocialConnectFacebook extends SocialConnect
         }
 
         $this->access_token = str_replace('access_token=', '', $result['result']);
+        if (strpos($this->access_token, '&expires=')) {
+          $this->access_token = explode('&expires=', $this->access_token);
+          $this->access_token_expires = $this->access_token[1];
+          $this->access_token = $this->access_token[0];
+        }
 
         $url = "https://graph.facebook.com/me?access_token=" 
            . $this->access_token;
@@ -1629,8 +1638,8 @@ class SocialConnectFacebook extends SocialConnect
           }
           $url .= $additionalParams;
         }
-        dpm('$url = ' . $url);
-        return NULL;
+        //dpm('$url = ' . $url);
+        //return NULL;
         
         $result = $this->processCurl($url, 'string');
         
