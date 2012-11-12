@@ -48,6 +48,7 @@ function dmm_social_postToSocials($message, $user_uid, $connectedAccounts, $acco
     'message' => 'MessageX',
     'description' => 'DescriptionX',
     'actions' => '{"name": "' . 'ActionsTitleX' . '", "link": "' . 'http://dommoejmechty.com.ua' . '"}',
+    'picture' => 'http://dommoejmechty.com.ua/f/styles/comment_avatar/public/avatars/picture-1-1352439021.jpg',
   );
   foreach ($accountsToAutoposting as $account_key => $connectedAccount) {
     $accountObject = $socialInit->getAccountObjectByServiceName(null, null, null, $connectedAccount['service'], $connectedAccount);

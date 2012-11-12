@@ -275,7 +275,9 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
         if ($connectedAccounts = dmm_social_getUserConnectedAccounts($user->uid)) {
           
           module_load_include('inc', 'dmm_social', 'inc/dmm_social');
+          
           $socialDefaults = SocialInit::$connect_to;
+          $autopostingCommentsChecked = array();
           
           foreach($connectedAccounts as $account_key => $connectedAccount) {
             if (isset($socialDefaults[$connectedAccount['service']]['autoposting'])) {
