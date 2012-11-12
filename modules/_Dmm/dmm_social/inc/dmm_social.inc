@@ -2033,7 +2033,7 @@ class SocialConnectMailRu extends SocialConnect
           'title' => 'titleX',
           'user_text' => 'user_textX',
           'link1_text' => 'link1_textX',
-          'link1_href' => urlencode('http://dommoejmechty.com.ua/articles/dekor-vashego-doma#comment-35'),
+          'link1_href' => 'http://dommoejmechty.com.ua/articles/dekor-vashego-doma#comment-35',
           //'link1_href' => 'http://dommoejmechty.com.ua/articles/dekor-vashego-doma#comment-35',
           //'link2_text' => 'link2_textX',
           //'link2_href' => urlencode('http://dommoejmechty.com.ua'),
