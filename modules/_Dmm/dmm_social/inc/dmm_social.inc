@@ -1706,11 +1706,11 @@ class SocialConnectFacebook extends SocialConnect
         $options['connection'] = 'feed';
         $options['method'] = 'post';
         
-        if(!$albums_object = $this->fbOpenGraph(null, $options)) {
+        if(!$result = $this->fbOpenGraph(null, $options)) {
           return 'Error: reading fbOpenGraph';
         }
         
-        dpm($albums_object);
+        dpm($result);
         
         return null; // success
         
@@ -2014,9 +2014,19 @@ class SocialConnectMailRu extends SocialConnect
         }
     } // end of public function connectAccount($get, $redirect_url, $siteCreds)
     
-   
     
-    protected function getUserAlbums_fromRemote($aid = null)
+    
+    public function postMessageToWall($message, $options)
+    {
+        if(!$result = $this->processRest('users.getInfo'))
+            return 'Error: reading mail.ru REST users.getInfo';
+        
+        dpm($result);
+    }
+    
+    
+    
+    protected function getUserAlbums_fromRemote($album_id = null)
     {
         if(!$albums_object = $this->processRest('photos.getAlbums'))
             return 'Error: reading mail.ru REST photos.getAlbums';
@@ -2042,6 +2052,10 @@ class SocialConnectMailRu extends SocialConnect
             $albums[$key1]['photos']['photo_' . $key3][$key4]['data'] = $this->dpr($value);
             */
             
+            if ($album_id && $albumEntry->aid != $album_id) {
+              continue;
+            }
+              
             $aid = $albumEntry->aid;
             
             $this->albums[$aid]['info']['title'] = $albumEntry->title;
