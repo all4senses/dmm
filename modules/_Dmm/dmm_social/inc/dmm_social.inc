@@ -2028,15 +2028,15 @@ class SocialConnectMailRu extends SocialConnect
       
         $ext_params = array(
           //'uids' => $this->existing_account['id'],
-          'user_text' => 'user_text X',
-          'text' => 'text X',
-          'title' => 'title X',
-          'user_text' => 'user_text X',
-          'link1_text' => 'link1_text X',
-          'link1_href' => 'http://dommoejmechty.com.ua/articles/dekor-vashego-doma#comment-35',
-          'link2_text' => 'link2_text X',
-          'link2_href' => 'http://dommoejmechty.com.ua',
-          'img_url' => 'http://dommoejmechty.com.ua/f/styles/comment_avatar/public/avatars/picture-1-1352439021.jpg',
+          'user_text' => 'user_textX',
+          'text' => 'textX',
+          'title' => 'titleX',
+          'user_text' => 'user_textX',
+          'link1_text' => 'link1_textX',
+          'link1_href' => urlencode('http://dommoejmechty.com.ua/articles/dekor-vashego-doma#comment-35'),
+          'link2_text' => 'link2_textX',
+          'link2_href' => urlencode('http://dommoejmechty.com.ua'),
+          'img_url' => urlencode('http://dommoejmechty.com.ua/f/styles/comment_avatar/public/avatars/picture-1-1352439021.jpg'),
         );
         
         if(!$result = $this->processRest('stream.post', $ext_params))
