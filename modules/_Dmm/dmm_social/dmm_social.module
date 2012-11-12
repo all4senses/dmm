@@ -38,14 +38,14 @@ function dmm_social_menu() {
 /**
  * Implements hook_user_delete().
  */
-function dmm_social_postToSocials($message, $comment_id, $node_id, $user_uid, $connectedAccounts, $accountsToAutoposting) {
+function dmm_social_postToSocials($message, $comment_id, $node_id, $node_title, $user_uid, $connectedAccounts, $accountsToAutoposting) {
   
   //module_load_include('inc', 'dmm_social', 'inc/dmm_social');
   $socialInit = new SocialInit($user_uid, $connectedAccounts);
   $options = array(
     // Will be set as a site name (not a link).
     //'caption' => 'CaptionX',
-    'page_title' => 'page_title',
+    'page_title' => $node_title,
     'link_page' => url('node/' . $node_id, array('absolute' => TRUE)),
     'title' => 'Оставил(а) комментарий на сайте "Дом Моей Мечты", на странице...',
     'message' => 'Текст комментария: ' . $message,

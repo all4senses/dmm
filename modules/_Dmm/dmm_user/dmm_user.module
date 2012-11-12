@@ -308,6 +308,10 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
             '#type' => 'hidden',
             '#value' => $user->uid,
           );
+          $form['node_title'] = array(
+            '#type' => 'hidden',
+            '#value' => $form['#node']->title . ' | Дом Моей Мечты',
+          );
         }
         else {
           $form['connectAccountsLink'] = array(
@@ -422,7 +426,7 @@ function dmm_user_submitForm_comment(&$form, &$form_state) {
       }
       
       if (!empty($accountsToAutoposting)) {
-        dmm_social_postToSocials($form_state['values']['comment_body']['und'][0]['value'], $form_state['values']['cid'], $form_state['values']['nid'], $user->uid, $connectedAccounts, $accountsToAutoposting);
+        dmm_social_postToSocials($form_state['values']['comment_body']['und'][0]['value'], $form_state['values']['cid'], $form_state['values']['nid'], $form_state['values']['node_title'], $user->uid, $connectedAccounts, $accountsToAutoposting);
       }
 
   }
