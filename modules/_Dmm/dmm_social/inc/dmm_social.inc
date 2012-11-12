@@ -1916,6 +1916,8 @@ class SocialConnectMailRu extends SocialConnect
     
     public function processRest($function, $ext_params = null)
     {
+        // http://api.mail.ru/docs/reference/rest/stream-post/
+
         // check token freshness
         if($this->existing_account['data']->token_updated + $this->existing_account['data']->expires_in < time())
         {
@@ -2018,11 +2020,22 @@ class SocialConnectMailRu extends SocialConnect
     
     public function postMessageToWall($message, $options)
     {
+        // http://api.mail.ru/docs/reference/rest/stream-post/
+      
         $ext_params = array(
-          'uids' => $this->existing_account['id'],
+          //'uids' => $this->existing_account['id'],
+          'user_text' => 'user_text X',
+          'text' => 'text X',
+          'title' => 'title X',
+          'user_text' => 'user_text X',
+          'link1_text' => 'link1_text X',
+          'link1_href' => 'http://dommoejmechty.com.ua/articles/dekor-vashego-doma#comment-35',
+          'link2_text' => 'link2_text X',
+          'link2_href' => 'http://dommoejmechty.com.ua',
+          'img_url' => 'http://dommoejmechty.com.ua/f/styles/comment_avatar/public/avatars/picture-1-1352439021.jpg',
         );
         
-        if(!$result = $this->processRest('users.getInfo', $ext_params))
+        if(!$result = $this->processRest('stream.post', $ext_params))
             return 'Error: reading mail.ru REST users.getInfo';
         
         dpm($result);
