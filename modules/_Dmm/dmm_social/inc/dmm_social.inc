@@ -1450,28 +1450,34 @@ class SocialConnect{
     public function getAccountAlbumPhotos_themedToSlideshow($albumId, $photosObject, $thumbs_height = '70px')
     {
         
-        drupal_add_css("sites/all/libraries/jquery.plugins/Ad-gallery/css/jquery.ad-gallery.css", array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
-        drupal_add_css("sites/all/libraries/jquery.plugins/Ad-gallery/css/jquery.ad-gallery_custom.css", array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
+        drupal_add_css("sites/all/libraries/jquery.plugins/adgallery/css/jquery.ad-gallery.css", array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
+        drupal_add_css("sites/all/libraries/jquery.plugins/adgallery/css/jquery.ad-gallery_custom.css", array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
 
-        drupal_add_js('sites/all/libraries/jquery.plugins/Ad-gallery/dmm_image_gallery_ad.js');
-        drupal_add_js('sites/all/libraries/jquery.plugins/Ad-gallery/jquery.ad-gallery.js');
+        //drupal_add_js('sites/all/libraries/jquery.plugins/adgallery/dmm_image_gallery_ad.js');
+        drupal_add_js('sites/all/libraries/jquery.plugins/adgallery/jquery.ad-gallery.js');
+        
+        drupal_add_js(array('dmm_image' => array('group_' . $albumId => 1)), 'setting');
+        $path_to_module = drupal_get_path('module', 'dmm_image');
+        drupal_add_js($path_to_module . '/js/dmm_add_Colorbox_ToAlbums.js');
+        drupal_add_js($path_to_module . '/js/dmm_add_GalleryAd_ToAlbums.js');
+        drupal_add_css($path_to_module . '/css/dmm_add_GalleryAd_ToAlbums.css', array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
         
         //1, 3, 4, 
         drupal_add_css("sites/all/libraries/jquery.plugins/Colorbox/css4/colorbox.css", array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
         drupal_add_js('sites/all/libraries/jquery.plugins/Colorbox/jquery.colorbox.js');
         
-        drupal_add_js('
-            
-                    jQuery(document).ready(function(){
-                            //Examples of how to assign the ColorBox event to elements
-                            jQuery(".group_' . $albumId .'").colorbox({transition:"fade", slideshow:true, slideshowAuto: false, rel:"group_' . $albumId . '", width:"95%", height:"95%"});
-
-                            //$(".group2").colorbox({rel:"group2", transition:"fade"});
-                            //$(".group3").colorbox({rel:"group3", transition:"none", width:"75%", height:"75%"});
-                            //$(".group4").colorbox({rel:"group4", slideshow:true});
-                    });
-
-                ', 'inline');
+//        drupal_add_js('
+//            
+//                    jQuery(document).ready(function(){
+//                            //Examples of how to assign the ColorBox event to elements
+//                            jQuery(".group_' . $albumId .'").colorbox({transition:"fade", slideshow:true, slideshowAuto: false, rel:"group_' . $albumId . '", width:"95%", height:"95%"});
+//
+//                            //$(".group2").colorbox({rel:"group2", transition:"fade"});
+//                            //$(".group3").colorbox({rel:"group3", transition:"none", width:"75%", height:"75%"});
+//                            //$(".group4").colorbox({rel:"group4", slideshow:true});
+//                    });
+//
+//                ', 'inline');
         
         //$links_collection_for_colobox = '';
         $body_to_slideshow =  
