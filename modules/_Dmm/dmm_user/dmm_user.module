@@ -362,8 +362,10 @@ function dmm_user_validateForm_comment(&$form, &$form_state) {
  */
 function dmm_user_submitForm_comment(&$form, &$form_state) {
 
-  global $user;
-  dpm($form_state['values']);
+  //dpm($form_state['values']);
+  
+  
+  
   if (isset($_SESSION['dmm_user_loginza_logged_as'])) {
     //dpm($_SESSION['dmm_user_loginza_logged_as']);
     $dmm_logged_as = $_SESSION['dmm_user_loginza_logged_as'];
@@ -386,8 +388,10 @@ function dmm_user_submitForm_comment(&$form, &$form_state) {
   
   // Autoposting.
   if (isset($form_state['values']['autopostingOptions'])) {
-    
-      $connectedAccounts = dmm_social_getUserConnectedAccounts($form_state['values']['user_uid']);
+      
+      global $user;
+      
+      $connectedAccounts = dmm_social_getUserConnectedAccounts($user->uid);
 
       $autopostIsChanged = FALSE;
       foreach ($connectedAccounts as $account_key => $connectedAccount) {
@@ -409,12 +413,12 @@ function dmm_user_submitForm_comment(&$form, &$form_state) {
       }
 
       if ($autopostIsChanged) {
-        dmm_misc_fieldSave('social_credentials', $form_state['values']['user_uid'], serialize($connectedAccounts), 'user');
+        dmm_misc_fieldSave('social_credentials', $user->uid, serialize($connectedAccounts), 'user');
         drupal_set_message('Autoposting settings are changed!', 'warning');
       }
       
       if (!empty($accountsToAutoposting)) {
-        dmm_social_postToSocials($form_state['values']['comment_body']['und'][0]['value'], $form_state['values']['user_uid'], $connectedAccounts, $accountsToAutoposting);
+        dmm_social_postToSocials($form_state['values']['comment_body']['und'][0]['value'], $user->uid, $connectedAccounts, $accountsToAutoposting);
       }
 
   }
