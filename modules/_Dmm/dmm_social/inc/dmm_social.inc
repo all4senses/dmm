@@ -1938,8 +1938,6 @@ class SocialConnectMailRu extends SocialConnect
             $base_params = array_merge($base_params, $ext_params);
 
         ksort($base_params);
-        
-        dpm($base_params);
 
         $base_params_str = null;
         foreach($base_params as $key => $value)
@@ -1956,7 +1954,6 @@ class SocialConnectMailRu extends SocialConnect
         $full_params = $base_params_str . '&sig=' . $sig; //. '&ext_perm=widget'; 
         $url = $base_url . $full_params;
 
-        dpm($url);
         
         $result = $this->processCurl($url, 'string');
         if($result['ok'])
@@ -2034,13 +2031,11 @@ class SocialConnectMailRu extends SocialConnect
           'text' => 'textX',
           'title' => 'titleX',
           'user_text' => 'user_textX',
-          'link1_text' => 'link1_textX',
+          'link1_text' => 'default',
           'link1_href' => 'http://dommoejmechty.com.ua/articles/dekor-vashego-doma#comment-35',
-          //'link1_href' => 'http://dommoejmechty.com.ua/articles/dekor-vashego-doma#comment-35',
-          //'link2_text' => 'link2_textX',
-          //'link2_href' => urlencode('http://dommoejmechty.com.ua'),
-          //'link2_href' => 'http://dommoejmechty.com.ua',
-          //'img_url' => urlencode('http://dommoejmechty.com.ua/f/styles/comment_avatar/public/avatars/picture-1-1352439021.jpg'),
+          'link2_text' => 'link2_textX',
+          'link2_href' => 'http://dommoejmechty.com.ua',
+          'img_url' => 'http://dommoejmechty.com.ua/f/styles/comment_avatar/public/avatars/picture-1-1352439021.jpg',
         );
         
         if(!$result = $this->processRest('stream.post', $ext_params))
