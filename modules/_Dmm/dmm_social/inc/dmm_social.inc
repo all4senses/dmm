@@ -1887,15 +1887,15 @@ class SocialConnectVkontakte extends SocialConnect
               
         $ext_params = array(
         
-          //'message' => $options['message'],
-          'uids' => $this->existing_account['id'],
+          'message' => 'test', //$options['message'],
+          //'uids' => $this->existing_account['id'],
         
         );
         
         
         //if(!$result = $this->processRest('wall.post', array('owner_id' => $this->existing_account['id'])))
-        //if(!$result = $this->processRest('wall.post', $ext_params))
-        if(!$result = $this->processRest('users.get', $ext_params))
+        if(!$result = $this->processRest('wall.post', $ext_params))
+        //if(!$result = $this->processRest('users.get', $ext_params))
             return 'Error: reading vkontakte REST wall.post';
         
         
