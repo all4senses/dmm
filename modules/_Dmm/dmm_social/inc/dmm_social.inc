@@ -1798,9 +1798,6 @@ class SocialConnectVkontakte extends SocialConnect
         $full_params = $base_params_str . '&sig=' . $sig; //. '&ext_perm=widget'; 
         $url = $base_url . $full_params;
         
-        dpm($base_params);
-        dpm($url);
-        
         $result = $this->processCurl($url, 'string');
         
         if($result['ok'])
@@ -1823,8 +1820,7 @@ class SocialConnectVkontakte extends SocialConnect
 
         $result = $this->processCurl($token_url, 'string', null, 'POST', $token_url_params);
         
-        //dpr($result);
-        
+
         if(!$result['ok'])
         {
             drupal_add_js('alert("Authentication error. Try again."); window.location.href = "' . $this->redirect_url . ($get['type']?'?type=' . $get['type']:'') .'"', 'inline');
@@ -1833,8 +1829,6 @@ class SocialConnectVkontakte extends SocialConnect
 
         $result = json_decode($result['result']);
 
-        //dpr($result);
-        //die;
         
         $this->access_token = $result->access_token;
         $this->existing_account['access_token'] = $result->access_token;
@@ -1865,41 +1859,27 @@ class SocialConnectVkontakte extends SocialConnect
     public function postMessageToWall($message, $options)
     {
         // http://vk.com/developers.php?oid=-1&p=wall.post
-      
-        /*
-        $ext_params = array(
-          //'uids' => $this->existing_account['id'], // for users.getInfo
-          'user_text' => $options['title'],
-          'text' => $options['message'],
-          'title' => $options['page_title'],
-          'link1_text' => 'default',
-          'link1_href' => $options['link_page'],
-          'link2_text' => $options['text_reply'],
-          'link2_href' => $options['link_reply'],
-        );
         
-        if (isset($options['picture'])) {
-          $ext_params['img_url'] = $options['picture'];
-        }
-        */
-        
+        // wall.post doesnt work for sites! :(
       
-              
+        return;
+        
+        
+        
+        
+        
+        
         $ext_params = array(
         
-          'message' => 'test', //$options['message'],
-          //'uids' => $this->existing_account['id'],
+          'message' => $options['message'],
         
         );
         
         
-        //if(!$result = $this->processRest('wall.post', array('owner_id' => $this->existing_account['id'])))
         if(!$result = $this->processRest('wall.post', $ext_params))
-        //if(!$result = $this->processRest('users.get', $ext_params))
             return 'Error: reading vkontakte REST wall.post';
         
         
-        dpm($result);
     }
     
     
@@ -1961,6 +1941,10 @@ class SocialConnectVkontakte extends SocialConnect
 
 
 } // end of cclass SocialConnectVkontakte extends SocialConnect
+
+
+
+
 
 
 
@@ -2113,7 +2097,7 @@ class SocialConnectMailRu extends SocialConnect
         if(!$result = $this->processRest('stream.post', $ext_params))
             return 'Error: reading mail.ru REST stream.post';
         
-        dpm($result);
+        //dpm($result);
     }
     
     
