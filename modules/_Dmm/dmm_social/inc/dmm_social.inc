@@ -58,7 +58,7 @@ function dmm_social_socialPageForm($arg1, $arg2)
     
                 
     $connected_accounts = (isset($user_url->field_social_credentials['und'][0]['value']) ? unserialize($user_url->field_social_credentials['und'][0]['value']) : null);
-    dpm($connected_accounts);
+    //dpm($connected_accounts);
     
     $socialInit = new SocialInit($user_url->uid, $connected_accounts, array('disable_same_service_accounts' => false));
   
