@@ -235,7 +235,7 @@ class SocialInit{
                         'title' => 'Vkontakte.ru',
                         'client_id' => 2706510, // 2421528,
                         'client_secret' => 'uZ69MqrM3Pm3dLkEWDM9', // 'Uyp3IwG9EsDfNgRhUgyF',
-                        'autoposting' => TRUE, // We have a functionality for autoposting for this social provider.
+                        //'autoposting' => TRUE, // We have NO a functionality for autoposting for this social provider.
                        ),
         'mail.ru' => array(
                         // alexxhome@mail.ru

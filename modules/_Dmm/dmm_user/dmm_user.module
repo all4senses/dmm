@@ -214,9 +214,16 @@ function dmm_user_preprocess_comment(&$variables) {
  */
 function dmm_user_form_alter(&$form, &$form_state, $form_id) {
   
-  dpm($form_id); dpm($form);
+  //dpm($form_id); dpm($form);
   
   switch($form['#id']) {
+    
+    case 'user_profile_form':
+      
+      $form['field_social_loginza']['#success'] = FALSE;
+      $form['field_social_credentials']['#success'] = FALSE;
+      
+      break;
     
     case 'comment-form':
       
