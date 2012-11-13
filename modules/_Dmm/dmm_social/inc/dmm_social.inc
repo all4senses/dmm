@@ -1789,9 +1789,9 @@ class SocialConnectVkontakte extends SocialConnect
         foreach($base_params as $key => $value)
         {
             if(!$base_params_str)
-                $base_params_str .= '?' . $key . '=' . $value;
+                $base_params_str .= '?' . $key . '=' . urlencode($value);
             else
-                $base_params_str .= '&' . $key . '=' . $value;
+                $base_params_str .= '&' . $key . '=' . urlencode($value);
         }
 
         $sig = $this->getRestSignature($base_params, $this->siteCreds['client_secret']);
