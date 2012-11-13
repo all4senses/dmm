@@ -1457,10 +1457,13 @@ class SocialConnect{
         drupal_add_js('sites/all/libraries/jquery.plugins/adgallery/jquery.adgallery.js');
         
         drupal_add_js(array('dmm_image' => array('group_' . $albumId => 1)), 'setting');
+        dmm_image_addSlideShowJs();
+        /*
         $path_to_module = drupal_get_path('module', 'dmm_image');
         drupal_add_js($path_to_module . '/js/dmm_add_Colorbox_ToAlbums.js');
         drupal_add_js($path_to_module . '/js/dmm_add_GalleryAd_ToAlbums.js');
         drupal_add_css($path_to_module . '/css/dmm_add_GalleryAd_ToAlbums.css', array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
+        */
         
         //1, 3, 4, 
         drupal_add_css("sites/all/libraries/jquery.plugins/Colorbox/css4/colorbox.css", array('preprocess' => FALSE)); // array('group' => CSS_THEME, 'preprocess' => FALSE)
@@ -1762,6 +1765,8 @@ class SocialConnectVkontakte extends SocialConnect
     
     public function processRest($function, $ext_params = null)
     {
+        // http://vk.com/developers.php?oid=-1&p=%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5_%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2_API
+      
         $base_url = 'http://api.vkontakte.ru/api.php';
 
         $base_params = array(
@@ -1850,6 +1855,43 @@ class SocialConnectVkontakte extends SocialConnect
         $this->saveAccount();
         
     } // end of public function connectAccount($get)
+    
+    
+    
+    public function postMessageToWall($message, $options)
+    {
+        // http://vk.com/developers.php?oid=-1&p=wall.post
+      
+        /*
+        $ext_params = array(
+          //'uids' => $this->existing_account['id'], // for users.getInfo
+          'user_text' => $options['title'],
+          'text' => $options['message'],
+          'title' => $options['page_title'],
+          'link1_text' => 'default',
+          'link1_href' => $options['link_page'],
+          'link2_text' => $options['text_reply'],
+          'link2_href' => $options['link_reply'],
+        );
+        
+        if (isset($options['picture'])) {
+          $ext_params['img_url'] = $options['picture'];
+        }
+        */
+        
+        $ext_params = array(
+        
+          'message' => $options['message'],
+        
+        );
+        
+        
+        if(!$albums_object = $this->processRest('wall.post', array('owner_id' => $this->existing_account['id'])))
+            return 'Error: reading vkontakte REST wall.post';
+        
+        
+        dpm($result);
+    }
     
     
     protected function getUserAlbums_fromRemote($aid = null)
