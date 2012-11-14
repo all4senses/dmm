@@ -299,26 +299,34 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
 
             }
           }
-
-          $form['autopostingOptions'] = array(
-            '#type' => 'checkboxes',
-            '#options' => $autopostingComments,
-            '#default_value' => $autopostingCommentsChecked,
-            '#title' => t('Comments autoposting to:'),
-            '#weight' => 10,
-          );
-          $form['connectAccountsLink'] = array(
-            '#markup' => '<div class="link">' . l('Connect your other social accounts for comments autoposting', 'user/' . $user->uid . '/social', array('attributes' => array('target' => '_blank'))) . '</div>',
-            '#weight' => 11,
-          );
-          $form['user_uid'] = array(
-            '#type' => 'hidden',
-            '#value' => $user->uid,
-          );
-          $form['node_title'] = array(
-            '#type' => 'hidden',
-            '#value' => $form['#node']->title . ' | Дом Моей Мечты',
-          );
+          
+          if (!empty($autopostingComments)) {
+            $form['autopostingOptions'] = array(
+              '#type' => 'checkboxes',
+              '#options' => $autopostingComments,
+              '#default_value' => $autopostingCommentsChecked,
+              '#title' => t('Comments autoposting to:'),
+              '#weight' => 10,
+            );
+            $form['connectAccountsLink'] = array(
+              '#markup' => '<div class="link">' . l('Connect your other social accounts for comments autoposting', 'user/' . $user->uid . '/social', array('attributes' => array('target' => '_blank'))) . '</div>',
+              '#weight' => 11,
+            );
+            $form['user_uid'] = array(
+              '#type' => 'hidden',
+              '#value' => $user->uid,
+            );
+            $form['node_title'] = array(
+              '#type' => 'hidden',
+              '#value' => $form['#node']->title . ' | Дом Моей Мечты',
+            );
+          }
+          else {
+            $form['connectAccountsLink'] = array(
+              '#markup' => '<div class="link">' . l('Connect your social accounts for comments autoposting', 'user/' . $user->uid . '/social', array('attributes' => array('target' => '_blank'))) . '</div>',
+              '#weight' => 11,
+            );
+          }
         }
         else {
           $form['connectAccountsLink'] = array(
