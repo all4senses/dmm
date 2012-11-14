@@ -615,3 +615,7 @@ div.ctools-modal-content .modal-content {overflow: hidden;}
 
 .user-header{position: absolute; top: 55px; right: 10px; color: white;}
 .user-header .user-profile{margin-right: 15px;}
+
+/* Iframes */
+body.page-get-iframe{background: none;}
+.page-get-iframe #all-content, .page-get-iframe #highlighted{background: none; box-shadow: none;}
