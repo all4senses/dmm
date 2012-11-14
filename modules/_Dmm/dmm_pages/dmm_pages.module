@@ -8,14 +8,32 @@ function dmm_pages_menu() {
   $items = array();
   
   $items['home'] = array( 
-      //'title' => t('Home'),
-      'page callback' => 'dmm_pages_getHomePage',
-      //'page arguments' => array(1, 'blog_post', 'blog post', 'blog posts'),
-      'access arguments' => array('access content'),
-      'type' => MENU_CALLBACK,
-    );
+    //'title' => t('Home'),
+    'page callback' => 'dmm_pages_getHomePage',
+    //'page arguments' => array(1, 'blog_post', 'blog post', 'blog posts'),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
 
+  $items['get/iframe/ok'] = array(
+    'title' => 'Page for OK',
+    'page callback' => 'dmm_page_getIframe_OK',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+    
   return $items;
+}
+
+
+
+/**
+ * Returns page for an iframe in OK.
+ */
+function dmm_page_getIframe_OK() {
+  
+  $out = '.';
+  return $out;
 }
 
 
