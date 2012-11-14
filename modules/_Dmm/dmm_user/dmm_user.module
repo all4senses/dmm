@@ -323,7 +323,7 @@ function dmm_user_form_alter(&$form, &$form_state, $form_id) {
           }
           else {
             $form['connectAccountsLink'] = array(
-              '#markup' => '<div class="link">' . l('Connect your social accounts for comments autoposting', 'user/' . $user->uid . '/social', array('attributes' => array('target' => '_blank'))) . '</div>',
+              '#markup' => '<div class="link">' . l('Connect your other social accounts for comments autoposting', 'user/' . $user->uid . '/social', array('attributes' => array('target' => '_blank'))) . '</div>',
               '#weight' => 11,
             );
           }
