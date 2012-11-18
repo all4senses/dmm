@@ -795,7 +795,6 @@ class SocialConnect{
 
     protected function getServiceId()
     {
-        $services_ids = variable_del('dmm_services_ids');
         $services_ids = variable_get('dmm_services_ids', array('facebook'=>1, 'google'=>2, 'picasa'=>3, 'mail.ru'=>4, 'vkontakte.ru'=>5, 'odnoklassniki.ru'=>6));
         return $services_ids[$this->service];
     }
@@ -2047,7 +2046,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
         $token_url_params = 
             'client_id=' . $this->siteCreds['client_id'] . 
             '&client_secret=' . $this->siteCreds['client_secret'] . 
-            '&redirect_uri=' . $this->currentUrl . 
+            '&redirect_uri=' .$this->redirect_url . 
             '&grant_type=authorization_code' . 
             '&code=' . $get['code']; 
 
