@@ -1110,7 +1110,7 @@ class SocialConnect{
             if($error_message = $this->getUserAlbums_fromRemote($aid))
                 return $error_message;
             
-            $this->saveUserAlbums_toDB($aid);
+            //$this->saveUserAlbums_toDB($aid);
         }
     }
     
@@ -2082,8 +2082,6 @@ class SocialConnectOdnoklassniki extends SocialConnect
 
         $result = json_decode($result['result']);
 
-        //dpm($result);
-        
         $this->access_token = $result->access_token;
         $this->existing_account['access_token'] = $result->access_token;
         $this->existing_account['refresh_token'] = $result->refresh_token;
@@ -2092,15 +2090,12 @@ class SocialConnectOdnoklassniki extends SocialConnect
         
         
         $this->existing_account['data'] = $result;
-        unset($result->access_token);
+        //unset($result->access_token);
         
-        //$this->existing_account['id'] = $result->user_id;
+        // http://dev.odnoklassniki.ru/wiki/display/ok/REST+API+-+users.getCurrentUser+ru
         
-        //if($user_object = $this->processRest('getProfiles', array('uids' => $this->existing_account['id'], 'fields' => 'nickname,screen_name,sex,birthdate,city,country,timezone,photo,photo_medium,photo_big,has_mobile,rate,contacts,education,online,counters'))) //'nickname, screen_name, sex, birthdate, city, country, timezone, photo, photo_medium, photo_big, has_mobile, rate, contacts, education, online, counters'
         if($user_object = $this->processRest('users.getCurrentUser'))
         {
-            dpm($user_object);
-            
             if (!is_object($user_object)) {
               return NULL;
             }
@@ -2135,9 +2130,11 @@ class SocialConnectOdnoklassniki extends SocialConnect
     
     protected function getUserAlbums_fromRemote($aid = null)
     {
-//        if(!$albums_object = $this->processRest('photos.getAlbums', array('uid' => $this->existing_account['id'])))
-//            return 'Error: reading vkontakte REST photos.getAlbums';
+        if(!$albums_object = $this->processRest('photos.getAlbums', array('uid' => $this->existing_account['id'])))
+            return 'Error: reading vkontakte REST photos.getAlbums';
                 
+        dpm($albums_object);
+        
         foreach ($albums_object as $key1 => $albumEntry) 
         {
 
