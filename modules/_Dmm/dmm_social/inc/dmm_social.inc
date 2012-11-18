@@ -1988,8 +1988,6 @@ class SocialConnectOdnoklassniki extends SocialConnect
     {
       
         $base_url = 'http://api.odnoklassniki.ru/fb.do';
-
-        dpm($this);
        
         $base_params = array(
             //'application_key' => $this->siteCreds['client_id'], //'api_id' => $this->siteCreds['client_id'],
@@ -2022,15 +2020,14 @@ class SocialConnectOdnoklassniki extends SocialConnect
         $full_params = $base_params_str . '&sig=' . $sig . '&access_token=' . @$this->existing_account['access_token']; //. '&ext_perm=widget'; 
         $url = $base_url . $full_params;
         
-        dpm($url);
-        
         $result = $this->processCurl($url, 'string');
-        
-        dpm($result);
         
         if($result['ok'])
         {
             $result = json_decode($result['result']);
+            
+            dpm($result);
+            
             if(!isset($result->error))
                 return $result->response;
             else
