@@ -795,7 +795,8 @@ class SocialConnect{
 
     protected function getServiceId()
     {
-        $services_ids = variable_get('dmm_services_ids', array('facebook'=>1, 'google'=>2, 'picasa'=>3, 'mail.ru'=>4, 'vkontakte.ru'=>5));
+        $services_ids = variable_del('dmm_services_ids');
+        $services_ids = variable_get('dmm_services_ids', array('facebook'=>1, 'google'=>2, 'picasa'=>3, 'mail.ru'=>4, 'vkontakte.ru'=>5, 'odnoklassniki.ru'=>6));
         return $services_ids[$this->service];
     }
     
