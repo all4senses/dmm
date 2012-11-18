@@ -938,7 +938,8 @@ class SocialConnect{
             $this->insertAccountToDB($this->connectedAccounts);
         }
 
-        if($reload_page_and_show_message)
+        if(0)
+        //if($reload_page_and_show_message)
             drupal_add_js('alert("Your rights for the ' . ucfirst($this->service) . ' account ~' . ($this->existing_account['nick']?$this->existing_account['nick']:$this->existing_account['id']) . '~ have been approved and ' . ($account_index?'reconnected again':'connected') . ' to our site.");' 
                         . ' window.location.href = "' . $this->redirect_url . '"'
                         , 'inline');
@@ -2019,6 +2020,8 @@ class SocialConnectOdnoklassniki extends SocialConnect
         
         $result = $this->processCurl($url, 'string');
         
+        dpm($result);
+        
         if($result['ok'])
         {
             $result = json_decode($result['result']);
@@ -2071,7 +2074,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
         unset($result->access_token);
         
         $this->existing_account['data'] = $result;
-        $this->existing_account['id'] = $result->user_id;
+        //$this->existing_account['id'] = $result->user_id;
         
         //if($user_object = $this->processRest('getProfiles', array('uids' => $this->existing_account['id'], 'fields' => 'nickname,screen_name,sex,birthdate,city,country,timezone,photo,photo_medium,photo_big,has_mobile,rate,contacts,education,online,counters'))) //'nickname, screen_name, sex, birthdate, city, country, timezone, photo, photo_medium, photo_big, has_mobile, rate, contacts, education, online, counters'
         if($user_object = $this->processRest('users.getCurrentUser'))
