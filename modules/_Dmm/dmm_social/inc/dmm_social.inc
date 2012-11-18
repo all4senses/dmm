@@ -2097,7 +2097,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
         {
             dpm($user_object);
             
-            return;
+            return; 
             
             $this->existing_account['id'] = $user_object->uid;
             
