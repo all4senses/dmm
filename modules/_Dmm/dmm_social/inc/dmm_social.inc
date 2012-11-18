@@ -2082,7 +2082,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
 
         $result = json_decode($result['result']);
 
-        dpm($result);
+        //dpm($result);
         
         $this->access_token = $result->access_token;
         $this->existing_account['access_token'] = $result->access_token;
@@ -2097,23 +2097,27 @@ class SocialConnectOdnoklassniki extends SocialConnect
         //$this->existing_account['id'] = $result->user_id;
         
         //if($user_object = $this->processRest('getProfiles', array('uids' => $this->existing_account['id'], 'fields' => 'nickname,screen_name,sex,birthdate,city,country,timezone,photo,photo_medium,photo_big,has_mobile,rate,contacts,education,online,counters'))) //'nickname, screen_name, sex, birthdate, city, country, timezone, photo, photo_medium, photo_big, has_mobile, rate, contacts, education, online, counters'
-        if($user_object = $this->processRest('users.getCurrentUser') && is_object($user_object))
+        if($user_object = $this->processRest('users.getCurrentUser'))
         {
             dpm($user_object);
             
-            return; 
+            if (!is_object($user_object)) {
+              return NULL;
+            }
             
             $this->existing_account['id'] = $user_object->uid;
             
             $this->existing_account['data']->user = $user_object;
             
-            if($user_object[0]->user->nickname)
-                $this->existing_account['nick'] = $user_object[0]->user->nickname;
+            if($user_object->name)
+                $this->existing_account['nick'] = $user_object->name;
             else
-                $this->existing_account['nick'] = $user_object[0]->user->first_name . ' ' . $user_object[0]->user->last_name;
+                $this->existing_account['nick'] = $user_object->first_name . ' ' . $user_object->last_name;
         }
-        else
-            $this->existing_account['nick'] = null;
+        else {
+          drupal_add_js('alert("Authentication error while getting a user info. Try again."); window.location.href = "' . $this->redirect_url . ($get['type']?'?type=' . $get['type']:'') .'"', 'inline');
+          return;
+        }
         
         // add creds to the db
         $this->saveAccount();
