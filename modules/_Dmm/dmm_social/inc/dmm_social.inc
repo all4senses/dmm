@@ -1991,8 +1991,8 @@ class SocialConnectOdnoklassniki extends SocialConnect
 
        
         $base_params = array(
-            //'application_key' => $this->siteCreds['client_id'], //'api_id' => $this->siteCreds['client_id'],
-            'application_key' => $this->siteCreds['client_secret'], //'api_id' => $this->siteCreds['client_id'],
+            'application_key' => $this->siteCreds['client_id'], //'api_id' => $this->siteCreds['client_id'],
+            //'application_key' => $this->siteCreds['client_secret'], //'api_id' => $this->siteCreds['client_id'],
             'method' => $function,
             //'session_key' => $this->existing_account->auth_key,
             'session_key' => @$this->existing_account['access_token'],
@@ -2016,7 +2016,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
                 $base_params_str .= '&' . $key . '=' . urlencode($value);
         }
 
-        $sig = $this->getRestSignature($base_params, $this->siteCreds['client_secret']);
+        $sig = $this->getRestSignature($base_params);
         $full_params = $base_params_str . '&sig=' . $sig; //. '&ext_perm=widget'; 
         $url = $base_url . $full_params;
         
