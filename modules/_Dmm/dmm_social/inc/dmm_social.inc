@@ -2022,9 +2022,13 @@ class SocialConnectOdnoklassniki extends SocialConnect
         
         $result = $this->processCurl($url, 'string');
         
+        dpm($result);
+        
         if($result['ok'])
         {
             $result = json_decode($result['result']);
+            
+            dpm($result);
             
             if(isset($result->error_code))
                 return $result->error_msg;
