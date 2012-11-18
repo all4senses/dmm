@@ -1964,7 +1964,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
 {
     function __construct($user_uid, $connectedAccounts, $redirect_url, $service = null, $account = null) 
     { 
-        parent::__construct($user_uid, $connectedAccounts, $redirect_url, 'vkontakte.ru', $account);
+        parent::__construct($user_uid, $connectedAccounts, $redirect_url, 'odnoklassniki.ru', $account);
     }
     
     
