@@ -2093,7 +2093,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
         //$this->existing_account['id'] = $result->user_id;
         
         //if($user_object = $this->processRest('getProfiles', array('uids' => $this->existing_account['id'], 'fields' => 'nickname,screen_name,sex,birthdate,city,country,timezone,photo,photo_medium,photo_big,has_mobile,rate,contacts,education,online,counters'))) //'nickname, screen_name, sex, birthdate, city, country, timezone, photo, photo_medium, photo_big, has_mobile, rate, contacts, education, online, counters'
-        if($user_object = $this->processRest('users.getCurrentUserrrr') && is_object($user_object))
+        if($user_object = $this->processRest('users.getCurrentUser') && is_object($user_object))
         {
             dpm($user_object);
             
