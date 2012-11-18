@@ -1989,8 +1989,10 @@ class SocialConnectOdnoklassniki extends SocialConnect
       
         $base_url = 'http://api.odnoklassniki.ru/fb.do';
 
+       
         $base_params = array(
-            'application_key' => $this->siteCreds['client_id'], //'api_id' => $this->siteCreds['client_id'],
+            //'application_key' => $this->siteCreds['client_id'], //'api_id' => $this->siteCreds['client_id'],
+            'application_key' => $this->siteCreds['client_secret'], //'api_id' => $this->siteCreds['client_id'],
             'method' => $function,
             //'session_key' => $this->existing_account->auth_key,
             'session_key' => @$this->existing_account['access_token'],
@@ -2071,9 +2073,11 @@ class SocialConnectOdnoklassniki extends SocialConnect
         $this->existing_account['refresh_token'] = $result->refresh_token;
         $this->existing_account['token_type'] = $result->token_type;
         $this->existing_account['token_date'] = time();
-        unset($result->access_token);
+        
         
         $this->existing_account['data'] = $result;
+        unset($result->access_token);
+        
         //$this->existing_account['id'] = $result->user_id;
         
         //if($user_object = $this->processRest('getProfiles', array('uids' => $this->existing_account['id'], 'fields' => 'nickname,screen_name,sex,birthdate,city,country,timezone,photo,photo_medium,photo_big,has_mobile,rate,contacts,education,online,counters'))) //'nickname, screen_name, sex, birthdate, city, country, timezone, photo, photo_medium, photo_big, has_mobile, rate, contacts, education, online, counters'
