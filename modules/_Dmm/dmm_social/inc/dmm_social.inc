@@ -245,6 +245,14 @@ class SocialInit{
                         'client_private' => 'fdebb1370a19d2f5e7df41ba4495c8b9',
                         'autoposting' => TRUE, // We have a functionality for autoposting for this social provider.
                        ),
+        'odnoklassniki.ru' => array(
+                        // myha
+                        'title' => 'Odnoklassniki.ru',
+                        'client_id' => 94151424, //Application ID
+                        'client_secret' => 'B462E1D141C881DA30A60377', //Секретный ключ приложения
+                        'client_private' => 'CBAEKNJGABABABABA', //Публичный ключ приложения
+                        'autoposting' => FALSE, // We have no a functionality for autoposting for this social provider.
+                       ),
         );
     
     
@@ -630,6 +638,9 @@ class SocialInit{
             case 'mail.ru':
                 $oauthLink = SocialConnectMailRu::getOauthLink(SocialInit::$connect_to[$service], $redirect_url);
                 break;
+            case 'odnoklassniki.ru':
+                $oauthLink = SocialConnectOdnoklassniki::getOauthLink(SocialInit::$connect_to[$service], $redirect_url);
+                break;
         }
         
         return $oauthLink;
@@ -658,6 +669,9 @@ class SocialInit{
                 break;
             case 'vkontakte.ru':
                 $accountObject = new SocialConnectVkontakte($user_uid, $connectedAccounts, $redirect_url, $service, $account);
+                break;
+            case 'odnoklassniki.ru':
+                $accountObject = new SocialConnectOdnoklassniki($user_uid, $connectedAccounts, $redirect_url, $service, $account);
                 break;
             default:
                 $accountObject = null;
@@ -1943,6 +1957,168 @@ class SocialConnectVkontakte extends SocialConnect
 } // end of cclass SocialConnectVkontakte extends SocialConnect
 
 
+
+
+
+class SocialConnectOdnoklassniki extends SocialConnect
+{
+    function __construct($user_uid, $connectedAccounts, $redirect_url, $service = null, $account = null) 
+    { 
+        parent::__construct($user_uid, $connectedAccounts, $redirect_url, 'vkontakte.ru', $account);
+    }
+    
+    
+    // pass arguments here, not using $this->... to have possibility to use just a function without an object, like SocialConnectOdnoklassniki::getOauthLink(...)
+    public function getOauthLink($siteCreds, $redirect_url)
+    {
+        //http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=12878032
+          
+        //http://www.odnoklassniki.ru/oauth/authorize?client_id={clientId}&scope={scope}&response_type={responseType}&redirect_uri={redirectUri}
+      
+        return 'http://www.odnoklassniki.ru/oauth/authorize'
+               . '?client_id=' . $siteCreds['client_id']
+               . '&scope=VALUABLE ACCESS;SET STATUS;PHOTO CONTENT;MESSAGING'
+               . '&response_type=code'
+               . '&redirect_uri=' . $redirect_url;
+    }
+    
+    
+    public function processRest($function, $ext_params = null)
+    {
+      
+        $base_url = 'http://api.odnoklassniki.ru/fb.do';
+
+        $base_params = array(
+            'application_key' => $this->siteCreds['client_id'], //'api_id' => $this->siteCreds['client_id'],
+            'method' => $function,
+            //'session_key' => $this->existing_account->auth_key,
+            'session_key' => @$this->existing_account['access_token'],
+            'format' => 'json',
+            'timestamp' => time(),
+            'random' => time()/2,
+            );
+
+        if($ext_params)
+            $base_params = array_merge($base_params, $ext_params);
+
+        ksort($base_params);
+        
+        $base_params_str = null;
+        
+        foreach($base_params as $key => $value)
+        {
+            if(!$base_params_str)
+                $base_params_str .= '?' . $key . '=' . urlencode($value);
+            else
+                $base_params_str .= '&' . $key . '=' . urlencode($value);
+        }
+
+        $sig = $this->getRestSignature($base_params, $this->siteCreds['client_secret']);
+        $full_params = $base_params_str . '&sig=' . $sig; //. '&ext_perm=widget'; 
+        $url = $base_url . $full_params;
+        
+        $result = $this->processCurl($url, 'string');
+        
+        if($result['ok'])
+        {
+            $result = json_decode($result['result']);
+            if(!isset($result->error))
+                return $result->response;
+            else
+                return $result;
+        }
+
+        return null;
+    }
+    
+    
+    public function connectAccount($get)
+    {
+      
+//      code - authorization code, received with user return the url
+//      redirect_uri - same redirect uri you provided in the first call
+//      grant_type - authorization_code supported only at this moment
+//      client_id - application ID
+//      client_secret - application secret key
+              
+              
+        $token_url = 'http://api.odnoklassniki.ru/oauth/token.do?';
+        $token_url_params = 
+            'client_id=' . $this->siteCreds['client_id'] . 
+            '&client_secret=' . $this->siteCreds['client_secret'] . 
+            '&redirect_uri=' . $this->currentUrl . 
+            '&grant_type=authorization_code' . 
+            '&code=' . $get['code']; 
+
+        $result = $this->processCurl($token_url, 'string', null, 'POST', $token_url_params);
+        
+
+        if(!$result['ok'])
+        {
+            drupal_add_js('alert("Authentication error. Try again."); window.location.href = "' . $this->redirect_url . ($get['type']?'?type=' . $get['type']:'') .'"', 'inline');
+            return;
+        }
+
+        $result = json_decode($result['result']);
+
+        dpm($result);
+        
+        $this->access_token = $result->access_token;
+        $this->existing_account['access_token'] = $result->access_token;
+        $this->existing_account['refresh_token'] = $result->refresh_token;
+        $this->existing_account['token_type'] = $result->token_type;
+        $this->existing_account['token_date'] = time();
+        unset($result->access_token);
+        
+        $this->existing_account['data'] = $result;
+        $this->existing_account['id'] = $result->user_id;
+        
+        //if($user_object = $this->processRest('getProfiles', array('uids' => $this->existing_account['id'], 'fields' => 'nickname,screen_name,sex,birthdate,city,country,timezone,photo,photo_medium,photo_big,has_mobile,rate,contacts,education,online,counters'))) //'nickname, screen_name, sex, birthdate, city, country, timezone, photo, photo_medium, photo_big, has_mobile, rate, contacts, education, online, counters'
+        if($user_object = $this->processRest('users.getCurrentUser'))
+        {
+            dpm($user_object);
+            
+            $this->existing_account['id'] = $user_object[0]->uid;
+            
+            $this->existing_account['data']->user = $user_object[0]->user;
+            
+            if($user_object[0]->user->nickname)
+                $this->existing_account['nick'] = $user_object[0]->user->nickname;
+            else
+                $this->existing_account['nick'] = $user_object[0]->user->first_name . ' ' . $user_object[0]->user->last_name;
+        }
+        else
+            $this->existing_account['nick'] = null;
+        
+        // add creds to the db
+        $this->saveAccount();
+        
+    } // end of public function connectAccount($get)
+    
+    
+    
+    public function postMessageToWall($message, $options)
+    {
+        
+        
+    }
+    
+    
+    protected function getUserAlbums_fromRemote($aid = null)
+    {
+//        if(!$albums_object = $this->processRest('photos.getAlbums', array('uid' => $this->existing_account['id'])))
+//            return 'Error: reading vkontakte REST photos.getAlbums';
+                
+        foreach ($albums_object as $key1 => $albumEntry) 
+        {
+
+        } // end of foreach ($albums_object as $key1 => $albumEntry) 
+        
+        return null; // success
+    }
+
+
+} // end of cclass SocialConnectOdnoklassniki extends SocialConnect
 
 
 
