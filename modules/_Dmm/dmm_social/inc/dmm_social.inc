@@ -1997,8 +1997,8 @@ class SocialConnectOdnoklassniki extends SocialConnect
             //'session_key' => $this->existing_account->auth_key,
             'session_key' => @$this->existing_account['access_token'],
             'format' => 'json',
-            'timestamp' => time(),
-            'random' => time()/2,
+            //'timestamp' => time(),
+            //'random' => time()/2,
             );
 
         if($ext_params)
@@ -2020,6 +2020,8 @@ class SocialConnectOdnoklassniki extends SocialConnect
         $full_params = $base_params_str . '&sig=' . $sig; //. '&ext_perm=widget'; 
         $url = $base_url . $full_params;
         
+        dpm($url);
+        
         $result = $this->processCurl($url, 'string');
         
         dpm($result);
@@ -2035,6 +2037,19 @@ class SocialConnectOdnoklassniki extends SocialConnect
 
         return null;
     }
+    
+    
+    
+    
+    protected function getRestSignature($request_params) 
+    {
+        $params = '';
+        foreach ($request_params as $key => $value)
+            $params .= "$key=$value";
+        return md5($params . md5($this->existing_account['access_token'] . $this->siteCreds['client_secret']) );
+    }
+    
+    
     
     
     public function connectAccount($get)
