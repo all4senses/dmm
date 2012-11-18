@@ -1989,13 +1989,15 @@ class SocialConnectOdnoklassniki extends SocialConnect
       
         $base_url = 'http://api.odnoklassniki.ru/fb.do';
 
+        dpm($this);
        
         $base_params = array(
-            'application_key' => $this->siteCreds['client_id'], //'api_id' => $this->siteCreds['client_id'],
-            //'application_key' => $this->siteCreds['client_secret'], //'api_id' => $this->siteCreds['client_id'],
+            //'application_key' => $this->siteCreds['client_id'], //'api_id' => $this->siteCreds['client_id'],
+            'application_key' => $this->siteCreds['client_private'], //'api_id' => $this->siteCreds['client_id'],
+            'client_id' => $this->siteCreds['client_id'], //'api_id' => $this->siteCreds['client_id'],
             'method' => $function,
             //'session_key' => $this->existing_account->auth_key,
-            'session_key' => @$this->existing_account['access_token'],
+            //'session_key' => @$this->existing_account['access_token'],
             'format' => 'json',
             //'timestamp' => time(),
             //'random' => time()/2,
@@ -2017,7 +2019,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
         }
 
         $sig = $this->getRestSignature($base_params);
-        $full_params = $base_params_str . '&sig=' . $sig; //. '&ext_perm=widget'; 
+        $full_params = $base_params_str . '&sig=' . $sig . '&access_token=' . @$this->existing_account['access_token']; //. '&ext_perm=widget'; 
         $url = $base_url . $full_params;
         
         dpm($url);
