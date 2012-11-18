@@ -2022,17 +2022,13 @@ class SocialConnectOdnoklassniki extends SocialConnect
         
         $result = $this->processCurl($url, 'string');
         
-        dpm($result);
-        
         if($result['ok'])
         {
             $result = json_decode($result['result']);
             
-//            dpm($result);
-//            
-//            if(!isset($result->error))
-//                return $result->response;
-//            else
+            if(isset($result->error_code))
+                return $result->error_msg;
+            else
                 return $result;
         }
 
@@ -2097,15 +2093,15 @@ class SocialConnectOdnoklassniki extends SocialConnect
         //$this->existing_account['id'] = $result->user_id;
         
         //if($user_object = $this->processRest('getProfiles', array('uids' => $this->existing_account['id'], 'fields' => 'nickname,screen_name,sex,birthdate,city,country,timezone,photo,photo_medium,photo_big,has_mobile,rate,contacts,education,online,counters'))) //'nickname, screen_name, sex, birthdate, city, country, timezone, photo, photo_medium, photo_big, has_mobile, rate, contacts, education, online, counters'
-        if($user_object = $this->processRest('users.getCurrentUserrrr'))
+        if($user_object = $this->processRest('users.getCurrentUserrrr') && is_object($user_object))
         {
-            return;
-            
             dpm($user_object);
             
-            $this->existing_account['id'] = $user_object[0]->uid;
+            return;
             
-            $this->existing_account['data']->user = $user_object[0]->user;
+            $this->existing_account['id'] = $user_object->uid;
+            
+            $this->existing_account['data']->user = $user_object;
             
             if($user_object[0]->user->nickname)
                 $this->existing_account['nick'] = $user_object[0]->user->nickname;
