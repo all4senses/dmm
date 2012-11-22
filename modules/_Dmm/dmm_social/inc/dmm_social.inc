@@ -2163,8 +2163,8 @@ class SocialConnectOdnoklassniki extends SocialConnect
                     
                     $this->albums[$aid]['photos'][$pid]['data'] = $this->dpr($photoEntry);
                             
-                    $this->albums[$aid]['photos'][$pid]['th'][0]['url'] = $photoEntry->standard_url;
-                    $this->albums[$aid]['photos'][$pid]['th'][0]['img_src'] = $photoEntry->preview_url;
+                    $this->albums[$aid]['photos'][$pid]['th'][0]['url'] = $photoEntry->preview_url;
+                    $this->albums[$aid]['photos'][$pid]['th'][0]['img_src'] = $photoEntry->standard_url;
                 }
 
             }
