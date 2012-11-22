@@ -1989,13 +1989,13 @@ class SocialConnectOdnoklassniki extends SocialConnect
     
     public function processRest($function, $ext_params = null, $refreshToken = TRUE)
     {
-        dpm($this);
+        //dpm($this);
       
         if ($refreshToken) {
           $this->refreshToken();
         }
         
-        dpm($this);
+        //dpm($this);
         
         $base_url = 'http://api.odnoklassniki.ru/fb.do';
        
@@ -2151,7 +2151,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
 
         $result = $this->processCurl($token_url, 'string', null, 'POST', $token_url_params);
         
-        dpm($result);
+        //dpm($result);
 
         if(!$result['ok'])
         {
@@ -2161,7 +2161,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
 
         $result = json_decode($result['result']);
         
-        dpm($result);
+        //dpm($result);
 
         $this->access_token = $result->access_token;
         $this->existing_account['access_token'] = $result->access_token;
