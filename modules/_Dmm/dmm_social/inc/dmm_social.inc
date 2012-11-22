@@ -2123,6 +2123,57 @@ class SocialConnectOdnoklassniki extends SocialConnect
     
     
     
+    
+    
+    public function refreshToken()
+    {
+            
+      
+//refresh_token - refresh token received before
+//grant_type = refresh_token
+//client_id - Application ID
+//client_secret - application secret key
+              
+        $token_url = 'http://api.odnoklassniki.ru/oauth/token.do?';
+        $token_url_params = 
+            'refresh_token=' . $this->existing_account['refresh_token'] .
+            '&grant_type=refresh_token' .
+            'client_id=' . $this->siteCreds['client_id'] . 
+            '&client_secret=' . $this->siteCreds['client_secret'];
+            //'&redirect_uri=' .$this->redirect_url . 
+
+
+        $result = $this->processCurl($token_url, 'string', null, 'POST', $token_url_params);
+        
+        dpm($result);
+
+        if(!$result['ok'])
+        {
+            drupal_add_js('alert("Refresh token error. Try again or reconnect your ' . $this->existing_account['service'] . ' account!");', 'inline');
+            return;
+        }
+
+        $result = json_decode($result['result']);
+        
+        dpm($result);
+
+        return;
+        
+        $this->access_token = $result->access_token;
+        $this->existing_account['access_token'] = $result->access_token;
+        $this->existing_account['refresh_token'] = $result->refresh_token;
+        $this->existing_account['token_type'] = $result->token_type;
+        $this->existing_account['token_date'] = time();
+        
+        
+        // add creds to the db
+        $this->saveAccount();
+        
+    } // end of public function connectAccount($get)
+    
+    
+    
+    
     public function postMessageToWall($message, $options)
     {
          $ext_params = array(
