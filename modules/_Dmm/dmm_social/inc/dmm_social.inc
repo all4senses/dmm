@@ -2124,7 +2124,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
     }
     
     
-    protected function getUserAlbums_fromRemote($aid = null)
+    protected function getUserAlbums_fromRemote($album_id = null)
     {
         if(!$albums_object = $this->processRest('photos.getAlbums', array('detectTotalCount' => TRUE/*, 'uid' => $this->existing_account['id']*/)))
             return 'Error: reading vkontakte REST photos.getAlbums';
