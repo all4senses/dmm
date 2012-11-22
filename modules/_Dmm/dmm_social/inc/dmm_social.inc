@@ -1991,6 +1991,10 @@ class SocialConnectOdnoklassniki extends SocialConnect
     {
         dpm($this);
       
+        $this->refreshToken();
+        
+        dpm($this);
+        
         $base_url = 'http://api.odnoklassniki.ru/fb.do';
        
         $base_params = array(
