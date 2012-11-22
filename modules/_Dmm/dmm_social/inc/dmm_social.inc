@@ -1981,7 +1981,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
       
         return 'http://www.odnoklassniki.ru/oauth/authorize'
                . '?client_id=' . $siteCreds['client_id']
-               . '&scope=VALUABLE ACCESS;SET STATUS;PHOTO CONTENT;MESSAGING;PUBLISH_TO_STREAM'
+               . '&scope=VALUABLE ACCESS;SET STATUS;PHOTO CONTENT;MESSAGING;PUBLISH STREAM;PUBLISH TO STREAM'
                . '&response_type=code'
                . '&redirect_uri=' . $redirect_url;
     }
