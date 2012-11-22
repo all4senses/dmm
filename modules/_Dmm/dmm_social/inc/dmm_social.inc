@@ -1981,7 +1981,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
       
         return 'http://www.odnoklassniki.ru/oauth/authorize'
                . '?client_id=' . $siteCreds['client_id']
-               . '&scope=VALUABLE ACCESS;SET STATUS;PHOTO CONTENT;MESSAGING;PUBLISH STREAM;PUBLISH TO STREAM'
+               . '&scope=VALUABLE ACCESS;SET STATUS;PHOTO CONTENT;MESSAGING;PUBLISH TO STREAM'
                . '&response_type=code'
                . '&redirect_uri=' . $redirect_url;
     }
@@ -2135,10 +2135,10 @@ class SocialConnectOdnoklassniki extends SocialConnect
     {
             
       
-//refresh_token - refresh token received before
-//grant_type = refresh_token
-//client_id - Application ID
-//client_secret - application secret key
+        //refresh_token - refresh token received before
+        //grant_type = refresh_token
+        //client_id - Application ID
+        //client_secret - application secret key
               
         $token_url = 'http://api.odnoklassniki.ru/oauth/token.do?';
         $token_url_params = 
