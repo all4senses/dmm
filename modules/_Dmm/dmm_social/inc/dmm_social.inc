@@ -410,7 +410,7 @@ class SocialInit{
                               . ($connectedAccount['nick']?'<div>Nick: ' . $connectedAccount['nick'] . '</div>':'')
                               . '<div>Access token: ' . $connectedAccount['access_token'] . '</div>'
                               . '<div><a href="' . $this->currentUrl . '?op=unconnect&accid=' . $connectedAccount['account_key'] . '">Unconnect this account from our site</a></div>'
-                              . (!empty(SocialInit::$connect_to[$connectedAccount['service']]['albumsIsAccessible'])  ?  '<div><a href="' . $this->currentUrl . '?op=showAlbums&accid=' . $connectedAccount['account_key'] . '">Show this account\'s albums</a></div>' : ''),
+                              . (!empty(SocialInit::$connect_to[$connectedAccount['service']]['albumsAreAccessible'])  ?  '<div><a href="' . $this->currentUrl . '?op=showAlbums&accid=' . $connectedAccount['account_key'] . '">Show this account\'s albums</a></div>' : ''),
                    );
 
                 // disable connect several accounts of the same service
