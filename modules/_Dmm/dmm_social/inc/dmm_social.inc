@@ -2161,11 +2161,9 @@ class SocialConnectOdnoklassniki extends SocialConnect
         
         dpm($result);
 
-        return;
-        
         $this->access_token = $result->access_token;
         $this->existing_account['access_token'] = $result->access_token;
-        $this->existing_account['refresh_token'] = $result->refresh_token;
+        //$this->existing_account['refresh_token'] = $result->refresh_token;
         $this->existing_account['token_type'] = $result->token_type;
         $this->existing_account['token_date'] = time();
         
