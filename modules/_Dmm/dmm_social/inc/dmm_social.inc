@@ -255,7 +255,7 @@ class SocialInit{
                         'client_id' => 94151424, //Application ID
                         'client_secret' => 'B462E1D141C881DA30A60377', //Секретный ключ приложения
                         'client_private' => 'CBAEKNJGABABABABA', //Публичный ключ приложения
-                        'autoposting' => FALSE, // We have no a functionality for autoposting for this social provider.
+                        'autoposting' => TRUE, // We have no a functionality for autoposting for this social provider.
                         'albumsAreAccessible' => FALSE, // OK disallows hot linking.
                        ),
         );
@@ -1752,8 +1752,6 @@ class SocialConnectFacebook extends SocialConnect
           return 'Error: processing fbOpenGraph function';
         }
         
-        dpm($result);
-        
         return null; // success
         
     } // end of public function getUserAlbums(&$albums)
@@ -2124,13 +2122,32 @@ class SocialConnectOdnoklassniki extends SocialConnect
     
     public function postMessageToWall($message, $options)
     {
+         $ext_params = array(
+          //'uids' => $this->existing_account['id'], // for users.getInfo
+          //'user_text' => $options['title'],
+          'message' => $options['message'],
+           
+          'action_links' => '{"text": "' . $options['text_reply'] . '", "href": "' . $options['link_reply'] . '"}',   
+             
+          //'title' => $options['page_title'],
+          
+        );
         
+        if (isset($options['picture'])) {
+          $ext_params['attachment'] = '{"text": "", "src": "' . $options['picture'] . '"}';
+        }
+        
+        if(!$result = $this->processRest('stream.publish', $ext_params))
+            return 'Error: reading odnoklassniki.ru REST stream.post';
+        
+        dpm($result);
         
     }
     
     
     protected function getUserAlbums_fromRemote($album_id = null)
     {
+        // http://dev.odnoklassniki.ru/wiki/display/ok/REST+API+-+photos.getAlbums+ru
       
         // Actually, OK doesn't allow hot linking... (not like some other Social networks).
         // So it could be used only for copying photos to the local server from OK.
