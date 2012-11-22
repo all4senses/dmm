@@ -2022,14 +2022,10 @@ class SocialConnectOdnoklassniki extends SocialConnect
         
         $result = $this->processCurl($url, 'string');
         
-        dpm($result);
-        
         if($result['ok'])
         {
             $result = json_decode($result['result']);
-            
-            dpm($result);
-            
+           
             if(isset($result->error_code))
                 return $result->error_msg;
             else
@@ -2130,13 +2126,49 @@ class SocialConnectOdnoklassniki extends SocialConnect
     
     protected function getUserAlbums_fromRemote($aid = null)
     {
-        if(!$albums_object = $this->processRest('photos.getAlbums'/*, array('uid' => $this->existing_account['id'])*/))
+        if(!$albums_object = $this->processRest('photos.getAlbums', array('detectTotalCount' => TRUE/*, 'uid' => $this->existing_account['id']*/)))
             return 'Error: reading vkontakte REST photos.getAlbums';
                 
         dpm($albums_object);
         
         foreach ($albums_object as $key1 => $albumEntry) 
         {
+            if ($album_id && $albumEntry->aid != $album_id) {
+              continue;
+            }
+              
+            $aid = $albumEntry->aid;
+            
+            $this->albums[$aid]['info']['title'] = $albumEntry->title;
+            $this->albums[$aid]['info']['aid'] = $aid;
+            $this->albums[$aid]['info']['published'] = $albumEntry->created;
+            
+            $this->albums[$aid]['data'][0] = $this->dpr($albumEntry);
+            
+            $this->albums[$aid]['th'][0]['url'] = @$albumEntry->link; // No such element actually.
+            $this->albums[$aid]['th'][0]['img_src'] = @$albumEntry->cover_url; // No such element actually.
+
+            if($albumPhotos = $this->processRest('photos.getUserAlbumPhotos', array('aid' => $albumEntry->aid, 'detectTotalCount' => TRUE)))
+            {
+                //$this->albums[$key1]['photos']['title'] = $albumEntry->title;
+                dpm($albumPhotos);
+                continue;
+                
+                foreach ($albumPhotos as $key3 => $photoEntry) 
+                {
+                    $pid = $photoEntry->pid;
+                    $this->albums[$aid]['photos'][$pid]['info']['title'] = t('Photo [' . $key3 .']' . ($photoEntry->title?': ' . $photoEntry->title:''));
+
+                    $this->albums[$aid]['photos'][$pid]['info']['pid'] = $pid;
+                    $this->albums[$aid]['photos'][$pid]['info']['published'] = $photoEntry->created;
+                    
+                    $this->albums[$aid]['photos'][$pid]['data'] = $this->dpr($photoEntry);
+                            
+                    $this->albums[$aid]['photos'][$pid]['th'][0]['url'] = $photoEntry->src;
+                    $this->albums[$aid]['photos'][$pid]['th'][0]['img_src'] = $photoEntry->src_small;
+                }
+
+            }
 
         } // end of foreach ($albums_object as $key1 => $albumEntry) 
         
