@@ -2142,9 +2142,9 @@ class SocialConnectOdnoklassniki extends SocialConnect
         $token_url_params = 
             'refresh_token=' . $this->existing_account['refresh_token'] .
             '&grant_type=refresh_token' .
-            'client_id=' . $this->siteCreds['client_id'] . 
-            '&client_secret=' . $this->siteCreds['client_secret'];
-            //'&redirect_uri=' .$this->redirect_url . 
+            '&client_id=' . $this->siteCreds['client_id'] . 
+            '&client_secret=' . $this->siteCreds['client_secret'] .
+            '&redirect_uri=' .$this->redirect_url;
 
 
         $result = $this->processCurl($token_url, 'string', null, 'POST', $token_url_params);
