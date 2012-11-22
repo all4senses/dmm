@@ -2152,7 +2152,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
             {
                 //$this->albums[$key1]['photos']['title'] = $albumEntry->title;
                 dpm($albumPhotos);
-                continue;
+                break;
                 
                 foreach ($albumPhotos as $key3 => $photoEntry) 
                 {
