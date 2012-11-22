@@ -938,8 +938,8 @@ class SocialConnect{
             $this->insertAccountToDB($this->connectedAccounts);
         }
 
-        if(0)
-        //if($reload_page_and_show_message)
+        
+        if($reload_page_and_show_message)
             drupal_add_js('alert("Your rights for the ' . ucfirst($this->service) . ' account ~' . ($this->existing_account['nick']?$this->existing_account['nick']:$this->existing_account['id']) . '~ have been approved and ' . ($account_index?'reconnected again':'connected') . ' to our site.");' 
                         . ' window.location.href = "' . $this->redirect_url . '"'
                         , 'inline');
@@ -2130,7 +2130,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
     
     protected function getUserAlbums_fromRemote($aid = null)
     {
-        if(!$albums_object = $this->processRest('photos.getAlbums', array('uid' => $this->existing_account['id'])))
+        if(!$albums_object = $this->processRest('photos.getAlbums'/*, array('uid' => $this->existing_account['id'])*/))
             return 'Error: reading vkontakte REST photos.getAlbums';
                 
         dpm($albums_object);
