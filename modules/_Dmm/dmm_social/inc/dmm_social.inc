@@ -1987,11 +1987,13 @@ class SocialConnectOdnoklassniki extends SocialConnect
     }
     
     
-    public function processRest($function, $ext_params = null)
+    public function processRest($function, $ext_params = null, $refreshToken = TRUE)
     {
         dpm($this);
       
-        $this->refreshToken();
+        if ($refreshToken) {
+          $this->refreshToken();
+        }
         
         dpm($this);
         
@@ -2100,7 +2102,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
         
         // http://dev.odnoklassniki.ru/wiki/display/ok/REST+API+-+users.getCurrentUser+ru
         
-        if($user_object = $this->processRest('users.getCurrentUser'))
+        if($user_object = $this->processRest('users.getCurrentUser', NULL, NULL))
         {
             if (!is_object($user_object)) {
               return NULL;
