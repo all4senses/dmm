@@ -222,6 +222,7 @@ class SocialInit{
         'picasa' => array(
                         // all4senses@gmail.com
                         'title' => 'Picasa',
+                        'albumsAreAccessible' => TRUE,
                         ),
         'facebook' => array(
                         // kamchatka.pushistaya@gmail.com
@@ -229,13 +230,15 @@ class SocialInit{
                         'client_id' => 138241656284512, //170848282985782,
                         'client_secret' => '99ebdb160b628174358c38d29d2af3cf', //'814c6f051addd0369e55d83ae22b805c',
                         'autoposting' => TRUE, // We have a functionality for autoposting for this social provider.
+                        'albumsAreAccessible' => TRUE,
                        ),
         'vkontakte.ru' => array(
                         // deepsaeon@gmail.com                        
                         'title' => 'Vkontakte.ru',
                         'client_id' => 2706510, // 2421528,
                         'client_secret' => 'uZ69MqrM3Pm3dLkEWDM9', // 'Uyp3IwG9EsDfNgRhUgyF',
-                        //'autoposting' => TRUE, // We have NO a functionality for autoposting for this social provider.
+                        //'autoposting' => TRUE, // We have NO a functionality for autoposting for this social provider. Disallowed by VK for desktops.
+                        'albumsAreAccessible' => TRUE,
                        ),
         'mail.ru' => array(
                         // alexxhome@mail.ru
@@ -244,6 +247,7 @@ class SocialInit{
                         'client_secret' => '8b2317b11afd968e3764d1b5e7222a13',
                         'client_private' => 'fdebb1370a19d2f5e7df41ba4495c8b9',
                         'autoposting' => TRUE, // We have a functionality for autoposting for this social provider.
+                        'albumsAreAccessible' => TRUE,
                        ),
         'odnoklassniki.ru' => array(
                         // myha
@@ -252,6 +256,7 @@ class SocialInit{
                         'client_secret' => 'B462E1D141C881DA30A60377', //Секретный ключ приложения
                         'client_private' => 'CBAEKNJGABABABABA', //Публичный ключ приложения
                         'autoposting' => FALSE, // We have no a functionality for autoposting for this social provider.
+                        'albumsAreAccessible' => FALSE, // OK disallows hot linking.
                        ),
         );
     
@@ -385,7 +390,7 @@ class SocialInit{
             {
                 $form['connectedAccounts'][$account_key] = array(
                     '#type' => 'fieldset',
-                    '#title' => ucfirst($connectedAccount['service']) . ' ' . ($connectedAccount['nick']?$connectedAccount['nick']:$connectedAccount['id']),
+                    '#title' => ucfirst($connectedAccount['service']) . ' ' . ($connectedAccount['nick'] ? $connectedAccount['nick'] : $connectedAccount['id']),
                     '#collapsible' => true,
                     '#collapsed' => true,
                    );
@@ -405,7 +410,7 @@ class SocialInit{
                               . ($connectedAccount['nick']?'<div>Nick: ' . $connectedAccount['nick'] . '</div>':'')
                               . '<div>Access token: ' . $connectedAccount['access_token'] . '</div>'
                               . '<div><a href="' . $this->currentUrl . '?op=unconnect&accid=' . $connectedAccount['account_key'] . '">Unconnect this account from our site</a></div>'
-                              . '<div><a href="' . $this->currentUrl . '?op=showAlbums&accid=' . $connectedAccount['account_key'] . '">Show this account\'s albums</a></div>',
+                              . (!empty(SocialInit::$connect_to[$connectedAccount['service']]['albumsIsAccessible'])  ?  '<div><a href="' . $this->currentUrl . '?op=showAlbums&accid=' . $connectedAccount['account_key'] . '">Show this account\'s albums</a></div>' : ''),
                    );
 
                 // disable connect several accounts of the same service
@@ -2126,10 +2131,14 @@ class SocialConnectOdnoklassniki extends SocialConnect
     
     protected function getUserAlbums_fromRemote($album_id = null)
     {
+      
+        // Actually, OK doesn't allow hot linking... (not like some other Social networks).
+        // So it could be used only for copying photos to the local server from OK.
+      
         if(!$albums_object = $this->processRest('photos.getAlbums', array('detectTotalCount' => TRUE/*, 'uid' => $this->existing_account['id']*/)))
             return 'Error: reading vkontakte REST photos.getAlbums';
                 
-        dpm($albums_object);
+        //dpm($albums_object);
         
         foreach ($albums_object->albums as $key1 => $albumEntry) 
         {
@@ -2151,7 +2160,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
             if($albumPhotos = $this->processRest('photos.getUserAlbumPhotos', array('aid' => $albumEntry->aid, 'detectTotalCount' => TRUE)))
             {
                 //$this->albums[$key1]['photos']['title'] = $albumEntry->title;
-                dpm($albumPhotos);
+                //dpm($albumPhotos);
                 
                 foreach ($albumPhotos->photos as $key3 => $photoEntry) 
                 {
