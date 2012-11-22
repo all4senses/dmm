@@ -2131,7 +2131,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
                 
         dpm($albums_object);
         
-        foreach ($albums_object as $key1 => $albumEntry) 
+        foreach ($albums_object->albums as $key1 => $albumEntry) 
         {
             if ($album_id && $albumEntry->aid != $album_id) {
               continue;
