@@ -1989,6 +1989,7 @@ class SocialConnectOdnoklassniki extends SocialConnect
     
     public function processRest($function, $ext_params = null)
     {
+        dpm($this);
       
         $base_url = 'http://api.odnoklassniki.ru/fb.do';
        
@@ -2029,6 +2030,8 @@ class SocialConnectOdnoklassniki extends SocialConnect
         {
             $result = json_decode($result['result']);
            
+            dpm($result);
+            
             if(isset($result->error_code))
                 return $result->error_msg;
             else

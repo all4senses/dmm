@@ -396,7 +396,7 @@ function dmm_user_submitForm_comment(&$form, &$form_state) {
       'provider' => $dmm_logged_as['provider'],
       'identity' => $dmm_logged_as['identity'],
       'uid' => $dmm_logged_as['uid'],
-      'nickname' => $dmm_logged_as['nickname'],
+      'nickname' => empty($dmm_logged_as['nickname']) ? $dmm_logged_as['name']['full_name'] : $dmm_logged_as['nickname'],
       'full_name' => $dmm_logged_as['name']['full_name'],
       'photo_local_uri' => $dmm_logged_as['photo_local_uri'],
     );
@@ -602,9 +602,9 @@ function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
   // Get the current user's accounts.
   if (isset($account->field_social_loginza['und'][0]['value']) && $account->field_social_loginza['und'][0]['value']) {
     $user_social_data = unserialize($account->field_social_loginza['und'][0]['value']);
-    dpm('saved social 1');
-    dpm($user_social_data);
-    dpm('saved social 2');
+//    dpm('saved social 1');
+//    dpm($user_social_data);
+//    dpm('saved social 2');
   }
   
   
@@ -637,7 +637,7 @@ function dmm_user_loginza_data_refine(&$data, $account, $registration = FALSE) {
   $_SESSION['dmm_user_loginza_logged_as'] = $data;
   
   //dpm('in dmm_user_loginza_data');
-  dpm($data);
+  //dpm($data);
   //dpm($account);
 }
 
