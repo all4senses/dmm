@@ -2152,20 +2152,19 @@ class SocialConnectOdnoklassniki extends SocialConnect
             {
                 //$this->albums[$key1]['photos']['title'] = $albumEntry->title;
                 dpm($albumPhotos);
-                break;
                 
-                foreach ($albumPhotos as $key3 => $photoEntry) 
+                foreach ($albumPhotos->photos as $key3 => $photoEntry) 
                 {
-                    $pid = $photoEntry->pid;
-                    $this->albums[$aid]['photos'][$pid]['info']['title'] = t('Photo [' . $key3 .']' . ($photoEntry->title?': ' . $photoEntry->title:''));
+                    $pid = $photoEntry->fid;
+                    $this->albums[$aid]['photos'][$pid]['info']['title'] = t('Photo [' . $key3 .']' . ($photoEntry->caption ? ': ' . $photoEntry->caption : ''));
 
                     $this->albums[$aid]['photos'][$pid]['info']['pid'] = $pid;
-                    $this->albums[$aid]['photos'][$pid]['info']['published'] = $photoEntry->created;
+                    $this->albums[$aid]['photos'][$pid]['info']['published'] = @$photoEntry->created; // No such element actually.
                     
                     $this->albums[$aid]['photos'][$pid]['data'] = $this->dpr($photoEntry);
                             
-                    $this->albums[$aid]['photos'][$pid]['th'][0]['url'] = $photoEntry->src;
-                    $this->albums[$aid]['photos'][$pid]['th'][0]['img_src'] = $photoEntry->src_small;
+                    $this->albums[$aid]['photos'][$pid]['th'][0]['url'] = $photoEntry->standard_url;
+                    $this->albums[$aid]['photos'][$pid]['th'][0]['img_src'] = $photoEntry->preview_url;
                 }
 
             }
