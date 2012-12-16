@@ -210,4 +210,6 @@
 
 <?php if (!$page): ?>
   </article> <!-- /.node -->
+<?php else: ?>
+  </div> 
 <?php endif; ?>
