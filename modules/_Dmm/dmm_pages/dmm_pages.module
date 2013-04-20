@@ -828,7 +828,7 @@ function dmm_pages_form_alter(&$form, &$form_state, $form_id) {
     $form['field_extra_data']['#access'] = FALSE;
   }
   
-  switch($form['#id']) {
+  switch($form_id) {
           
     case 'article_node_form':
       
