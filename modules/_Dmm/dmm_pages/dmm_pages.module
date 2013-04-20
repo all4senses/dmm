@@ -828,10 +828,18 @@ function dmm_pages_form_alter(&$form, &$form_state, $form_id) {
   }
   
   switch($form['#id']) {
-    
+          
+    case 'article_node_form':
+      
+        dpm($form);
+        $form['dmm_links'] = array(
+          '#type' => 'textarea',
+          '#default_value' => '',
+          '#weight' => 3,
+        );
+      
     case 'news_post_node_form':
     case 'blog_post_node_form':
-    case 'article_node_form':
     case 'section_node_form':
     case 'master_class_node_form':
         $form['actions']['save_draft'] = array(
@@ -841,6 +849,7 @@ function dmm_pages_form_alter(&$form, &$form_state, $form_id) {
           '#weight' => 6,
         );
 
+        $form['#validate'][] = 'dmm_pages_validateForm';
         $form['#submit'][] = 'dmm_pages_submitForm_nodeDraft';
         
         break;
@@ -859,7 +868,30 @@ function dmm_pages_form_alter(&$form, &$form_state, $form_id) {
 
 
 /**
- * Custom validate of article type form.
+ * Custom validate of the form.
+ *
+ * @return void
+ *   Return nothing.
+ */
+function dmm_pages_validateForm(&$form, &$form_state) {
+  dpm($form_state['values']);
+  
+  
+//  $extra_data = array(
+//    'title' => $form_state['values']['title'], 
+//    'teaser_block' => $teaser_data['teaser_block'], 
+//    'teaser_home' => $teaser_data['teaser_home']
+//  );
+//  
+//  
+//  
+//  form_set_value($form['field_extra_data'], array('und' => array(0 => array('value' => serialize($extra_data), 'format' => 'full_html') )), $form_state);
+  
+}
+
+
+/**
+ * Custom submit of the form.
  *
  * @param array &$form
  *   Array with declared form.
