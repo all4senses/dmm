@@ -844,7 +844,7 @@ function dmm_pages_form_alter(&$form, &$form_state, $form_id) {
           '#title' => 'Ссылки',
           '#type' => 'text_format',
           '#format' => 'full_html',
-          '#default_value' => $extra_data['dmm_links'],
+          '#default_value' => @$extra_data['dmm_links'],
           '#weight' => 3,
         );
       
@@ -888,7 +888,7 @@ function dmm_pages_validateForm(&$form, &$form_state) {
   
   if (!empty($form_state['values']['dmm_links'])) {
     $extra_data = array(
-      'dmm_links' => $form_state['values']['dmm_links'], 
+      'dmm_links' => $form_state['values']['dmm_links']['value'], 
     );
   }
 
