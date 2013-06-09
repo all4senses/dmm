@@ -419,7 +419,7 @@ function dmm_misc_getNodeDataForViews($key, $options) {
         $sections = $query->execute()->fetchAllAssoc('nid');
         $out = '';
         if (!empty($sections)) {
-          dpm($sections);
+          //dpm($sections);
           foreach ($sections as $nid => $section) {
             $out .= '<div>' . l($section->title, 'node/' . $nid) . '; </div>';
           }
