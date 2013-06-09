@@ -389,8 +389,10 @@ function dmm_misc_getNodeDataForViews($key, $options) {
   switch ($key) {
     case 'met_in_sections':
         //dpm($options);
+      if ($options['data']->nid == 105) {
         dpm($options['data']->nid);
         dpm($options['data']->node_type);
+      }
       
 //      nid (String, 3 characters ) 112
 //node_title (String, 41 characters ) Теория дизайна и стиля
