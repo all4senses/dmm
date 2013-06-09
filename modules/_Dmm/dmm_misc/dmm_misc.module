@@ -381,6 +381,34 @@ function dmm_misc_OmBlock_getSectionsLists_bySupersectionsTerms($supersectionsTe
 }
 
 
+
+/**
+ * Returns data for views. 
+ */
+function dmm_misc_getNodeDataForViews($key, $options) {
+  switch ($key) {
+    case 'met_in_sections':
+        //dpm($options);
+        dpm($options['data']->nid);
+        dpm($options['data']->node_type);
+      
+//      nid (String, 3 characters ) 112
+//node_title (String, 41 characters ) Теория дизайна и стиля
+//history_timestamp (String, 10 characters ) 1370731287
+//node_created (String, 10 characters ) 1370706810
+//node_changed (String, 10 characters ) 1370707129
+//node_type (String, 7 characters ) section
+//users_node_name (String, 7 characters ) domovoy
+//users_node_uid (String, 1 characters ) 1
+//node_status (String, 1 characters ) 1
+      
+      return $options['data']->nid;
+
+  }
+  
+}
+
+
 /**
  * Returns tags list. 
  */
