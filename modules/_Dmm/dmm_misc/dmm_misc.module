@@ -390,8 +390,12 @@ function dmm_misc_getNodeDataForViews($key, $options) {
     case 'met_in_sections':
         //dpm($options);
       
-        //dpm($options['data']->nid);
-        //dpm($options['data']->node_type);
+      
+      if ($options['data']->nid == 88) {
+        dpm($options['data']->nid);
+        dpm($options['data']->node_type);
+      }
+      
         if ($options['data']->node_type == 'section') {
           return;
         }
