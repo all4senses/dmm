@@ -391,10 +391,10 @@ function dmm_misc_getNodeDataForViews($key, $options) {
         //dpm($options);
       
       
-      if ($options['data']->nid == 88) {
-        dpm($options['data']->nid);
-        dpm($options['data']->node_type);
-      }
+//      if ($options['data']->nid == 88) {
+//        dpm($options['data']->nid);
+//        dpm($options['data']->node_type);
+//      }
       
         if ($options['data']->node_type == 'section') {
           return;
@@ -412,7 +412,7 @@ function dmm_misc_getNodeDataForViews($key, $options) {
         $query = db_select('node', 'n');
         $query->fields('n', array('nid', 'title'));
         $query->join('field_revision_field_tags', 'f', 'f.entity_id = n.nid AND f.field_tags_tid IN (' . implode(',', $tids) . ')');
-        $query->join('field_revision_field_content_types', 'ct', 'ct.entity_id = n.nid AND ct.field_content_types_value = "' . $options['data']->node_type) . '"';
+        $query->join('field_revision_field_content_types', 'ct', 'ct.entity_id = n.nid AND ct.field_content_types_value = "' . $options['data']->node_type . '"');
         
         $query->condition('n.type', 'section'); 
         $query->distinct();
