@@ -393,9 +393,18 @@ function dmm_misc_getNodeDataForViews($key, $options) {
         dpm($options['data']->nid);
         dpm($options['data']->node_type);
         
+        $query = db_select('field_revision_field_tags', 'f');
+        $query->fields('f', array('field_tags_tid'));
+        $query->condition('f.entity_id', $options['data']->nid); 
+
+        $tids = $query->execute()->fetchCol();
+        if (empty($tids)) {
+          return;
+        }
+        
         $query = db_select('node', 'n');
         $query->fields('n', array('nid', 'title'));
-        $query->join('field_revision_field_tags', 'f', 'f.entity_id = n.nid AND f.field_tags_tid IN (32,3' . ')');
+        $query->join('field_revision_field_tags', 'f', 'f.entity_id = n.nid AND f.field_tags_tid IN (' . implode(',', $tids) . ')');
         //$query->fields('pn', array('field_p_name_value'));
         $query->condition('n.type', 'section'); 
 
