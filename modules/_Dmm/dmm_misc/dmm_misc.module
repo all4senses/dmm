@@ -389,9 +389,9 @@ function dmm_misc_getNodeDataForViews($key, $options) {
   switch ($key) {
     case 'met_in_sections':
         //dpm($options);
-      if ($options['data']->nid == 105) {
-        dpm($options['data']->nid);
-        dpm($options['data']->node_type);
+
+        //dpm($options['data']->nid);
+        //dpm($options['data']->node_type);
         
         $query = db_select('field_revision_field_tags', 'f');
         $query->fields('f', array('field_tags_tid'));
@@ -408,15 +408,15 @@ function dmm_misc_getNodeDataForViews($key, $options) {
         $query->condition('n.type', 'section'); 
         $query->distinct();
         $sections = $query->execute()->fetchAllAssoc('nid');
+        $out = '';
         if (!empty($sections)) {
-          dpm($sections);
-          $out = '';
+          //dpm($sections);
           foreach ($sections as $nid => $section) {
-            $out .= ($out ? ',' : '') . l($section->title, 'node/' . $nid);
+            $out .= ($out ? '; ' : '') . l($section->title, 'node/' . $nid);
           }
         }
         return $out;
-      }
+
       
 //      nid (String, 3 characters ) 112
 //node_title (String, 41 characters ) Теория дизайна и стиля
@@ -427,8 +427,6 @@ function dmm_misc_getNodeDataForViews($key, $options) {
 //users_node_name (String, 7 characters ) domovoy
 //users_node_uid (String, 1 characters ) 1
 //node_status (String, 1 characters ) 1
-      
-      return $options['data']->nid;
 
   }
   
