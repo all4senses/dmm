@@ -699,7 +699,7 @@ function dmm_pages_node_presave($node) {
  */
 function dmm_pages_getExtraDataFromBody($node_field_body, $nid, $content_type = NULL, $characters_num = NULL, $only_teaser = FALSE) {
  
-  $body = $node_field_body['und'][0]['value'];
+  $body = @$node_field_body['und'][0]['value'];
   $summary = $node_field_body['und'][0]['summary'];
   
   $main_image_html = NULL;
